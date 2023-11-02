@@ -8,9 +8,11 @@
 import Foundation
 
 enum Curl { // namespace
-	static func invoke() -> String {
+	static let curlPath = "/usr/bin/curl" // I could make this a URL, but then the names get all confusion — curlURL etc. don't imply the path of the executable
+	
+	static func invoke(arguments: [Curl.Argument]) -> String {
 		let task = Process()
-		task.executableURL = URL(fileURLWithPath: "/usr/bin/curl")
+		task.executableURL = URL(fileURLWithPath: curlPath)
 		
 		// Specify the command-line arguments
 		task.arguments = ["-o", "output.txt", "https://example.com"] // Replace "https://example.com" with your desired URL
@@ -34,5 +36,10 @@ enum Curl { // namespace
 		}
 		
 		return ""
+	}
+}
+extension Curl {
+	enum Argument {
+		case abstractUnixSocket(path: String)
 	}
 }
