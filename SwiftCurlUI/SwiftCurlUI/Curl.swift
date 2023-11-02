@@ -233,31 +233,31 @@ extension Curl {
 		case removeOnError
 		case requestTarget(path: String)
 		case request(method: String) // alias with '-X', which ones you're allowed depend on your protocol, so this is best left as a String at least for the first version
-		case resolve(hostPortAddr: String)
+		case resolve(hostPortAddr: String) // <[+]host:port:addr[,addr]...>
 		case retryAllErrors
 		case retryConnRefused
-		case retryDelay(seconds: Double)
-		case retryMaxTime(seconds: Double)
-		case retry(num: Int)
-		case saslAuthzid(identity: String)
-		case saslIr
+		case retryDelay(seconds: TimeInterval)
+		case retryMaxTime(seconds: TimeInterval)
+		case retry(number: UInt)
+		case saslAuthorizationIdentity(identity: String)
+		case saslInitialResponse
 		case serviceName(name: String)
 		case showError // alias with '-S'
 		case silent // alias with '-s'
-		case socks4(hostPort: String)
-		case socks4a(hostPort: String)
+		case socks4(hostPort: String) // <host[:port]>
+		case socks4a(hostPort: String) // <host[:port]>
 		case socks5Basic
-		case socks5GssapiNec
-		case socks5GssapiService(name: String)
-		case socks5Gssapi
+		case socks5_GSS_API_NEC
+		case socks5_GSS_API_Service(name: String)
+		case socks5_GSS_API
 		case socks5Hostname(hostPort: String)
 		case socks5(hostPort: String)
-		case speedLimit(speed: String) // alias with '-Y'
-		case speedTime(seconds: Double) // alias with '-y'
+		case speedLimit(speed: UInt64) // alias with '-Y'; lower limit, bytes/second, over time window in speedTime
+		case speedTime(seconds: TimeInterval) // alias with '-y', time window used by speedLimit
 		case sslAllowBeast // From the man page: WARNING: this option loosens the SSL security, and by using this flag you ask for exactly that.
 		case sslAutoClientCert
 		case sslNoRevoke
-		case sslReqd
+		case sslRequired
 		case sslRevokeBestEffort
 		case ssl
 		case sslv2 // alias with '-2'
@@ -268,7 +268,7 @@ extension Curl {
 		case tcpFastOpen
 		case tcpNoDelay
 		case telnetOption(option: String) // alias with '-t'; Supported options: TTYPE=<term>, XDISPLOC=<X display>, NEW_ENV=<var,val>; e.g. `curl -t TTYPE=vt100 …`
-		case tftpBlksize(value: Int) // block size on a TFTP server
+		case tftpBlockSize(value: UInt64) // block size on a TFTP server
 		case tftpNoOptions
 		case timeCond(time: String) // alias '-z'; this is a string representing a date, which can be "all sorts of date" formats
 		case tlsMax(version: String) // valid values: [default, 1.0, 1.1, 1.2, 1.3]
@@ -281,16 +281,16 @@ extension Curl {
 		case tlsv1_2
 		case tlsv1_3
 		case tlsv1 // alias with '-1'
-		case trEncoding
+		case trEncoding // request compressed Transfer-Encoding response
 		case traceAscii(file: String)
 		case traceConfig(string: String)
-		case traceIds
+		case traceIDs
 		case traceTime
 		case trace(file: String)
 		case unixSocket(path: String)
 		case uploadFile(file: String) // alias with '-T'
 		case urlQuery(data: String)
-		case url(url: String)
+		case url(url: URL) // to fetch
 		case useAscii // alias with '-B'
 		case userAgent(name: String) // alias with '-A'
 		case user(userPassword: String) // alias with '-u'
