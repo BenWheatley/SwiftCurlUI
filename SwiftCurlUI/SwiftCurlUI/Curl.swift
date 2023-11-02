@@ -87,7 +87,7 @@ extension Curl {
 		case dnsServers(addresses: [String])
 		case dohCertStatus
 		case dohInsecure
-		case dohUrl(url: String)
+		case dohUrl(url: URL)
 		
 		func derivedArguments() -> [String] {
 			[]
