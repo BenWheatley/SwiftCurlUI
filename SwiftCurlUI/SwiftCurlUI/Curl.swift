@@ -146,6 +146,15 @@ extension Curl {
 		case limitRate(speed: LimitRate) // measured in bytes/second, unless a suffix (k, M, G, T, P) is appended, these are 1024-based
 		case listOnly // alias with '-l'
 		case localPort(low: UInt16, high: UInt16?) // either "low" (for a single value) or "low-high" (for a range)
+		case locationTrusted
+		case location // alias with '-L'
+		case loginOptions(options: String)
+		case mailAuth(emailAddress: String)
+		case mailFrom(emailAddress: String)
+		case mailRcptAllowFails
+		case mailRcpt(emailAddress: String)
+		case manual // alias with '-M', the manual
+		case maxFilesize(bytes: Int)
 		
 		func derivedArguments() -> [String] {
 			[]
