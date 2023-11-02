@@ -167,61 +167,60 @@ extension Curl {
 		case noBuffer // alias with '-N'
 		case noClobber
 		case noKeepalive
-		case noNpn
 		case noProgressMeter
-		case noSessionid
+		case noSessionID
 		case noProxy(noProxyList: String) // comma-separated list, or *
 		case ntlmWb
 		case ntlm
-		case oauth2Bearer(token: String)
-		case outputDir(dir: String)
+		case oauth2Bearer(token: String) // RFC 6750
+		case outputDirectory(directory: String)
 		case output(file: String) // alias with '-o'
 		case parallelImmediate
-		case parallelMax(num: Int)
+		case parallelMax(num: UInt)
 		case parallel // alias with '-Z'
 		case pass(phrase: String) // (SSH TLS) Passphrase for the private key.
 		case pathAsIs
-		case pinnedpubkey(hashes: String) // either (1) path to a file, or (2) "sha256//" followed by base64-encoded sha256s separated by ";"
+		case pinnedPubKey(hashes: String) // either (1) path to a file, or (2) "sha256//" followed by base64-encoded sha256s separated by ";"
 		case post301
 		case post302
 		case post303
-		case preproxy(protocolHostPort: String)
+		case preproxy(protocolHostPort: String) // [protocol://]host[:port]
 		case progressBar // alias with '-#'
 		case protoDefault(protocol: String)
-		case protoRedir(protocols: String)
+		case protoRedirect(protocols: String)
 		case proto(protocols: String) // see man page for details on the structure, too much for a mere comment
 		case proxyAnyAuth
 		case proxyBasic
-		case proxyCaNative
-		case proxyCaCert(file: String)
-		case proxyCaPath(dir: String)
+		case proxyCANative
+		case proxyCACert(file: String)
+		case proxyCAPath(dir: String)
 		case proxyCertType(type: String)
-		case proxyCert(cert: String)
+		case proxyCert(cert: String, password: String?) // if it has a password, concatenate with ':'
 		case proxyCiphers(list: String)
 		case proxyCrlfile(file: String)
 		case proxyDigest
-		case proxyHeader(header: String)
+		case proxyHeader(header: String) // same rules as --header but not an alias
 		case proxyHttp2
 		case proxyInsecure
 		case proxyKeyType(type: String)
 		case proxyKey(key: String)
 		case proxyNegotiate
-		case proxyNtlm
+		case proxyNTLM
 		case proxyPass(phrase: String)
-		case proxyPinnedpubkey(hashes: String)
+		case proxyPinnedPubKey(hashes: String)
 		case proxyServiceName(name: String)
-		case proxySslAllowBeast
-		case proxySslAutoClientCert
-		case proxyTls13Ciphers(ciphersuiteList: String)
-		case proxyTlsauthtype(type: String)
-		case proxyTlspassword(string: String)
-		case proxyTlsuser(name: String)
-		case proxyTlsv1
-		case proxyUser(userPassword: String) // alias with '-U'
-		case proxy(protocolHostPort: String) // alias with '-x'
-		case proxy1_0(hostPort: String)
+		case proxySSLAllowBeast
+		case proxySSLAutoClientCert
+		case proxyTLS13Ciphers(ciphersuiteList: String)
+		case proxyTLSAuthType(type: String)
+		case proxyTLSPassword(string: String)
+		case proxyTLSUser(name: String)
+		case proxyTLSv1
+		case proxyUser(user: String, password: String) // alias with '-U', concatenate with ':'
+		case proxy(protocolHostPort: String) // alias with '-x', [protocol://]host[:port]
+		case proxy1_0(hostPort: String) // host[:port]
 		case proxytunnel // alias with '-p'
-		case pubkey(key: String)
+		case pubKey(key: String)
 		case quote(command: String) // alias with '-Q'
 		case range(range: String) // alias with '-r', see man page for parsing rules
 		case rate(maxRequestRate: String) // number of transfer starts per time unit, the user can specify s, m, h, d for obvious meanings, e.g., "5/s," more than 1000/s is counted as unrestricted
