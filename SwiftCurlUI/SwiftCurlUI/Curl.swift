@@ -155,8 +155,8 @@ extension Curl {
 		case mailRcpt(emailAddress: String)
 		case manual // alias with '-M', the manual
 		case maxFilesize(bytes: HumanBytes)
-		case maxRedirs(num: Int)
-		case maxTime(fractionalSeconds: Double) // alias with '-m'
+		case maxRedirs(num: UInt)
+		case maxTime(fractionalSeconds: TimeInterval) // alias with '-m'
 		// --metalink disabled in curl for security reasons, according to man page
 		case negotiate
 		case netrcFile(filename: String)
