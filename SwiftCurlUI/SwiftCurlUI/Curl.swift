@@ -71,7 +71,23 @@ extension Curl {
 		case crlf
 		case crlFile(file: String)
 		case curves(algorithmList: [String]) // when stringified multiple algorithms can be provided by separating them with ":"
-		// Add more cases as needed
+		case dataAscii(data: String)
+		case dataBinary(data: String)
+		case dataRaw(data: String)
+		case dataUrlEncode(data: String)
+		case delegation(level: String) // You can use an enum for level if it has predefined values
+		case digest
+		case disableEprt
+		case disableEpsv
+		case disable
+		case disallowUsernameInUrl
+		case dnsInterface(interface: String)
+		case dnsIpv4Addr(address: String)
+		case dnsIpv6Addr(address: String)
+		case dnsServers(addresses: [String])
+		case dohCertStatus
+		case dohInsecure
+		case dohUrl(url: String)
 		
 		func derivedArguments() -> [String] {
 			[]
