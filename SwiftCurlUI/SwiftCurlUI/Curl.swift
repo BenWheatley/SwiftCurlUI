@@ -145,7 +145,7 @@ extension Curl {
 		case libcurl(file: String) // creates libcurl-using C source code to perform task (instead of or as well as?) performing task
 		case limitRate(speed: LimitRate) // measured in bytes/second, unless a suffix (k, M, G, T, P) is appended, these are 1024-based
 		case listOnly // alias with '-l'
-		case localPort(eitherNumberOrRange: String)
+		case localPort(low: UInt16, high: UInt16?) // either "low" (for a single value) or "low-high" (for a range)
 		
 		func derivedArguments() -> [String] {
 			[]
