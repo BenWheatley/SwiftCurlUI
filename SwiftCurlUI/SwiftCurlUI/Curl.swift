@@ -133,17 +133,17 @@ extension Curl {
 		case include // alias with '-i'
 		case insecure // alias with '-k'
 		case interface(name: String)
-		case ipfsGateway(url: String)
+		case ipfsGateway(url: URL)
 		case ipv4 // alias with '-4'
 		case ipv6 // alias with '-6'
 		case json(data: String) // is a shortcut for --data [arg] --header "Content-Type: application/json" --header "Accept: application/json"; If <data> starts with '@' it is interpreted as a filename to read the data from; if <data> is a hyphen '-' it reads the data from stdin
 		case junkSessionCookies // alias with '-j'
-		case keepaliveTime(seconds: Double)
-		case keyType(type: String) // type is DER, PEM, or ENG
+		case keepaliveTime(seconds: TimeInterval)
+		case keyType(type: KeyType) // type is DER, PEM, or ENG
 		case key(key: String) // man page says private key "file name" rather than "value"
-		case krb(level: String) // Kerberos; values are clear, safe, confidential, or private
+		case krb(level: KerberosLevel) // Kerberos; values are clear, safe, confidential, or private
 		case libcurl(file: String) // creates libcurl-using C source code to perform task (instead of or as well as?) performing task
-		case limitRate(speed: String) // measured in bytes/second, unless a suffix (k, M, G, T, P) is appended, these are 1024-based
+		case limitRate(speed: LimitRate) // measured in bytes/second, unless a suffix (k, M, G, T, P) is appended, these are 1024-based
 		case listOnly // alias with '-l'
 		case localPort(eitherNumberOrRange: String)
 		
@@ -168,5 +168,39 @@ extension Curl {
 extension Curl {
 	enum SSLClearCommandChannelMode: String {
 		case active, passive
+	}
+}
+
+extension Curl {
+	enum KeyType: String {
+		case DER, PEM, ENG
+	}
+}
+
+extension Curl {
+	enum KerberosLevel: String {
+		case clear, safe, confidential, `private`
+	}
+}
+
+extension Curl {
+	struct LimitRate {
+		let value: UInt
+		let base: Base?
+		
+		var toString: String {
+			switch base {
+			case .none: return "\(value)"
+			case .k: return "\(value/1024)"
+			case .M: return "\(value/(1024 * 1024))"
+			case .G: return "\(value/(1024 * 1024 * 1024))"
+			case .T: return "\(value/(1024 * 1024 * 1024 * 1024))"
+			case .P: return "\(value/(1024 * 1024 * 1024 * 1024 * 1024))"
+			}
+		}
+		
+		enum Base: String {
+			case k, M, G, T, P
+		}
 	}
 }
