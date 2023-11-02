@@ -295,6 +295,10 @@ extension Curl {
 		case userAgent(name: String) // alias with '-A'
 		case user(userPassword: String) // alias with '-u'
 		case variable(nameText: String) // <[%]name=text/@file>
+		case verbose // alias with '-v'
+		case version // alias with '-V'
+		case writeOut(format: String) // alias with '-w', format string is a decent-sized part of the man page all by itself
+		case xattr
 		
 		func derivedArguments() -> [String] {
 			[]
