@@ -88,29 +88,29 @@ extension Curl {
 		case dohCertStatus
 		case dohInsecure
 		case dohUrl(url: URL)
-		case dumpHeader(filename: String)
+		case dumpHeader(filename: String) // alias with '-D'
 		case egdFile(file: String)
-		case engine(name: String)
+		case engine(name: String) // the UI for this could be a popup list, populated from calling the command `curl --engine list`
 		case etagCompare(filename: String)
-		case expect100Timeout(seconds: Double)
+		case expect100Timeout(seconds: TimeInterval)
 		case failEarly
 		case failWithBody
-		case fail
+		case fail // alias with '-f'
 		case falseStart
 		case formEscape
-		case formString(name: String)
-		case form(name: String)
+		case formString(name: String, value: String) // concatenate with =
+		case form(name: String, content: String) // concatenate with =
 		case ftpAccount(data: String)
 		case ftpAlternativeToUser(command: String)
 		case ftpCreateDirs
-		case ftpMethod(method: String)
+		case ftpMethod(method: FTPMethod)
 		case ftpPasv
-		case ftpPort(address: String)
+		case ftpPort(address: String) // alias with '-P'; address is one of interface (e.g. "eth0"), IP address, host name, or "-"
 		case ftpPret
 		case ftpSkipPasvIp
-		case ftpSslCccMode(mode: String)
-		case ftpSslCcc
-		case ftpSslControl
+		case ftpSSLClearCommandChannelMode(mode: SSLClearCommandChannelMode)
+		case ftpSSLClearCommandChannel
+		case ftpSSLControl
 		case get
 		
 		func derivedArguments() -> [String] {
@@ -122,5 +122,17 @@ extension Curl {
 extension Curl {
 	enum DelegationLevel: String {
 		case none, policy, always
+	}
+}
+
+extension Curl {
+	enum FTPMethod: String {
+		case multicwd, nocwd, singlecwd
+	}
+}
+
+extension Curl {
+	enum SSLClearCommandChannelMode: String {
+		case active, passive
 	}
 }
