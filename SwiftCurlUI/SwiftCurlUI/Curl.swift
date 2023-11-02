@@ -67,14 +67,36 @@ extension Curl {
 		case cookieJar(filename: String) // "-" means "stdout"
 		case cookie(dataOrFilename: String) // if there's a "=", it's data; otherswise it's a filename; if it's "-" this means "stdin"
 		case createDirs
-		case createFileMode(mode: String)
+		case createFileMode(mode: FileMode) // Unix file mode when stringified, so a 4-digit octal number.
 		case crlf
 		case crlFile(file: String)
-		case curves(algorithmList: String)
+		case curves(algorithmList: [String]) // when stringified multiple algorithms can be provided by separating them with ":"
 		// Add more cases as needed
 		
 		func derivedArguments() -> [String] {
 			[]
 		}
+	}
+}
+
+struct FileMode { // This probably already exists somehwere (it certainly ought to in macOS!) but google didn't find it
+	let owner: Permission
+	let group: Permission
+	let other: Permission
+	
+	struct Permission {
+		let read: Bool
+		let write: Bool
+		let execute: Bool
+		
+		var toOctal: UInt8 {
+			(read ? 4 : 0) +
+			(write ? 2 : 0) +
+			(execute ? 1: 0)
+		}
+	}
+	
+	var toString: String {
+		"0\(owner.toOctal)\(group.toOctal)\(other.toOctal)"
 	}
 }
