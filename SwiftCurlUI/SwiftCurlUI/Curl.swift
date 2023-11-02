@@ -88,6 +88,30 @@ extension Curl {
 		case dohCertStatus
 		case dohInsecure
 		case dohUrl(url: URL)
+		case dumpHeader(filename: String)
+		case egdFile(file: String)
+		case engine(name: String)
+		case etagCompare(filename: String)
+		case expect100Timeout(seconds: Double)
+		case failEarly
+		case failWithBody
+		case fail
+		case falseStart
+		case formEscape
+		case formString(name: String)
+		case form(name: String)
+		case ftpAccount(data: String)
+		case ftpAlternativeToUser(command: String)
+		case ftpCreateDirs
+		case ftpMethod(method: String)
+		case ftpPasv
+		case ftpPort(address: String)
+		case ftpPret
+		case ftpSkipPasvIp
+		case ftpSslCccMode(mode: String)
+		case ftpSslCcc
+		case ftpSslControl
+		case get
 		
 		func derivedArguments() -> [String] {
 			[]
