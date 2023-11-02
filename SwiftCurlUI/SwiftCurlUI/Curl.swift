@@ -143,7 +143,7 @@ extension Curl {
 		case key(key: String) // man page says private key "file name" rather than "value"
 		case krb(level: KerberosLevel) // Kerberos; values are clear, safe, confidential, or private
 		case libcurl(file: String) // creates libcurl-using C source code to perform task (instead of or as well as?) performing task
-		case limitRate(speed: LimitRate) // measured in bytes/second, unless a suffix (k, M, G, T, P) is appended, these are 1024-based
+		case limitRate(speed: HumanBytes)
 		case listOnly // alias with '-l'
 		case localPort(low: UInt16, high: UInt16?) // either "low" (for a single value) or "low-high" (for a range)
 		case locationTrusted
@@ -154,7 +154,7 @@ extension Curl {
 		case mailRcptAllowFails
 		case mailRcpt(emailAddress: String)
 		case manual // alias with '-M', the manual
-		case maxFilesize(bytes: Int)
+		case maxFilesize(bytes: HumanBytes)
 		
 		func derivedArguments() -> [String] {
 			[]
@@ -193,7 +193,7 @@ extension Curl {
 }
 
 extension Curl {
-	struct LimitRate {
+	struct HumanBytes {
 		let value: UInt
 		let base: Base?
 		
