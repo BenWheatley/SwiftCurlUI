@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct FileMode { // This probably already exists somehwere (it certainly ought to in macOS!) but google didn't find it
+struct FileMode: Codable { // This probably already exists somehwere (it certainly ought to in macOS!) but google didn't find it
 	let owner: Permission
 	let group: Permission
 	let other: Permission
 	
-	struct Permission {
+	struct Permission: Codable {
 		let read: Bool
 		let write: Bool
 		let execute: Bool

@@ -7,10 +7,15 @@
 
 import Foundation
 
-enum Curl { // namespace
-	static let curlPath = "/usr/bin/curl" // I could make this a URL, but then the names get all confusion — curlURL etc. don't imply the path of the executable
+struct Curl: Codable {
+	let curlPath: String // I could make this a URL, but then the names get all confusion — curlURL etc. don't imply the path of the executable
+	var arguments: [Curl.Argument] = []
 	
-	static func invoke(arguments: [Curl.Argument]) -> String {
+	init(curlPath: String = "/usr/bin/curl") {
+		self.curlPath = curlPath
+	}
+	
+	func invoke() -> String {
 		let task = Process()
 		task.executableURL = URL(fileURLWithPath: curlPath)
 		
@@ -44,7 +49,7 @@ enum Curl { // namespace
 }
 
 extension Curl {
-	enum Argument {
+	enum Argument: Codable {
 		case abstractUnixSocket(path: String)
 		case altSvc(fileName: String)
 		case anyAuth
@@ -307,37 +312,37 @@ extension Curl {
 }
 
 extension Curl {
-	enum DelegationLevel: String {
+	enum DelegationLevel: String, Codable {
 		case none, policy, always
 	}
 }
 
 extension Curl {
-	enum FTPMethod: String {
+	enum FTPMethod: String, Codable {
 		case multicwd, nocwd, singlecwd
 	}
 }
 
 extension Curl {
-	enum SSLClearCommandChannelMode: String {
+	enum SSLClearCommandChannelMode: String, Codable {
 		case active, passive
 	}
 }
 
 extension Curl {
-	enum KeyType: String {
+	enum KeyType: String, Codable {
 		case DER, PEM, ENG
 	}
 }
 
 extension Curl {
-	enum KerberosLevel: String {
+	enum KerberosLevel: String, Codable {
 		case clear, safe, confidential, `private`
 	}
 }
 
 extension Curl {
-	struct HumanBytes {
+	struct HumanBytes: Codable {
 		let value: UInt
 		let base: Base?
 		
@@ -352,7 +357,7 @@ extension Curl {
 			}
 		}
 		
-		enum Base: String {
+		enum Base: String, Codable {
 			case k, M, G, T, P
 		}
 	}
