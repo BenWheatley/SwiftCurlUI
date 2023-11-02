@@ -155,6 +155,16 @@ extension Curl {
 		case mailRcpt(emailAddress: String)
 		case manual // alias with '-M', the manual
 		case maxFilesize(bytes: HumanBytes)
+		case maxRedirs(num: Int)
+		case maxTime(fractionalSeconds: Double) // alias with '-m'
+		// --metalink disabled in curl for security reasons, according to man page
+		case negotiate
+		case netrcFile(filename: String)
+		case netrcOptional
+		case netrc // alias with '-n'
+		// -:, --next doesn't make sense within the GUI paradigm I'm currently creating
+		case noAlpn
+		case noBuffer // alias with '-N'
 		
 		func derivedArguments() -> [String] {
 			[]
