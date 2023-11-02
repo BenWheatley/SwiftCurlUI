@@ -112,26 +112,25 @@ extension Curl {
 		case ftpSSLClearCommandChannel
 		case ftpSSLControl
 		case get
-		case globOff
-		case happyEyeballsTimeoutMs(milliseconds: Int)
+		case globOff // alias with '-g'
+		case happyEyeballsTimeoutMs(milliseconds: UInt64)
 		case haproxyClientIp
 		case haproxyProtocol
-		case head
-		case header(header: String)
-		case help(category: String)
+		case head // alias with '-I'
+		case header(header: String) // alias with '-H', filenames will only be recognised as such when preceded with '@' (e.g. `@filename.txt`), read from stdin with `@-`
+		case help(category: String) // alias with '-h'
 		case hostpubmd5(md5: String)
 		case hostpubsha256(sha256: String)
 		case hsts(fileName: String)
 		case http0_9
-		case http1_0
+		case http1_0 // alias with '-0'
 		case http1_1
 		case http2PriorKnowledge
 		case http2
-		case http3Only
-		case http3
+		case http3Only // man page says: **WARNING**: this option is experimental. Do not use in production.
+		case http3 // man page says: **WARNING**: this option is experimental. Do not use in production.
 		case ignoreContentLength
-		case include
-
+		case include // alias with '-i'
 		
 		func derivedArguments() -> [String] {
 			[]
