@@ -15,7 +15,11 @@ enum Curl { // namespace
 		task.executableURL = URL(fileURLWithPath: curlPath)
 		
 		// Specify the command-line arguments
-		task.arguments = ["-o", "output.txt", "https://example.com"] // Replace "https://example.com" with your desired URL
+		var computedArguments: [String] = []
+		arguments.forEach {
+			computedArguments += $0.derivedArguments()
+		}
+		task.arguments = computedArguments
 		
 		// Optionally, you can set the working directory if needed
 		task.currentDirectoryPath = "/path/to/your/working/directory"
@@ -45,7 +49,7 @@ extension Curl {
 		case altSvc(fileName: String)
 		case anyAuth
 		case append
-		case awsSigV4(provider: String, region: String? = nil, service: String? = nil)
+		case awsSigV4(providerInfo: String) // There's a more complex pattern to the provider info than I can see how to fit into this signature sensibly
 		case basic
 		case caNative
 		case caCert(file: String)
@@ -53,20 +57,24 @@ extension Curl {
 		case certStatus
 		case certType(type: String)
 		case cert(certificate: String, password: String? = nil)
-		case ciphers(cipherList: String)
+		case ciphers(cipherList: [String]) // when turning into an argument, concatenate with hyphens e.g. "ECDHE-ECDSA-AES256-CCM8"
 		case compressedSsh
 		case compressed
 		case config(file: String)
-		case connectTimeout(seconds: Double)
-		case connectTo(host1: String, port1: String, host2: String, port2: String)
-		case continueAt(offset: String)
-		case cookieJar(filename: String)
-		case cookie(dataOrFilename: String)
+		case connectTimeout(seconds: TimeInterval) // when turned into a string, decimal must be a '.' regardless of locale
+		case connectTo(host1: String, port1: String, host2: String, port2: String) // when stringified, concatenate with ':', e.g. "example.com:443:example.net:8443"
+		case continueAt(offset: UInt64) // offset will never be negative
+		case cookieJar(filename: String) // "-" means "stdout"
+		case cookie(dataOrFilename: String) // if there's a "=", it's data; otherswise it's a filename; if it's "-" this means "stdin"
 		case createDirs
 		case createFileMode(mode: String)
 		case crlf
 		case crlFile(file: String)
 		case curves(algorithmList: String)
 		// Add more cases as needed
+		
+		func derivedArguments() -> [String] {
+			[]
+		}
 	}
 }
