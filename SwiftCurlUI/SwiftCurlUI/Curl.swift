@@ -112,6 +112,26 @@ extension Curl {
 		case ftpSSLClearCommandChannel
 		case ftpSSLControl
 		case get
+		case globOff
+		case happyEyeballsTimeoutMs(milliseconds: Int)
+		case haproxyClientIp
+		case haproxyProtocol
+		case head
+		case header(header: String)
+		case help(category: String)
+		case hostpubmd5(md5: String)
+		case hostpubsha256(sha256: String)
+		case hsts(fileName: String)
+		case http0_9
+		case http1_0
+		case http1_1
+		case http2PriorKnowledge
+		case http2
+		case http3Only
+		case http3
+		case ignoreContentLength
+		case include
+
 		
 		func derivedArguments() -> [String] {
 			[]
