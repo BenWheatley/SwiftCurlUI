@@ -16,6 +16,8 @@
 		B558973A2AF3BCCC00946FFD /* SwiftCurlUIUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55897392AF3BCCC00946FFD /* SwiftCurlUIUITestsLaunchTests.swift */; };
 		B55897472AF3C4CC00946FFD /* Curl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55897462AF3C4CC00946FFD /* Curl.swift */; };
 		B55897482AF3C4CC00946FFD /* Curl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55897462AF3C4CC00946FFD /* Curl.swift */; };
+		B558974A2AF3EA2400946FFD /* FileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55897492AF3EA2400946FFD /* FileMode.swift */; };
+		B558974B2AF3EA2400946FFD /* FileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55897492AF3EA2400946FFD /* FileMode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,7 @@
 		B55897372AF3BCCC00946FFD /* SwiftCurlUIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCurlUIUITests.swift; sourceTree = "<group>"; };
 		B55897392AF3BCCC00946FFD /* SwiftCurlUIUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCurlUIUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B55897462AF3C4CC00946FFD /* Curl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Curl.swift; sourceTree = "<group>"; };
+		B55897492AF3EA2400946FFD /* FileMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileMode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +104,7 @@
 				B558971B2AF3BCCB00946FFD /* SwiftCurlUIApp.swift */,
 				B558971D2AF3BCCB00946FFD /* ContentView.swift */,
 				B55897462AF3C4CC00946FFD /* Curl.swift */,
+				B55897492AF3EA2400946FFD /* FileMode.swift */,
 				B558971F2AF3BCCC00946FFD /* Assets.xcassets */,
 				B55897242AF3BCCC00946FFD /* SwiftCurlUI.entitlements */,
 				B55897212AF3BCCC00946FFD /* Preview Content */,
@@ -265,6 +269,7 @@
 			files = (
 				B55897472AF3C4CC00946FFD /* Curl.swift in Sources */,
 				B558971E2AF3BCCB00946FFD /* ContentView.swift in Sources */,
+				B558974A2AF3EA2400946FFD /* FileMode.swift in Sources */,
 				B558971C2AF3BCCB00946FFD /* SwiftCurlUIApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B558972E2AF3BCCC00946FFD /* SwiftCurlUITests.swift in Sources */,
+				B558974B2AF3EA2400946FFD /* FileMode.swift in Sources */,
 				B55897482AF3C4CC00946FFD /* Curl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

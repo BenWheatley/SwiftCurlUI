@@ -71,11 +71,11 @@ extension Curl {
 		case crlf
 		case crlFile(file: String)
 		case curves(algorithmList: [String]) // when stringified multiple algorithms can be provided by separating them with ":"
-		case dataAscii(data: String)
+		case dataAscii(data: String) // this is just an alias for -d, --data <data>
 		case dataBinary(data: String)
 		case dataRaw(data: String)
 		case dataUrlEncode(data: String)
-		case delegation(level: String) // You can use an enum for level if it has predefined values
+		case delegation(level: DelegationLevel) // You can use an enum for level if it has predefined values
 		case digest
 		case disableEprt
 		case disableEpsv
@@ -95,24 +95,8 @@ extension Curl {
 	}
 }
 
-struct FileMode { // This probably already exists somehwere (it certainly ought to in macOS!) but google didn't find it
-	let owner: Permission
-	let group: Permission
-	let other: Permission
-	
-	struct Permission {
-		let read: Bool
-		let write: Bool
-		let execute: Bool
-		
-		var toOctal: UInt8 {
-			(read ? 4 : 0) +
-			(write ? 2 : 0) +
-			(execute ? 1: 0)
-		}
-	}
-	
-	var toString: String {
-		"0\(owner.toOctal)\(group.toOctal)\(other.toOctal)"
+extension Curl {
+	enum DelegationLevel: String {
+		case none, policy, always
 	}
 }
