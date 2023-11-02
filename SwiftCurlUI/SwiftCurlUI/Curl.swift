@@ -38,8 +38,35 @@ enum Curl { // namespace
 		return ""
 	}
 }
+
 extension Curl {
 	enum Argument {
 		case abstractUnixSocket(path: String)
+		case altSvc(fileName: String)
+		case anyAuth
+		case append
+		case awsSigV4(provider: String, region: String? = nil, service: String? = nil)
+		case basic
+		case caNative
+		case caCert(file: String)
+		case caPath(directory: String)
+		case certStatus
+		case certType(type: String)
+		case cert(certificate: String, password: String? = nil)
+		case ciphers(cipherList: String)
+		case compressedSsh
+		case compressed
+		case config(file: String)
+		case connectTimeout(seconds: Double)
+		case connectTo(host1: String, port1: String, host2: String, port2: String)
+		case continueAt(offset: String)
+		case cookieJar(filename: String)
+		case cookie(dataOrFilename: String)
+		case createDirs
+		case createFileMode(mode: String)
+		case crlf
+		case crlFile(file: String)
+		case curves(algorithmList: String)
+		// Add more cases as needed
 	}
 }
