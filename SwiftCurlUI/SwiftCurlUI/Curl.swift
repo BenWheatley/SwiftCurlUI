@@ -131,6 +131,21 @@ extension Curl {
 		case http3 // man page says: **WARNING**: this option is experimental. Do not use in production.
 		case ignoreContentLength
 		case include // alias with '-i'
+		case insecure // alias with '-k'
+		case interface(name: String)
+		case ipfsGateway(url: String)
+		case ipv4 // alias with '-4'
+		case ipv6 // alias with '-6'
+		case json(data: String) // is a shortcut for --data [arg] --header "Content-Type: application/json" --header "Accept: application/json"; If <data> starts with '@' it is interpreted as a filename to read the data from; if <data> is a hyphen '-' it reads the data from stdin
+		case junkSessionCookies // alias with '-j'
+		case keepaliveTime(seconds: Double)
+		case keyType(type: String) // type is DER, PEM, or ENG
+		case key(key: String) // man page says private key "file name" rather than "value"
+		case krb(level: String) // Kerberos; values are clear, safe, confidential, or private
+		case libcurl(file: String) // creates libcurl-using C source code to perform task (instead of or as well as?) performing task
+		case limitRate(speed: String) // measured in bytes/second, unless a suffix (k, M, G, T, P) is appended, these are 1024-based
+		case listOnly // alias with '-l'
+		case localPort(eitherNumberOrRange: String)
 		
 		func derivedArguments() -> [String] {
 			[]
