@@ -340,7 +340,7 @@ extension Curl {
 			case .dataBinary(let data): return ["--data-binary", data]
 			case .dataRaw(let data): return ["--data-raw", data]
 			case .dataUrlEncode(let data): return ["--data-urlencode", data]
-			case .delegation(let level): return ["--delegation", level]
+			case .delegation(let level): return ["--delegation", level.rawValue]
 			case .digest: return ["--digest"]
 			case .disableEprt: return ["--disable-eprt"]
 			case .disableEpsv: return ["--disable-epsv"]
@@ -352,7 +352,7 @@ extension Curl {
 			case .dnsServers(let addresses): return ["--dns-servers", addresses.joined(separator: ",")]
 			case .dohCertStatus: return ["--doh-cert-status"]
 			case .dohInsecure: return ["--doh-insecure"]
-			case .dohUrl(let url): return ["--doh-url", url]
+			case .dohUrl(let url): return ["--doh-url", url.absoluteString]
 			case .dumpHeader(let filename): return ["--dump-header", filename]
 			case .egdFile(file: let file):
 				<#code#>
