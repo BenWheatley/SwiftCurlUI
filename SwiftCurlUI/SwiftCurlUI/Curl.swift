@@ -319,11 +319,8 @@ extension Curl {
 			case .certStatus: return ["--cert-status"]
 			case .certType(let type): return ["--cert-type", type.rawValue]
 			case .cert(let certificate, let password):
-				var args = ["--cert", certificate]
-				if let password = password {
-					args.append(password)
-				}
-				return args
+				guard let password = password else { return ["--cert", certificate] }
+				return ["--cert", "\(certificate):\(password)"]
 			case .ciphers(let cipherList): return ["--ciphers", cipherList]
 			case .compressedSsh: return ["--compressed-ssh"]
 			case .compressed: return ["--compressed"]
