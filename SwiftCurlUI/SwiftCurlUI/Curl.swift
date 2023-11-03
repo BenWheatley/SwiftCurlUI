@@ -307,15 +307,14 @@ extension Curl {
 		
 		func derivedArguments() -> [String] {
 			switch self {
-				
-			case .abstractUnixSocket(path: let path):
-				<#code#>
-			case .altSvc(fileName: let fileName):
-				<#code#>
+			case .abstractUnixSocket(let path):
+				return ["--abstract-unix-socket", path]
+			case .altSvc(let fileName):
+				return ["--alt-svc", fileName]
 			case .anyAuth:
-				<#code#>
+				return ["--anyauth"]
 			case .append:
-				<#code#>
+				return ["--append"]
 			case .awsSigV4(providerInfo: let providerInfo):
 				<#code#>
 			case .basic:
