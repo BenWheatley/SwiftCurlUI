@@ -60,7 +60,7 @@ extension Curl {
 		case caCert(file: String)
 		case caPath(directory: String)
 		case certStatus
-		case certType(type: String)
+		case certType(type: ClientCertificateType)
 		case cert(certificate: String, password: String? = nil)
 		case ciphers(cipherList: [String]) // when turning into an argument, concatenate with hyphens e.g. "ECDHE-ECDSA-AES256-CCM8"
 		case compressedSsh
@@ -317,7 +317,7 @@ extension Curl {
 			case .caCert(let file): return ["--cacert", file]
 			case .caPath(let directory): return ["--capath", directory]
 			case .certStatus: return ["--cert-status"]
-			case .certType(let type): return ["--cert-type", type]
+			case .certType(let type): return ["--cert-type", type.rawValue]
 			case .cert(certificate: let certificate, password: let password):
 				<#code#>
 			case .ciphers(cipherList: let cipherList):
@@ -802,6 +802,12 @@ extension Curl {
 				<#code#>
 			}
 		}
+	}
+}
+
+extension Curl {
+	enum ClientCertificateType: String, Codable {
+		case PEM, DER, ENG, P12
 	}
 }
 
