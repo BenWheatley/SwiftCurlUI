@@ -336,42 +336,24 @@ extension Curl {
 			case .crlf: return ["--crlf"]
 			case .crlFile(let file): return ["--crlfile", file]
 			case .curves(let algorithmList): return ["--curves", algorithmList.joined(separator: ":")]
-			case .dataAscii(data: let data):
-				<#code#>
-			case .dataBinary(data: let data):
-				<#code#>
-			case .dataRaw(data: let data):
-				<#code#>
-			case .dataUrlEncode(data: let data):
-				<#code#>
-			case .delegation(level: let level):
-				<#code#>
-			case .digest:
-				<#code#>
-			case .disableEprt:
-				<#code#>
-			case .disableEpsv:
-				<#code#>
-			case .disable:
-				<#code#>
-			case .disallowUsernameInUrl:
-				<#code#>
-			case .dnsInterface(interface: let interface):
-				<#code#>
-			case .dnsIpv4Addr(address: let address):
-				<#code#>
-			case .dnsIpv6Addr(address: let address):
-				<#code#>
-			case .dnsServers(addresses: let addresses):
-				<#code#>
-			case .dohCertStatus:
-				<#code#>
-			case .dohInsecure:
-				<#code#>
-			case .dohUrl(url: let url):
-				<#code#>
-			case .dumpHeader(filename: let filename):
-				<#code#>
+			case .dataAscii(let data): return ["--data-ascii", data]
+			case .dataBinary(let data): return ["--data-binary", data]
+			case .dataRaw(let data): return ["--data-raw", data]
+			case .dataUrlEncode(let data): return ["--data-urlencode", data]
+			case .delegation(let level): return ["--delegation", level]
+			case .digest: return ["--digest"]
+			case .disableEprt: return ["--disable-eprt"]
+			case .disableEpsv: return ["--disable-epsv"]
+			case .disable: return ["--disable"]
+			case .disallowUsernameInUrl: return ["--disallow-username-in-url"]
+			case .dnsInterface(let interface): return ["--dns-interface", interface]
+			case .dnsIpv4Addr(let address): return ["--dns-ipv4-addr", address]
+			case .dnsIpv6Addr(let address): return ["--dns-ipv6-addr", address]
+			case .dnsServers(let addresses): return ["--dns-servers", addresses.joined(separator: ",")]
+			case .dohCertStatus: return ["--doh-cert-status"]
+			case .dohInsecure: return ["--doh-insecure"]
+			case .dohUrl(let url): return ["--doh-url", url]
+			case .dumpHeader(let filename): return ["--dump-header", filename]
 			case .egdFile(file: let file):
 				<#code#>
 			case .engine(name: let name):
