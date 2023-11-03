@@ -123,7 +123,7 @@ extension Curl {
 		case haproxyProtocol
 		case head // alias with '-I'
 		case header(header: String) // alias with '-H', filenames will only be recognised as such when preceded with '@' (e.g. `@filename.txt`), read from stdin with `@-`
-		case help(category: String) // alias with '-h'
+		case help(category: String?) // alias with '-h'
 		case hostpubmd5(md5: String)
 		case hostpubsha256(sha256: String)
 		case hsts(fileName: String)
@@ -383,7 +383,9 @@ extension Curl {
 			case .haproxyProtocol: return ["--haproxy-protocol"]
 			case .head: return ["--head"]
 			case .header(let header): return ["--header", header]
-			case .help(let category): return ["--help", category]
+			case .help(let category):
+				guard let category = category else { return ["--help"] }
+				return ["--help", category]
 			case .hostpubmd5(let md5): return ["--hostpubmd5", md5]
 			case .hostpubsha256(let sha256): return ["--hostpubsha256", sha256]
 			case .hsts(let fileName): return ["--hsts", fileName]
@@ -398,7 +400,7 @@ extension Curl {
 			case .include: return ["--include"]
 			case .insecure: return ["--insecure"]
 			case .interface(let name): return ["--interface", name]
-			case .ipfsGateway(let url): return ["--ipfs-gateway", url]
+			case .ipfsGateway(let url): return ["--ipfs-gateway", url.absoluteString]
 			case .ipv4: return ["--ipv4"]
 			case .ipv6: return ["--ipv6"]
 			case .json(let data): return ["--json", data]
