@@ -312,19 +312,13 @@ extension Curl {
 			case .anyAuth: return ["--anyauth"]
 			case .append: return ["--append"]
 			case .awsSigV4(providerInfo: let providerInfo):
-				<#code#>
-			case .basic:
-				<#code#>
-			case .caNative:
-				<#code#>
-			case .caCert(file: let file):
-				<#code#>
-			case .caPath(directory: let directory):
-				<#code#>
-			case .certStatus:
-				<#code#>
-			case .certType(type: let type):
-				<#code#>
+				return ["--aws-sigv4", providerInfo]
+			case .basic: return ["--basic"]
+			case .caNative: return ["--ca-native"]
+			case .caCert(let file): return ["--cacert", file]
+			case .caPath(let directory): return ["--capath", directory]
+			case .certStatus: return ["--cert-status"]
+			case .certType(let type): return ["--cert-type", type]
 			case .cert(certificate: let certificate, password: let password):
 				<#code#>
 			case .ciphers(cipherList: let cipherList):
