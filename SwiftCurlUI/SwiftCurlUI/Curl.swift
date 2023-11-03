@@ -579,7 +579,7 @@ extension Curl {
 				<#code#>
 			case .tls13Ciphers(ciphersuiteList: let ciphersuiteList):
 				<#code#>
-			case .tlsauthtype(type: let type):
+			case .tlsAuthType(type: let type):
 				<#code#>
 			case .tlspassword(string: let string):
 				<#code#>
