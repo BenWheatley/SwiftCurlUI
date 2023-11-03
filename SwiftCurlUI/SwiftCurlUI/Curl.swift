@@ -29,16 +29,20 @@ struct Curl: Codable {
 		// Optionally, you can set the working directory if needed
 		task.currentDirectoryPath = "/path/to/your/working/directory"
 		
-		let pipe = Pipe()
-		task.standardOutput = pipe
+		let output = Pipe()
+		let error = Pipe()
+		task.standardOutput = output
+		task.standardError = error
 		
 		do {
 			try task.run()
 			task.waitUntilExit()
 			
-			let data = pipe.fileHandleForReading.readDataToEndOfFile()
-			if let output = String(data: data, encoding: .utf8) {
+			if let output = String(data: output.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) {
 				print("Output: \(output)")
+			}
+			if let output = String(data: error.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) {
+				print("Error: \(error)")
 			}
 		} catch {
 			print("Error: \(error.localizedDescription)")
