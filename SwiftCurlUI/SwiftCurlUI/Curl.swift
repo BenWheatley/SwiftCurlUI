@@ -275,9 +275,9 @@ extension Curl {
 		case telnetOption(option: String) // alias with '-t'; Supported options: TTYPE=<term>, XDISPLOC=<X display>, NEW_ENV=<var,val>; e.g. `curl -t TTYPE=vt100 …`
 		case tftpBlockSize(value: UInt64) // block size on a TFTP server
 		case tftpNoOptions
-		case timeCond(time: String) // alias '-z'; this is a string representing a date, which can be "all sorts of date" formats
-		case tlsMax(version: String) // valid values: [default, 1.0, 1.1, 1.2, 1.3]
-		case tls13Ciphers(ciphersuiteList: String)
+		case timeCond(date: Date, olderThan: Bool) // alias '-z'; this is a string representing a date, which can be "all sorts of date" formats
+		case tlsMax(version: TLSVersion) // valid values: [default, 1.0, 1.1, 1.2, 1.3]
+		case tls13Ciphers(ciphersuiteList: [String])
 		case tlsAuthType(type: TLSAuthenticationType) // only supported value: SRP
 		case tlspassword(string: String)
 		case tlsuser(name: String)
@@ -298,7 +298,7 @@ extension Curl {
 		case url(url: URL) // to fetch
 		case useAscii // alias with '-B'
 		case userAgent(name: String) // alias with '-A'
-		case user(userPassword: String) // alias with '-u'
+		case user(user: String, password: String) // alias with '-u'
 		case variable(nameText: String) // <[%]name=text/@file>
 		case verbose // alias with '-v'
 		case version // alias with '-V'
@@ -521,7 +521,7 @@ extension Curl {
 			case .socks5_GSS_API: return ["--socks5-gssapi"]
 			case .socks5Hostname(let hostPort): return ["--socks5-hostname", hostPort]
 			case .socks5(let hostPort): return ["--socks5", hostPort]
-			case .speedLimit(let speed): return ["--speed-limit", speed]
+			case .speedLimit(let speed): return ["--speed-limit", String(speed)]
 			case .speedTime(let seconds): return ["--speed-time", String(seconds)]
 			case .sslAllowBeast: return ["--ssl-allow-beast"]
 			case .sslAutoClientCert: return ["--ssl-auto-client-cert"]
@@ -539,10 +539,10 @@ extension Curl {
 			case .telnetOption(let option): return ["--telnet-option", option]
 			case .tftpBlockSize(let value): return ["--tftp-blksize", String(value)]
 			case .tftpNoOptions: return ["--tftp-no-options"]
-			case .timeCond(let time): return ["--time-cond", time]
-			case .tlsMax(let version): return ["--tls-max", version]
-			case .tls13Ciphers(let ciphersuiteList): return ["--tls13-ciphers", ciphersuiteList.joined(separator: ",")]
-			case .tlsAuthType(let type): return ["--tlsauthtype", type]
+			case .timeCond(let date, let olderThan): return ["--time-cond", (olderThan ? "-" : "") + ISO8601DateFormatter.string(from: date, timeZone: TimeZone.current)]
+			case .tlsMax(let version): return ["--tls-max", version.rawValue]
+			case .tls13Ciphers(let ciphersuiteList): return ["--tls13-ciphers", ciphersuiteList.joined(separator: "_")]
+			case .tlsAuthType(let type): return ["--tlsauthtype", type.rawValue]
 			case .tlspassword(let string): return ["--tlspassword", string]
 			case .tlsuser(let name): return ["--tlsuser", name]
 			case .tlsv1_0: return ["--tlsv1.0"]
@@ -559,10 +559,10 @@ extension Curl {
 			case .unixSocket(let path): return ["--unix-socket", path]
 			case .uploadFile(let file): return ["--upload-file", file]
 			case .urlQuery(let data): return ["--url-query", data]
-			case .url(let url): return ["--url", url]
+			case .url(let url): return ["--url", url.absoluteString]
 			case .useAscii: return ["--use-ascii"]
 			case .userAgent(let name): return ["--user-agent", name]
-			case .user(let userPassword): return ["--user", userPassword]
+			case .user(let user, let password): return ["--user", "\(user):\(password)"]
 			case .variable(let nameText): return ["--variable", nameText]
 			case .verbose: return ["--verbose"]
 			case .version: return ["--version"]
@@ -613,6 +613,14 @@ extension Curl {
 }
 
 extension Curl {
+	enum TLSVersion: String, Codable {
+		case `default`
+		case _1_0 = "1.0"
+		case _1_1 = "1.1"
+		case _1_2 = "1.2"
+		case _1_3 = "1.3"
+	}
+	
 	enum TLSAuthenticationType: String, Codable {
 		case SRP
 	}
