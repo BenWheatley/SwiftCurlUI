@@ -325,7 +325,7 @@ extension Curl {
 			case .compressedSsh: return ["--compressed-ssh"]
 			case .compressed: return ["--compressed"]
 			case .config(let file): return ["--config", file]
-			case .connectTimeout(let seconds): return ["--connect-timeout", String(seconds)]
+			case .connectTimeout(let seconds): return ["--connect-timeout", String(seconds)] // TODO: how does String(double) construct numbers in different locales? I need "12.34" everywhere, no variation.
 			case .connectTo(let host1, let port1, let host2, let port2):
 				return ["--connect-to", "\(host1):\(port1):\(host2):\(port2)"]
 			case .continueAt(let offset): return ["--continue-at", String(offset)]
