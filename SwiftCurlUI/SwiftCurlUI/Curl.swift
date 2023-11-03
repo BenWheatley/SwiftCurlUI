@@ -199,10 +199,10 @@ extension Curl {
 		case proxyCANative
 		case proxyCACert(file: String)
 		case proxyCAPath(dir: String)
-		case proxyCertType(type: String)
+		case proxyCertType(type: ClientCertificateType)
 		case proxyCert(cert: String, password: String?) // if it has a password, concatenate with ':'
-		case proxyCiphers(list: String)
-		case proxyCrlfile(file: String)
+		case proxyCiphers(list: [String])
+		case proxyCRLFile(file: String)
 		case proxyDigest
 		case proxyHeader(header: String) // same rules as --header but not an alias
 		case proxyHttp2
@@ -216,8 +216,8 @@ extension Curl {
 		case proxyServiceName(name: String)
 		case proxySSLAllowBeast
 		case proxySSLAutoClientCert
-		case proxyTLS13Ciphers(ciphersuiteList: String)
-		case proxyTLSAuthType(type: String)
+		case proxyTLS13Ciphers(ciphersuiteList: [String])
+		case proxyTLSAuthType(type: TLSAuthenticationType)
 		case proxyTLSPassword(string: String)
 		case proxyTLSUser(name: String)
 		case proxyTLSv1
@@ -228,9 +228,9 @@ extension Curl {
 		case pubKey(key: String)
 		case quote(command: String) // alias with '-Q'
 		case range(range: String) // alias with '-r', see man page for parsing rules
-		case rate(maxRequestRate: String) // number of transfer starts per time unit, the user can specify s, m, h, d for obvious meanings, e.g., "5/s," more than 1000/s is counted as unrestricted
+		case rate(maxRequestRate: RequestRate) // number of transfer starts per time unit, the user can specify s, m, h, d for obvious meanings, e.g., "5/s," more than 1000/s is counted as unrestricted
 		case raw
-		case referer(url: String) // alias with '-e'
+		case referer(url: URL) // alias with '-e'
 		case remoteHeaderName // alias with '-J'
 		case remoteNameAll
 		case remoteName // alias with '-O'
@@ -278,7 +278,7 @@ extension Curl {
 		case timeCond(time: String) // alias '-z'; this is a string representing a date, which can be "all sorts of date" formats
 		case tlsMax(version: String) // valid values: [default, 1.0, 1.1, 1.2, 1.3]
 		case tls13Ciphers(ciphersuiteList: String)
-		case tlsauthtype(type: String) // only supported value: SRP
+		case tlsAuthType(type: TLSAuthenticationType) // only supported value: SRP
 		case tlspassword(string: String)
 		case tlsuser(name: String)
 		case tlsv1_0
@@ -447,24 +447,26 @@ extension Curl {
 			case .parallel: return ["--parallel"]
 			case .pass(let phrase): return ["--pass", phrase]
 			case .pathAsIs: return ["--path-as-is"]
-			case .pinnedPubKey(let hashes): return ["--pinnedpubkey", hashes] // would be something like `….joined(separator: ";")` if I use an array rather than a String for hashes
+			case .pinnedPubKey(let hashes): return ["--pinnedpubkey", hashes] // would be something like `"sha256//" + ….joined(separator: ";")` if I use an array rather than a String for hashes
 			case .post301: return ["--post301"]
 			case .post302: return ["--post302"]
 			case .post303: return ["--post303"]
 			case .preproxy(let protocolHostPort): return ["--preproxy", protocolHostPort]
 			case .progressBar: return ["--progress-bar"]
-			case .protoDefault(let protocol): return ["--proto-default", protocol]
-			case .protoRedirect(let protocols): return ["--proto-redir", protocols.joined(separator: ",")]
-			case .proto(let protocols): return ["--proto", protocols.joined(separator: ",")]
+			case .protoDefault(let `protocol`): return ["--proto-default", `protocol`]
+			case .protoRedirect(let protocols): return ["--proto-redir", protocols] // would be `….joined(separator: ",")` if I was using something more complex than String
+			case .proto(let protocols): return ["--proto", protocols] // would be `….joined(separator: ",")` if I was using something more complex than String
 			case .proxyAnyAuth: return ["--proxy-anyauth"]
 			case .proxyBasic: return ["--proxy-basic"]
 			case .proxyCANative: return ["--proxy-ca-native"]
 			case .proxyCACert(let file): return ["--proxy-cacert", file]
 			case .proxyCAPath(let dir): return ["--proxy-capath", dir]
-			case .proxyCertType(let type): return ["--proxy-cert-type", type]
-			case .proxyCert(let cert, let password): return ["--proxy-cert", "\(cert):\(password)"]
+			case .proxyCertType(let type): return ["--proxy-cert-type", type.rawValue]
+			case .proxyCert(let cert, let password):
+				guard let password = password else { return ["--proxy-cert", cert] }
+				return ["--proxy-cert", "\(cert):\(password)"]
 			case .proxyCiphers(let list): return ["--proxy-ciphers", list.joined(separator: "-")]
-			case .proxyCrlfile(let file): return ["--proxy-crlfile", file]
+			case .proxyCRLFile(let file): return ["--proxy-crlfile", file]
 			case .proxyDigest: return ["--proxy-digest"]
 			case .proxyHeader(let header): return ["--proxy-header", header]
 			case .proxyHttp2: return ["--proxy-http2"]
@@ -474,25 +476,25 @@ extension Curl {
 			case .proxyNegotiate: return ["--proxy-negotiate"]
 			case .proxyNTLM: return ["--proxy-ntlm"]
 			case .proxyPass(let phrase): return ["--proxy-pass", phrase]
-			case .proxyPinnedPubKey(let hashes): return ["--proxy-pinnedpubkey", hashes.joined(separator: ";")]
+			case .proxyPinnedPubKey(let hashes): return ["--proxy-pinnedpubkey", hashes] // would be something like `"sha256//" + ….joined(separator: ";")` if I use an array rather than a String for hashes
 			case .proxyServiceName(let name): return ["--proxy-service-name", name]
 			case .proxySSLAllowBeast: return ["--proxy-ssl-allow-beast"]
 			case .proxySSLAutoClientCert: return ["--proxy-ssl-auto-client-cert"]
-			case .proxyTLS13Ciphers(let ciphersuiteList): return ["--proxy-tls13-ciphers", ciphersuiteList]
-			case .proxyTLSAuthType(let type): return ["--proxy-tlsauthtype", type]
+			case .proxyTLS13Ciphers(let ciphersuiteList): return ["--proxy-tls13-ciphers", ciphersuiteList.joined(separator: "_")]
+			case .proxyTLSAuthType(let type): return ["--proxy-tlsauthtype", type.rawValue]
 			case .proxyTLSPassword(let string): return ["--proxy-tlspassword", string]
 			case .proxyTLSUser(let name): return ["--proxy-tlsuser", name]
 			case .proxyTLSv1: return ["--proxy-tlsv1"]
-			case .proxyUser(let user, let password): return ["--proxy", user, "--proxy-pass", password]
+			case .proxyUser(let user, let password): return ["--proxy-user", "\(user):\(password)"]
 			case .proxy(let protocolHostPort): return ["--proxy", protocolHostPort]
 			case .proxy1_0(let hostPort): return ["--proxy1.0", hostPort]
 			case .proxytunnel: return ["--proxytunnel"]
 			case .pubKey(let key): return ["--pubkey", key]
 			case .quote(let command): return ["--quote", command]
 			case .range(let range): return ["--range", range]
-			case .rate(let maxRequestRate): return ["--rate", maxRequestRate]
+			case .rate(let maxRequestRate): return ["--rate", maxRequestRate.toString]
 			case .raw: return ["--raw"]
-			case .referer(let url): return ["--referer", url]
+			case .referer(let url): return ["--referer", url.absoluteString]
 			case .remoteHeaderName: return ["--remote-header-name"]
 			case .remoteNameAll: return ["--remote-name-all"]
 			case .remoteName: return ["--remote-name"]
@@ -500,10 +502,9 @@ extension Curl {
 			case .removeOnError: return ["--remove-on-error"]
 			case .requestTarget(let path): return ["--request-target", path]
 			case .request(let method): return ["--request", method]
-			case .resolve(let hostPortAddr): return ["--resolve", hostPortAddr.joined(separator: ",")]
+			case .resolve(let hostPortAddr): return ["--resolve", hostPortAddr]
 			case .retryAllErrors: return ["--retry-all-errors"]
 			case .retryConnRefused: return ["--retry-connrefused"]
-
 			case .retryDelay(seconds: let seconds):
 				<#code#>
 			case .retryMaxTime(seconds: let seconds):
@@ -654,8 +655,29 @@ extension Curl {
 }
 
 extension Curl {
+	struct RequestRate: Codable {
+		let value: UInt
+		let unit: Unit
+		
+		var toString: String {
+			"\(value)/\(unit.rawValue)"
+		}
+		
+		enum Unit: String, Codable {
+			case s, m, h, d
+		}
+	}
+}
+
+extension Curl {
 	enum SSLClearCommandChannelMode: String, Codable {
 		case active, passive
+	}
+}
+
+extension Curl {
+	enum TLSAuthenticationType: String, Codable {
+		case SRP
 	}
 }
 
