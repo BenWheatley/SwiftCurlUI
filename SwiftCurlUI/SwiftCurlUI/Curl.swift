@@ -311,8 +311,7 @@ extension Curl {
 			case .altSvc(let fileName): return ["--alt-svc", fileName]
 			case .anyAuth: return ["--anyauth"]
 			case .append: return ["--append"]
-			case .awsSigV4(providerInfo: let providerInfo):
-				return ["--aws-sigv4", providerInfo]
+			case .awsSigV4(providerInfo: let providerInfo): return ["--aws-sigv4", providerInfo]
 			case .basic: return ["--basic"]
 			case .caNative: return ["--ca-native"]
 			case .caCert(let file): return ["--cacert", file]
