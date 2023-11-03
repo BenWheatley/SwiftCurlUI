@@ -318,36 +318,27 @@ extension Curl {
 			case .caPath(let directory): return ["--capath", directory]
 			case .certStatus: return ["--cert-status"]
 			case .certType(let type): return ["--cert-type", type.rawValue]
-			case .cert(certificate: let certificate, password: let password):
-				<#code#>
-			case .ciphers(cipherList: let cipherList):
-				<#code#>
-			case .compressedSsh:
-				<#code#>
-			case .compressed:
-				<#code#>
-			case .config(file: let file):
-				<#code#>
-			case .connectTimeout(seconds: let seconds):
-				<#code#>
-			case .connectTo(host1: let host1, port1: let port1, host2: let host2, port2: let port2):
-				<#code#>
-			case .continueAt(offset: let offset):
-				<#code#>
-			case .cookieJar(filename: let filename):
-				<#code#>
-			case .cookie(dataOrFilename: let dataOrFilename):
-				<#code#>
-			case .createDirs:
-				<#code#>
-			case .createFileMode(mode: let mode):
-				<#code#>
-			case .crlf:
-				<#code#>
-			case .crlFile(file: let file):
-				<#code#>
-			case .curves(algorithmList: let algorithmList):
-				<#code#>
+			case .cert(let certificate, let password):
+				var args = ["--cert", certificate]
+				if let password = password {
+					args.append(password)
+				}
+				return args
+			case .ciphers(let cipherList): return ["--ciphers", cipherList]
+			case .compressedSsh: return ["--compressed-ssh"]
+			case .compressed: return ["--compressed"]
+			case .config(let file): return ["--config", file]
+			case .connectTimeout(let seconds): return ["--connect-timeout", String(seconds)]
+			case .connectTo(let host1, let port1, let host2, let port2):
+				return ["--connect-to", "\(host1):\(port1):\(host2):\(port2)"]
+			case .continueAt(let offset): return ["--continue-at", String(offset)]
+			case .cookieJar(let filename): return ["--cookie-jar", filename]
+			case .cookie(let dataOrFilename): return ["--cookie", dataOrFilename]
+			case .createDirs: return ["--create-dirs"]
+			case .createFileMode(let mode): return ["--create-file-mode", mode]
+			case .crlf: return ["--crlf"]
+			case .crlFile(let file): return ["--crlfile", file]
+			case .curves(let algorithmList): return ["--curves", algorithmList]
 			case .dataAscii(data: let data):
 				<#code#>
 			case .dataBinary(data: let data):
