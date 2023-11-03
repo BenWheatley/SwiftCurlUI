@@ -374,62 +374,34 @@ extension Curl {
 			case .ftpPret: return ["--ftp-pret"]
 			case .ftpSkipPasvIp: return ["--ftp-skip-pasv-ip"]
 			case .ftpSSLClearCommandChannelMode(let mode): return ["--ftp-ssl-ccc-mode", mode.rawValue]
-			case .ftpSSLClearCommandChannel:
-				<#code#>
-			case .ftpSSLControl:
-				<#code#>
-			case .get:
-				<#code#>
-			case .globOff:
-				<#code#>
-			case .happyEyeballsTimeoutMs(milliseconds: let milliseconds):
-				<#code#>
-			case .haproxyClientIp:
-				<#code#>
-			case .haproxyProtocol:
-				<#code#>
-			case .head:
-				<#code#>
-			case .header(header: let header):
-				<#code#>
-			case .help(category: let category):
-				<#code#>
-			case .hostpubmd5(md5: let md5):
-				<#code#>
-			case .hostpubsha256(sha256: let sha256):
-				<#code#>
-			case .hsts(fileName: let fileName):
-				<#code#>
-			case .http0_9:
-				<#code#>
-			case .http1_0:
-				<#code#>
-			case .http1_1:
-				<#code#>
-			case .http2PriorKnowledge:
-				<#code#>
-			case .http2:
-				<#code#>
-			case .http3Only:
-				<#code#>
-			case .http3:
-				<#code#>
-			case .ignoreContentLength:
-				<#code#>
-			case .include:
-				<#code#>
-			case .insecure:
-				<#code#>
-			case .interface(name: let name):
-				<#code#>
-			case .ipfsGateway(url: let url):
-				<#code#>
-			case .ipv4:
-				<#code#>
-			case .ipv6:
-				<#code#>
-			case .json(data: let data):
-				<#code#>
+			case .ftpSSLClearCommandChannel: return ["--ftp-ssl-ccc"]
+			case .ftpSSLControl: return ["--ftp-ssl-control"]
+			case .get: return ["--get"]
+			case .globOff: return ["--globoff"]
+			case .happyEyeballsTimeoutMs(let milliseconds): return ["--happy-eyeballs-timeout-ms", String(milliseconds)]
+			case .haproxyClientIp: return ["--haproxy-clientip"]
+			case .haproxyProtocol: return ["--haproxy-protocol"]
+			case .head: return ["--head"]
+			case .header(let header): return ["--header", header]
+			case .help(let category): return ["--help", category]
+			case .hostpubmd5(let md5): return ["--hostpubmd5", md5]
+			case .hostpubsha256(let sha256): return ["--hostpubsha256", sha256]
+			case .hsts(let fileName): return ["--hsts", fileName]
+			case .http0_9: return ["--http0.9"]
+			case .http1_0: return ["--http1.0"]
+			case .http1_1: return ["--http1.1"]
+			case .http2PriorKnowledge: return ["--http2-prior-knowledge"]
+			case .http2: return ["--http2"]
+			case .http3Only: return ["--http3-only"]
+			case .http3: return ["--http3"]
+			case .ignoreContentLength: return ["--ignore-content-length"]
+			case .include: return ["--include"]
+			case .insecure: return ["--insecure"]
+			case .interface(let name): return ["--interface", name]
+			case .ipfsGateway(let url): return ["--ipfs-gateway", url]
+			case .ipv4: return ["--ipv4"]
+			case .ipv6: return ["--ipv6"]
+			case .json(let data): return ["--json", data]
 			case .junkSessionCookies:
 				<#code#>
 			case .keepaliveTime(seconds: let seconds):
