@@ -174,7 +174,7 @@ extension Curl {
 		case noKeepalive
 		case noProgressMeter
 		case noSessionID
-		case noProxy(noProxyList: String) // comma-separated list, or *
+		case noProxy(noProxyList: [String]) // comma-separated list, or *
 		case ntlmWb
 		case ntlm
 		case oauth2Bearer(token: String) // RFC 6750
@@ -406,13 +406,15 @@ extension Curl {
 			case .json(let data): return ["--json", data]
 			case .junkSessionCookies: return ["--junk-session-cookies"]
 			case .keepaliveTime(let seconds): return ["--keepalive-time", String(seconds)]
-			case .keyType(let type): return ["--key-type", type]
+			case .keyType(let type): return ["--key-type", type.rawValue]
 			case .key(let key): return ["--key", key]
-			case .krb(let level): return ["--krb", level]
+			case .krb(let level): return ["--krb", level.rawValue]
 			case .libcurl(let file): return ["--libcurl", file]
-			case .limitRate(let speed): return ["--limit-rate", speed]
+			case .limitRate(let speed): return ["--limit-rate", speed.toString]
 			case .listOnly: return ["--list-only"]
-			case .localPort(let low, let high): return ["--local-port", "\(low):\(high)"]
+			case .localPort(let low, let high):
+				guard let high = high else { return ["--local-port", "\(low)"] }
+				return ["--local-port", "\(low)-\(high)"]
 			case .locationTrusted: return ["--location-trusted"]
 			case .location: return ["--location"]
 			case .loginOptions(let options): return ["--login-options", options]
@@ -421,7 +423,7 @@ extension Curl {
 			case .mailRcptAllowFails: return ["--mail-rcpt-allowfails"]
 			case .mailRcpt(let emailAddress): return ["--mail-rcpt", emailAddress]
 			case .manual: return ["--manual"]
-			case .maxFilesize(let bytes): return ["--max-filesize", String(bytes)]
+			case .maxFilesize(let bytes): return ["--max-filesize", bytes.toString]
 			case .maxRedirs(let num): return ["--max-redirs", String(num)]
 			case .maxTime(let fractionalSeconds): return ["--max-time", String(fractionalSeconds)]
 			case .negotiate: return ["--negotiate"]
@@ -445,13 +447,12 @@ extension Curl {
 			case .parallel: return ["--parallel"]
 			case .pass(let phrase): return ["--pass", phrase]
 			case .pathAsIs: return ["--path-as-is"]
-			case .pinnedPubKey(let hashes): return ["--pinnedpubkey", hashes.joined(separator: ";")]
+			case .pinnedPubKey(let hashes): return ["--pinnedpubkey", hashes] // would be something like `….joined(separator: ";")` if I use an array rather than a String for hashes
 			case .post301: return ["--post301"]
 			case .post302: return ["--post302"]
 			case .post303: return ["--post303"]
 			case .preproxy(let protocolHostPort): return ["--preproxy", protocolHostPort]
 			case .progressBar: return ["--progress-bar"]
-
 			case .protoDefault(protocol: let protocol):
 				<#code#>
 			case .protoRedirect(protocols: let protocols):
