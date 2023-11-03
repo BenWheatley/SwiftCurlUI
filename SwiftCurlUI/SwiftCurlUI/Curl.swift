@@ -368,12 +368,12 @@ extension Curl {
 			case .ftpAccount(let data): return ["--ftp-account", data]
 			case .ftpAlternativeToUser(let command): return ["--ftp-alternative-to-user", command]
 			case .ftpCreateDirs: return ["--ftp-create-dirs"]
-			case .ftpMethod(let method): return ["--ftp-method", method]
+			case .ftpMethod(let method): return ["--ftp-method", method.rawValue]
 			case .ftpPasv: return ["--ftp-pasv"]
 			case .ftpPort(let address): return ["--ftp-port", address]
 			case .ftpPret: return ["--ftp-pret"]
 			case .ftpSkipPasvIp: return ["--ftp-skip-pasv-ip"]
-			case .ftpSSLClearCommandChannelMode(let mode): return ["--ftp-ssl-ccc-mode", mode]
+			case .ftpSSLClearCommandChannelMode(let mode): return ["--ftp-ssl-ccc-mode", mode.rawValue]
 			case .ftpSSLClearCommandChannel:
 				<#code#>
 			case .ftpSSLControl:
