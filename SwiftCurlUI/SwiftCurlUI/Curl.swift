@@ -306,7 +306,513 @@ extension Curl {
 		case xattr
 		
 		func derivedArguments() -> [String] {
-			[]
+			switch self {
+				
+			case .abstractUnixSocket(path: let path):
+				<#code#>
+			case .altSvc(fileName: let fileName):
+				<#code#>
+			case .anyAuth:
+				<#code#>
+			case .append:
+				<#code#>
+			case .awsSigV4(providerInfo: let providerInfo):
+				<#code#>
+			case .basic:
+				<#code#>
+			case .caNative:
+				<#code#>
+			case .caCert(file: let file):
+				<#code#>
+			case .caPath(directory: let directory):
+				<#code#>
+			case .certStatus:
+				<#code#>
+			case .certType(type: let type):
+				<#code#>
+			case .cert(certificate: let certificate, password: let password):
+				<#code#>
+			case .ciphers(cipherList: let cipherList):
+				<#code#>
+			case .compressedSsh:
+				<#code#>
+			case .compressed:
+				<#code#>
+			case .config(file: let file):
+				<#code#>
+			case .connectTimeout(seconds: let seconds):
+				<#code#>
+			case .connectTo(host1: let host1, port1: let port1, host2: let host2, port2: let port2):
+				<#code#>
+			case .continueAt(offset: let offset):
+				<#code#>
+			case .cookieJar(filename: let filename):
+				<#code#>
+			case .cookie(dataOrFilename: let dataOrFilename):
+				<#code#>
+			case .createDirs:
+				<#code#>
+			case .createFileMode(mode: let mode):
+				<#code#>
+			case .crlf:
+				<#code#>
+			case .crlFile(file: let file):
+				<#code#>
+			case .curves(algorithmList: let algorithmList):
+				<#code#>
+			case .dataAscii(data: let data):
+				<#code#>
+			case .dataBinary(data: let data):
+				<#code#>
+			case .dataRaw(data: let data):
+				<#code#>
+			case .dataUrlEncode(data: let data):
+				<#code#>
+			case .delegation(level: let level):
+				<#code#>
+			case .digest:
+				<#code#>
+			case .disableEprt:
+				<#code#>
+			case .disableEpsv:
+				<#code#>
+			case .disable:
+				<#code#>
+			case .disallowUsernameInUrl:
+				<#code#>
+			case .dnsInterface(interface: let interface):
+				<#code#>
+			case .dnsIpv4Addr(address: let address):
+				<#code#>
+			case .dnsIpv6Addr(address: let address):
+				<#code#>
+			case .dnsServers(addresses: let addresses):
+				<#code#>
+			case .dohCertStatus:
+				<#code#>
+			case .dohInsecure:
+				<#code#>
+			case .dohUrl(url: let url):
+				<#code#>
+			case .dumpHeader(filename: let filename):
+				<#code#>
+			case .egdFile(file: let file):
+				<#code#>
+			case .engine(name: let name):
+				<#code#>
+			case .etagCompare(filename: let filename):
+				<#code#>
+			case .expect100Timeout(seconds: let seconds):
+				<#code#>
+			case .failEarly:
+				<#code#>
+			case .failWithBody:
+				<#code#>
+			case .fail:
+				<#code#>
+			case .falseStart:
+				<#code#>
+			case .formEscape:
+				<#code#>
+			case .formString(name: let name, value: let value):
+				<#code#>
+			case .form(name: let name, content: let content):
+				<#code#>
+			case .ftpAccount(data: let data):
+				<#code#>
+			case .ftpAlternativeToUser(command: let command):
+				<#code#>
+			case .ftpCreateDirs:
+				<#code#>
+			case .ftpMethod(method: let method):
+				<#code#>
+			case .ftpPasv:
+				<#code#>
+			case .ftpPort(address: let address):
+				<#code#>
+			case .ftpPret:
+				<#code#>
+			case .ftpSkipPasvIp:
+				<#code#>
+			case .ftpSSLClearCommandChannelMode(mode: let mode):
+				<#code#>
+			case .ftpSSLClearCommandChannel:
+				<#code#>
+			case .ftpSSLControl:
+				<#code#>
+			case .get:
+				<#code#>
+			case .globOff:
+				<#code#>
+			case .happyEyeballsTimeoutMs(milliseconds: let milliseconds):
+				<#code#>
+			case .haproxyClientIp:
+				<#code#>
+			case .haproxyProtocol:
+				<#code#>
+			case .head:
+				<#code#>
+			case .header(header: let header):
+				<#code#>
+			case .help(category: let category):
+				<#code#>
+			case .hostpubmd5(md5: let md5):
+				<#code#>
+			case .hostpubsha256(sha256: let sha256):
+				<#code#>
+			case .hsts(fileName: let fileName):
+				<#code#>
+			case .http0_9:
+				<#code#>
+			case .http1_0:
+				<#code#>
+			case .http1_1:
+				<#code#>
+			case .http2PriorKnowledge:
+				<#code#>
+			case .http2:
+				<#code#>
+			case .http3Only:
+				<#code#>
+			case .http3:
+				<#code#>
+			case .ignoreContentLength:
+				<#code#>
+			case .include:
+				<#code#>
+			case .insecure:
+				<#code#>
+			case .interface(name: let name):
+				<#code#>
+			case .ipfsGateway(url: let url):
+				<#code#>
+			case .ipv4:
+				<#code#>
+			case .ipv6:
+				<#code#>
+			case .json(data: let data):
+				<#code#>
+			case .junkSessionCookies:
+				<#code#>
+			case .keepaliveTime(seconds: let seconds):
+				<#code#>
+			case .keyType(type: let type):
+				<#code#>
+			case .key(key: let key):
+				<#code#>
+			case .krb(level: let level):
+				<#code#>
+			case .libcurl(file: let file):
+				<#code#>
+			case .limitRate(speed: let speed):
+				<#code#>
+			case .listOnly:
+				<#code#>
+			case .localPort(low: let low, high: let high):
+				<#code#>
+			case .locationTrusted:
+				<#code#>
+			case .location:
+				<#code#>
+			case .loginOptions(options: let options):
+				<#code#>
+			case .mailAuth(emailAddress: let emailAddress):
+				<#code#>
+			case .mailFrom(emailAddress: let emailAddress):
+				<#code#>
+			case .mailRcptAllowFails:
+				<#code#>
+			case .mailRcpt(emailAddress: let emailAddress):
+				<#code#>
+			case .manual:
+				<#code#>
+			case .maxFilesize(bytes: let bytes):
+				<#code#>
+			case .maxRedirs(num: let num):
+				<#code#>
+			case .maxTime(fractionalSeconds: let fractionalSeconds):
+				<#code#>
+			case .negotiate:
+				<#code#>
+			case .netrcFile(filename: let filename):
+				<#code#>
+			case .netrcOptional:
+				<#code#>
+			case .netrc:
+				<#code#>
+			case .noAlpn:
+				<#code#>
+			case .noBuffer:
+				<#code#>
+			case .noClobber:
+				<#code#>
+			case .noKeepalive:
+				<#code#>
+			case .noProgressMeter:
+				<#code#>
+			case .noSessionID:
+				<#code#>
+			case .noProxy(noProxyList: let noProxyList):
+				<#code#>
+			case .ntlmWb:
+				<#code#>
+			case .ntlm:
+				<#code#>
+			case .oauth2Bearer(token: let token):
+				<#code#>
+			case .outputDirectory(directory: let directory):
+				<#code#>
+			case .output(file: let file):
+				<#code#>
+			case .parallelImmediate:
+				<#code#>
+			case .parallelMax(num: let num):
+				<#code#>
+			case .parallel:
+				<#code#>
+			case .pass(phrase: let phrase):
+				<#code#>
+			case .pathAsIs:
+				<#code#>
+			case .pinnedPubKey(hashes: let hashes):
+				<#code#>
+			case .post301:
+				<#code#>
+			case .post302:
+				<#code#>
+			case .post303:
+				<#code#>
+			case .preproxy(protocolHostPort: let protocolHostPort):
+				<#code#>
+			case .progressBar:
+				<#code#>
+			case .protoDefault(protocol: let protocol):
+				<#code#>
+			case .protoRedirect(protocols: let protocols):
+				<#code#>
+			case .proto(protocols: let protocols):
+				<#code#>
+			case .proxyAnyAuth:
+				<#code#>
+			case .proxyBasic:
+				<#code#>
+			case .proxyCANative:
+				<#code#>
+			case .proxyCACert(file: let file):
+				<#code#>
+			case .proxyCAPath(dir: let dir):
+				<#code#>
+			case .proxyCertType(type: let type):
+				<#code#>
+			case .proxyCert(cert: let cert, password: let password):
+				<#code#>
+			case .proxyCiphers(list: let list):
+				<#code#>
+			case .proxyCrlfile(file: let file):
+				<#code#>
+			case .proxyDigest:
+				<#code#>
+			case .proxyHeader(header: let header):
+				<#code#>
+			case .proxyHttp2:
+				<#code#>
+			case .proxyInsecure:
+				<#code#>
+			case .proxyKeyType(type: let type):
+				<#code#>
+			case .proxyKey(key: let key):
+				<#code#>
+			case .proxyNegotiate:
+				<#code#>
+			case .proxyNTLM:
+				<#code#>
+			case .proxyPass(phrase: let phrase):
+				<#code#>
+			case .proxyPinnedPubKey(hashes: let hashes):
+				<#code#>
+			case .proxyServiceName(name: let name):
+				<#code#>
+			case .proxySSLAllowBeast:
+				<#code#>
+			case .proxySSLAutoClientCert:
+				<#code#>
+			case .proxyTLS13Ciphers(ciphersuiteList: let ciphersuiteList):
+				<#code#>
+			case .proxyTLSAuthType(type: let type):
+				<#code#>
+			case .proxyTLSPassword(string: let string):
+				<#code#>
+			case .proxyTLSUser(name: let name):
+				<#code#>
+			case .proxyTLSv1:
+				<#code#>
+			case .proxyUser(user: let user, password: let password):
+				<#code#>
+			case .proxy(protocolHostPort: let protocolHostPort):
+				<#code#>
+			case .proxy1_0(hostPort: let hostPort):
+				<#code#>
+			case .proxytunnel:
+				<#code#>
+			case .pubKey(key: let key):
+				<#code#>
+			case .quote(command: let command):
+				<#code#>
+			case .range(range: let range):
+				<#code#>
+			case .rate(maxRequestRate: let maxRequestRate):
+				<#code#>
+			case .raw:
+				<#code#>
+			case .referer(url: let url):
+				<#code#>
+			case .remoteHeaderName:
+				<#code#>
+			case .remoteNameAll:
+				<#code#>
+			case .remoteName:
+				<#code#>
+			case .remoteTime:
+				<#code#>
+			case .removeOnError:
+				<#code#>
+			case .requestTarget(path: let path):
+				<#code#>
+			case .request(method: let method):
+				<#code#>
+			case .resolve(hostPortAddr: let hostPortAddr):
+				<#code#>
+			case .retryAllErrors:
+				<#code#>
+			case .retryConnRefused:
+				<#code#>
+			case .retryDelay(seconds: let seconds):
+				<#code#>
+			case .retryMaxTime(seconds: let seconds):
+				<#code#>
+			case .retry(number: let number):
+				<#code#>
+			case .saslAuthorizationIdentity(identity: let identity):
+				<#code#>
+			case .saslInitialResponse:
+				<#code#>
+			case .serviceName(name: let name):
+				<#code#>
+			case .showError:
+				<#code#>
+			case .silent:
+				<#code#>
+			case .socks4(hostPort: let hostPort):
+				<#code#>
+			case .socks4a(hostPort: let hostPort):
+				<#code#>
+			case .socks5Basic:
+				<#code#>
+			case .socks5_GSS_API_NEC:
+				<#code#>
+			case .socks5_GSS_API_Service(name: let name):
+				<#code#>
+			case .socks5_GSS_API:
+				<#code#>
+			case .socks5Hostname(hostPort: let hostPort):
+				<#code#>
+			case .socks5(hostPort: let hostPort):
+				<#code#>
+			case .speedLimit(speed: let speed):
+				<#code#>
+			case .speedTime(seconds: let seconds):
+				<#code#>
+			case .sslAllowBeast:
+				<#code#>
+			case .sslAutoClientCert:
+				<#code#>
+			case .sslNoRevoke:
+				<#code#>
+			case .sslRequired:
+				<#code#>
+			case .sslRevokeBestEffort:
+				<#code#>
+			case .ssl:
+				<#code#>
+			case .sslv2:
+				<#code#>
+			case .sslv3:
+				<#code#>
+			case .stderr(file: let file):
+				<#code#>
+			case .styledOutput:
+				<#code#>
+			case .suppressConnectHeaders:
+				<#code#>
+			case .tcpFastOpen:
+				<#code#>
+			case .tcpNoDelay:
+				<#code#>
+			case .telnetOption(option: let option):
+				<#code#>
+			case .tftpBlockSize(value: let value):
+				<#code#>
+			case .tftpNoOptions:
+				<#code#>
+			case .timeCond(time: let time):
+				<#code#>
+			case .tlsMax(version: let version):
+				<#code#>
+			case .tls13Ciphers(ciphersuiteList: let ciphersuiteList):
+				<#code#>
+			case .tlsauthtype(type: let type):
+				<#code#>
+			case .tlspassword(string: let string):
+				<#code#>
+			case .tlsuser(name: let name):
+				<#code#>
+			case .tlsv1_0:
+				<#code#>
+			case .tlsv1_1:
+				<#code#>
+			case .tlsv1_2:
+				<#code#>
+			case .tlsv1_3:
+				<#code#>
+			case .tlsv1:
+				<#code#>
+			case .trEncoding:
+				<#code#>
+			case .traceAscii(file: let file):
+				<#code#>
+			case .traceConfig(string: let string):
+				<#code#>
+			case .traceIDs:
+				<#code#>
+			case .traceTime:
+				<#code#>
+			case .trace(file: let file):
+				<#code#>
+			case .unixSocket(path: let path):
+				<#code#>
+			case .uploadFile(file: let file):
+				<#code#>
+			case .urlQuery(data: let data):
+				<#code#>
+			case .url(url: let url):
+				<#code#>
+			case .useAscii:
+				<#code#>
+			case .userAgent(name: let name):
+				<#code#>
+			case .user(userPassword: let userPassword):
+				<#code#>
+			case .variable(nameText: let nameText):
+				<#code#>
+			case .verbose:
+				<#code#>
+			case .version:
+				<#code#>
+			case .writeOut(format: let format):
+				<#code#>
+			case .xattr:
+				<#code#>
+			}
 		}
 	}
 }
