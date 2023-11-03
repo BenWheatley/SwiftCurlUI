@@ -404,100 +404,54 @@ extension Curl {
 			case .ipv4: return ["--ipv4"]
 			case .ipv6: return ["--ipv6"]
 			case .json(let data): return ["--json", data]
-			case .junkSessionCookies:
-				<#code#>
-			case .keepaliveTime(seconds: let seconds):
-				<#code#>
-			case .keyType(type: let type):
-				<#code#>
-			case .key(key: let key):
-				<#code#>
-			case .krb(level: let level):
-				<#code#>
-			case .libcurl(file: let file):
-				<#code#>
-			case .limitRate(speed: let speed):
-				<#code#>
-			case .listOnly:
-				<#code#>
-			case .localPort(low: let low, high: let high):
-				<#code#>
-			case .locationTrusted:
-				<#code#>
-			case .location:
-				<#code#>
-			case .loginOptions(options: let options):
-				<#code#>
-			case .mailAuth(emailAddress: let emailAddress):
-				<#code#>
-			case .mailFrom(emailAddress: let emailAddress):
-				<#code#>
-			case .mailRcptAllowFails:
-				<#code#>
-			case .mailRcpt(emailAddress: let emailAddress):
-				<#code#>
-			case .manual:
-				<#code#>
-			case .maxFilesize(bytes: let bytes):
-				<#code#>
-			case .maxRedirs(num: let num):
-				<#code#>
-			case .maxTime(fractionalSeconds: let fractionalSeconds):
-				<#code#>
-			case .negotiate:
-				<#code#>
-			case .netrcFile(filename: let filename):
-				<#code#>
-			case .netrcOptional:
-				<#code#>
-			case .netrc:
-				<#code#>
-			case .noAlpn:
-				<#code#>
-			case .noBuffer:
-				<#code#>
-			case .noClobber:
-				<#code#>
-			case .noKeepalive:
-				<#code#>
-			case .noProgressMeter:
-				<#code#>
-			case .noSessionID:
-				<#code#>
-			case .noProxy(noProxyList: let noProxyList):
-				<#code#>
-			case .ntlmWb:
-				<#code#>
-			case .ntlm:
-				<#code#>
-			case .oauth2Bearer(token: let token):
-				<#code#>
-			case .outputDirectory(directory: let directory):
-				<#code#>
-			case .output(file: let file):
-				<#code#>
-			case .parallelImmediate:
-				<#code#>
-			case .parallelMax(num: let num):
-				<#code#>
-			case .parallel:
-				<#code#>
-			case .pass(phrase: let phrase):
-				<#code#>
-			case .pathAsIs:
-				<#code#>
-			case .pinnedPubKey(hashes: let hashes):
-				<#code#>
-			case .post301:
-				<#code#>
-			case .post302:
-				<#code#>
-			case .post303:
-				<#code#>
-			case .preproxy(protocolHostPort: let protocolHostPort):
-				<#code#>
-			case .progressBar:
-				<#code#>
+			case .junkSessionCookies: return ["--junk-session-cookies"]
+			case .keepaliveTime(let seconds): return ["--keepalive-time", String(seconds)]
+			case .keyType(let type): return ["--key-type", type]
+			case .key(let key): return ["--key", key]
+			case .krb(let level): return ["--krb", level]
+			case .libcurl(let file): return ["--libcurl", file]
+			case .limitRate(let speed): return ["--limit-rate", speed]
+			case .listOnly: return ["--list-only"]
+			case .localPort(let low, let high): return ["--local-port", "\(low):\(high)"]
+			case .locationTrusted: return ["--location-trusted"]
+			case .location: return ["--location"]
+			case .loginOptions(let options): return ["--login-options", options]
+			case .mailAuth(let emailAddress): return ["--mail-auth", emailAddress]
+			case .mailFrom(let emailAddress): return ["--mail-from", emailAddress]
+			case .mailRcptAllowFails: return ["--mail-rcpt-allowfails"]
+			case .mailRcpt(let emailAddress): return ["--mail-rcpt", emailAddress]
+			case .manual: return ["--manual"]
+			case .maxFilesize(let bytes): return ["--max-filesize", String(bytes)]
+			case .maxRedirs(let num): return ["--max-redirs", String(num)]
+			case .maxTime(let fractionalSeconds): return ["--max-time", String(fractionalSeconds)]
+			case .negotiate: return ["--negotiate"]
+			case .netrcFile(let filename): return ["--netrc-file", filename]
+			case .netrcOptional: return ["--netrc-optional"]
+			case .netrc: return ["--netrc"]
+			case .noAlpn: return ["--no-alpn"]
+			case .noBuffer: return ["--no-buffer"]
+			case .noClobber: return ["--no-clobber"]
+			case .noKeepalive: return ["--no-keepalive"]
+			case .noProgressMeter: return ["--no-progress-meter"]
+			case .noSessionID: return ["--no-sessionid"]
+			case .noProxy(let noProxyList): return ["--noproxy", noProxyList.joined(separator: ",")]
+			case .ntlmWb: return ["--ntlm-wb"]
+			case .ntlm: return ["--ntlm"]
+			case .oauth2Bearer(let token): return ["--oauth2-bearer", token]
+			case .outputDirectory(let directory): return ["--output-dir", directory]
+			case .output(let file): return ["--output", file]
+			case .parallelImmediate: return ["--parallel-immediate"]
+			case .parallelMax(let num): return ["--parallel-max", String(num)]
+			case .parallel: return ["--parallel"]
+			case .pass(let phrase): return ["--pass", phrase]
+			case .pathAsIs: return ["--path-as-is"]
+			case .pinnedPubKey(let hashes): return ["--pinnedpubkey", hashes.joined(separator: ";")]
+			case .post301: return ["--post301"]
+			case .post302: return ["--post302"]
+			case .post303: return ["--post303"]
+			case .preproxy(let protocolHostPort): return ["--preproxy", protocolHostPort]
+			case .progressBar: return ["--progress-bar"]
+
 			case .protoDefault(protocol: let protocol):
 				<#code#>
 			case .protoRedirect(protocols: let protocols):
