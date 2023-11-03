@@ -453,106 +453,57 @@ extension Curl {
 			case .post303: return ["--post303"]
 			case .preproxy(let protocolHostPort): return ["--preproxy", protocolHostPort]
 			case .progressBar: return ["--progress-bar"]
-			case .protoDefault(protocol: let protocol):
-				<#code#>
-			case .protoRedirect(protocols: let protocols):
-				<#code#>
-			case .proto(protocols: let protocols):
-				<#code#>
-			case .proxyAnyAuth:
-				<#code#>
-			case .proxyBasic:
-				<#code#>
-			case .proxyCANative:
-				<#code#>
-			case .proxyCACert(file: let file):
-				<#code#>
-			case .proxyCAPath(dir: let dir):
-				<#code#>
-			case .proxyCertType(type: let type):
-				<#code#>
-			case .proxyCert(cert: let cert, password: let password):
-				<#code#>
-			case .proxyCiphers(list: let list):
-				<#code#>
-			case .proxyCrlfile(file: let file):
-				<#code#>
-			case .proxyDigest:
-				<#code#>
-			case .proxyHeader(header: let header):
-				<#code#>
-			case .proxyHttp2:
-				<#code#>
-			case .proxyInsecure:
-				<#code#>
-			case .proxyKeyType(type: let type):
-				<#code#>
-			case .proxyKey(key: let key):
-				<#code#>
-			case .proxyNegotiate:
-				<#code#>
-			case .proxyNTLM:
-				<#code#>
-			case .proxyPass(phrase: let phrase):
-				<#code#>
-			case .proxyPinnedPubKey(hashes: let hashes):
-				<#code#>
-			case .proxyServiceName(name: let name):
-				<#code#>
-			case .proxySSLAllowBeast:
-				<#code#>
-			case .proxySSLAutoClientCert:
-				<#code#>
-			case .proxyTLS13Ciphers(ciphersuiteList: let ciphersuiteList):
-				<#code#>
-			case .proxyTLSAuthType(type: let type):
-				<#code#>
-			case .proxyTLSPassword(string: let string):
-				<#code#>
-			case .proxyTLSUser(name: let name):
-				<#code#>
-			case .proxyTLSv1:
-				<#code#>
-			case .proxyUser(user: let user, password: let password):
-				<#code#>
-			case .proxy(protocolHostPort: let protocolHostPort):
-				<#code#>
-			case .proxy1_0(hostPort: let hostPort):
-				<#code#>
-			case .proxytunnel:
-				<#code#>
-			case .pubKey(key: let key):
-				<#code#>
-			case .quote(command: let command):
-				<#code#>
-			case .range(range: let range):
-				<#code#>
-			case .rate(maxRequestRate: let maxRequestRate):
-				<#code#>
-			case .raw:
-				<#code#>
-			case .referer(url: let url):
-				<#code#>
-			case .remoteHeaderName:
-				<#code#>
-			case .remoteNameAll:
-				<#code#>
-			case .remoteName:
-				<#code#>
-			case .remoteTime:
-				<#code#>
-			case .removeOnError:
-				<#code#>
-			case .requestTarget(path: let path):
-				<#code#>
-			case .request(method: let method):
-				<#code#>
-			case .resolve(hostPortAddr: let hostPortAddr):
-				<#code#>
-			case .retryAllErrors:
-				<#code#>
-			case .retryConnRefused:
-				<#code#>
+			case .protoDefault(let protocol): return ["--proto-default", protocol]
+			case .protoRedirect(let protocols): return ["--proto-redir", protocols.joined(separator: ",")]
+			case .proto(let protocols): return ["--proto", protocols.joined(separator: ",")]
+			case .proxyAnyAuth: return ["--proxy-anyauth"]
+			case .proxyBasic: return ["--proxy-basic"]
+			case .proxyCANative: return ["--proxy-ca-native"]
+			case .proxyCACert(let file): return ["--proxy-cacert", file]
+			case .proxyCAPath(let dir): return ["--proxy-capath", dir]
+			case .proxyCertType(let type): return ["--proxy-cert-type", type]
+			case .proxyCert(let cert, let password): return ["--proxy-cert", "\(cert):\(password)"]
+			case .proxyCiphers(let list): return ["--proxy-ciphers", list.joined(separator: "-")]
+			case .proxyCrlfile(let file): return ["--proxy-crlfile", file]
+			case .proxyDigest: return ["--proxy-digest"]
+			case .proxyHeader(let header): return ["--proxy-header", header]
+			case .proxyHttp2: return ["--proxy-http2"]
+			case .proxyInsecure: return ["--proxy-insecure"]
+			case .proxyKeyType(let type): return ["--proxy-key-type", type]
+			case .proxyKey(let key): return ["--proxy-key", key]
+			case .proxyNegotiate: return ["--proxy-negotiate"]
+			case .proxyNTLM: return ["--proxy-ntlm"]
+			case .proxyPass(let phrase): return ["--proxy-pass", phrase]
+			case .proxyPinnedPubKey(let hashes): return ["--proxy-pinnedpubkey", hashes.joined(separator: ";")]
+			case .proxyServiceName(let name): return ["--proxy-service-name", name]
+			case .proxySSLAllowBeast: return ["--proxy-ssl-allow-beast"]
+			case .proxySSLAutoClientCert: return ["--proxy-ssl-auto-client-cert"]
+			case .proxyTLS13Ciphers(let ciphersuiteList): return ["--proxy-tls13-ciphers", ciphersuiteList]
+			case .proxyTLSAuthType(let type): return ["--proxy-tlsauthtype", type]
+			case .proxyTLSPassword(let string): return ["--proxy-tlspassword", string]
+			case .proxyTLSUser(let name): return ["--proxy-tlsuser", name]
+			case .proxyTLSv1: return ["--proxy-tlsv1"]
+			case .proxyUser(let user, let password): return ["--proxy", user, "--proxy-pass", password]
+			case .proxy(let protocolHostPort): return ["--proxy", protocolHostPort]
+			case .proxy1_0(let hostPort): return ["--proxy1.0", hostPort]
+			case .proxytunnel: return ["--proxytunnel"]
+			case .pubKey(let key): return ["--pubkey", key]
+			case .quote(let command): return ["--quote", command]
+			case .range(let range): return ["--range", range]
+			case .rate(let maxRequestRate): return ["--rate", maxRequestRate]
+			case .raw: return ["--raw"]
+			case .referer(let url): return ["--referer", url]
+			case .remoteHeaderName: return ["--remote-header-name"]
+			case .remoteNameAll: return ["--remote-name-all"]
+			case .remoteName: return ["--remote-name"]
+			case .remoteTime: return ["--remote-time"]
+			case .removeOnError: return ["--remove-on-error"]
+			case .requestTarget(let path): return ["--request-target", path]
+			case .request(let method): return ["--request", method]
+			case .resolve(let hostPortAddr): return ["--resolve", hostPortAddr.joined(separator: ",")]
+			case .retryAllErrors: return ["--retry-all-errors"]
+			case .retryConnRefused: return ["--retry-connrefused"]
+
 			case .retryDelay(seconds: let seconds):
 				<#code#>
 			case .retryMaxTime(seconds: let seconds):
