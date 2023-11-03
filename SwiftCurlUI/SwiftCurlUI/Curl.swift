@@ -505,132 +505,69 @@ extension Curl {
 			case .resolve(let hostPortAddr): return ["--resolve", hostPortAddr]
 			case .retryAllErrors: return ["--retry-all-errors"]
 			case .retryConnRefused: return ["--retry-connrefused"]
-			case .retryDelay(seconds: let seconds):
-				<#code#>
-			case .retryMaxTime(seconds: let seconds):
-				<#code#>
-			case .retry(number: let number):
-				<#code#>
-			case .saslAuthorizationIdentity(identity: let identity):
-				<#code#>
-			case .saslInitialResponse:
-				<#code#>
-			case .serviceName(name: let name):
-				<#code#>
-			case .showError:
-				<#code#>
-			case .silent:
-				<#code#>
-			case .socks4(hostPort: let hostPort):
-				<#code#>
-			case .socks4a(hostPort: let hostPort):
-				<#code#>
-			case .socks5Basic:
-				<#code#>
-			case .socks5_GSS_API_NEC:
-				<#code#>
-			case .socks5_GSS_API_Service(name: let name):
-				<#code#>
-			case .socks5_GSS_API:
-				<#code#>
-			case .socks5Hostname(hostPort: let hostPort):
-				<#code#>
-			case .socks5(hostPort: let hostPort):
-				<#code#>
-			case .speedLimit(speed: let speed):
-				<#code#>
-			case .speedTime(seconds: let seconds):
-				<#code#>
-			case .sslAllowBeast:
-				<#code#>
-			case .sslAutoClientCert:
-				<#code#>
-			case .sslNoRevoke:
-				<#code#>
-			case .sslRequired:
-				<#code#>
-			case .sslRevokeBestEffort:
-				<#code#>
-			case .ssl:
-				<#code#>
-			case .sslv2:
-				<#code#>
-			case .sslv3:
-				<#code#>
-			case .stderr(file: let file):
-				<#code#>
-			case .styledOutput:
-				<#code#>
-			case .suppressConnectHeaders:
-				<#code#>
-			case .tcpFastOpen:
-				<#code#>
-			case .tcpNoDelay:
-				<#code#>
-			case .telnetOption(option: let option):
-				<#code#>
-			case .tftpBlockSize(value: let value):
-				<#code#>
-			case .tftpNoOptions:
-				<#code#>
-			case .timeCond(time: let time):
-				<#code#>
-			case .tlsMax(version: let version):
-				<#code#>
-			case .tls13Ciphers(ciphersuiteList: let ciphersuiteList):
-				<#code#>
-			case .tlsAuthType(type: let type):
-				<#code#>
-			case .tlspassword(string: let string):
-				<#code#>
-			case .tlsuser(name: let name):
-				<#code#>
-			case .tlsv1_0:
-				<#code#>
-			case .tlsv1_1:
-				<#code#>
-			case .tlsv1_2:
-				<#code#>
-			case .tlsv1_3:
-				<#code#>
-			case .tlsv1:
-				<#code#>
-			case .trEncoding:
-				<#code#>
-			case .traceAscii(file: let file):
-				<#code#>
-			case .traceConfig(string: let string):
-				<#code#>
-			case .traceIDs:
-				<#code#>
-			case .traceTime:
-				<#code#>
-			case .trace(file: let file):
-				<#code#>
-			case .unixSocket(path: let path):
-				<#code#>
-			case .uploadFile(file: let file):
-				<#code#>
-			case .urlQuery(data: let data):
-				<#code#>
-			case .url(url: let url):
-				<#code#>
-			case .useAscii:
-				<#code#>
-			case .userAgent(name: let name):
-				<#code#>
-			case .user(userPassword: let userPassword):
-				<#code#>
-			case .variable(nameText: let nameText):
-				<#code#>
-			case .verbose:
-				<#code#>
-			case .version:
-				<#code#>
-			case .writeOut(format: let format):
-				<#code#>
-			case .xattr:
-				<#code#>
+			case .retryDelay(let seconds): return ["--retry-delay", "\(seconds)"]
+			case .retryMaxTime(let seconds): return ["--retry-max-time", "\(seconds)"]
+			case .retry(let number): return ["--retry", "\(number)"]
+			case .saslAuthorizationIdentity(let identity): return ["--sasl-authzid", identity]
+			case .saslInitialResponse: return ["--sasl-ir"]
+			case .serviceName(let name): return ["--service-name", name]
+			case .showError: return ["--show-error"]
+			case .silent: return ["--silent"]
+			case .socks4(let hostPort): return ["--socks4", hostPort]
+			case .socks4a(let hostPort): return ["--socks4a", hostPort]
+			case .socks5Basic: return ["--socks5-basic"]
+			case .socks5_GSS_API_NEC: return ["--socks5-gssapi-nec"]
+			case .socks5_GSS_API_Service(let name): return ["--socks5-gssapi-service", name]
+			case .socks5_GSS_API: return ["--socks5-gssapi"]
+			case .socks5Hostname(let hostPort): return ["--socks5-hostname", hostPort]
+			case .socks5(let hostPort): return ["--socks5", hostPort]
+			case .speedLimit(let speed): return ["--speed-limit", speed]
+			case .speedTime(let seconds): return ["--speed-time", "\(seconds)"]
+			case .sslAllowBeast: return ["--ssl-allow-beast"]
+			case .sslAutoClientCert: return ["--ssl-auto-client-cert"]
+			case .sslNoRevoke: return ["--ssl-no-revoke"]
+			case .sslRequired: return ["--ssl-reqd"]
+			case .sslRevokeBestEffort: return ["--ssl-revoke-best-effort"]
+			case .ssl: return ["--ssl"]
+			case .sslv2: return ["--sslv2"]
+			case .sslv3: return ["--sslv3"]
+			case .stderr(let file): return ["--stderr", file]
+			case .styledOutput: return ["--styled-output"]
+			case .suppressConnectHeaders: return ["--suppress-connect-headers"]
+			case .tcpFastOpen: return ["--tcp-fastopen"]
+			case .tcpNoDelay: return ["--tcp-nodelay"]
+			case .telnetOption(let option): return ["--telnet-option", option]
+			case .tftpBlockSize(let value): return ["--tftp-blksize", "\(value)"]
+			case .tftpNoOptions: return ["--tftp-no-options"]
+			case .timeCond(let time): return ["--time-cond", time]
+			case .tlsMax(let version): return ["--tls-max", version]
+			case .tls13Ciphers(let ciphersuiteList): return ["--tls13-ciphers", ciphersuiteList.joined(separator: ",")]
+			case .tlsAuthType(let type): return ["--tlsauthtype", type]
+			case .tlspassword(let string): return ["--tlspassword", string]
+			case .tlsuser(let name): return ["--tlsuser", name]
+			case .tlsv1_0: return ["--tlsv1.0"]
+			case .tlsv1_1: return ["--tlsv1.1"]
+			case .tlsv1_2: return ["--tlsv1.2"]
+			case .tlsv1_3: return ["--tlsv1.3"]
+			case .tlsv1: return ["--tlsv1"]
+			case .trEncoding: return ["--tr-encoding"]
+			case .traceAscii(let file): return ["--trace-ascii", file]
+			case .traceConfig(let string): return ["--trace-config", string]
+			case .traceIDs: return ["--trace-ids"]
+			case .traceTime: return ["--trace-time"]
+			case .trace(let file): return ["--trace", file]
+			case .unixSocket(let path): return ["--unix-socket", path]
+			case .uploadFile(let file): return ["--upload-file", file]
+			case .urlQuery(let data): return ["--url-query", data]
+			case .url(let url): return ["--url", url]
+			case .useAscii: return ["--use-ascii"]
+			case .userAgent(let name): return ["--user-agent", name]
+			case .user(let userPassword): return ["--user", userPassword]
+			case .variable(let nameText): return ["--variable", nameText]
+			case .verbose: return ["--verbose"]
+			case .version: return ["--version"]
+			case .writeOut(let format): return ["--write-out", format]
+			case .xattr: return ["--xattr"]
 			}
 		}
 	}
