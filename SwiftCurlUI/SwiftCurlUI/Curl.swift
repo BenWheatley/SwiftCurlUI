@@ -335,7 +335,7 @@ extension Curl {
 			case .createFileMode(let mode): return ["--create-file-mode", mode.toString]
 			case .crlf: return ["--crlf"]
 			case .crlFile(let file): return ["--crlfile", file]
-			case .curves(let algorithmList): return ["--curves", algorithmList]
+			case .curves(let algorithmList): return ["--curves", algorithmList.joined(separator: ":")]
 			case .dataAscii(data: let data):
 				<#code#>
 			case .dataBinary(data: let data):
