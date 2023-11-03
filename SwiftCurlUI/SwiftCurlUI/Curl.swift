@@ -45,7 +45,7 @@ struct Curl: Codable {
 				print("Error: \(error)")
 			}
 		} catch {
-			print("Error: \(error.localizedDescription)")
+			print("Exception: \(error.localizedDescription)")
 		}
 		
 		return ""
