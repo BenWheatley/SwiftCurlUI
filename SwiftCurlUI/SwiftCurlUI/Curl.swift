@@ -332,7 +332,7 @@ extension Curl {
 			case .cookieJar(let filename): return ["--cookie-jar", filename]
 			case .cookie(let dataOrFilename): return ["--cookie", dataOrFilename]
 			case .createDirs: return ["--create-dirs"]
-			case .createFileMode(let mode): return ["--create-file-mode", mode]
+			case .createFileMode(let mode): return ["--create-file-mode", mode.toString]
 			case .crlf: return ["--crlf"]
 			case .crlFile(let file): return ["--crlfile", file]
 			case .curves(let algorithmList): return ["--curves", algorithmList]
