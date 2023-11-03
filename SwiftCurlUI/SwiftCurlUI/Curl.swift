@@ -354,46 +354,26 @@ extension Curl {
 			case .dohInsecure: return ["--doh-insecure"]
 			case .dohUrl(let url): return ["--doh-url", url.absoluteString]
 			case .dumpHeader(let filename): return ["--dump-header", filename]
-			case .egdFile(file: let file):
-				<#code#>
-			case .engine(name: let name):
-				<#code#>
-			case .etagCompare(filename: let filename):
-				<#code#>
-			case .expect100Timeout(seconds: let seconds):
-				<#code#>
-			case .failEarly:
-				<#code#>
-			case .failWithBody:
-				<#code#>
-			case .fail:
-				<#code#>
-			case .falseStart:
-				<#code#>
-			case .formEscape:
-				<#code#>
-			case .formString(name: let name, value: let value):
-				<#code#>
-			case .form(name: let name, content: let content):
-				<#code#>
-			case .ftpAccount(data: let data):
-				<#code#>
-			case .ftpAlternativeToUser(command: let command):
-				<#code#>
-			case .ftpCreateDirs:
-				<#code#>
-			case .ftpMethod(method: let method):
-				<#code#>
-			case .ftpPasv:
-				<#code#>
-			case .ftpPort(address: let address):
-				<#code#>
-			case .ftpPret:
-				<#code#>
-			case .ftpSkipPasvIp:
-				<#code#>
-			case .ftpSSLClearCommandChannelMode(mode: let mode):
-				<#code#>
+			case .egdFile(let file): return ["--egd-file", file]
+			case .engine(let name): return ["--engine", name]
+			case .etagCompare(let filename): return ["--etag-compare", filename]
+			case .expect100Timeout(let seconds): return ["--expect100-timeout", String(seconds)]
+			case .failEarly: return ["--fail-early"]
+			case .failWithBody: return ["--fail-with-body"]
+			case .fail: return ["--fail"]
+			case .falseStart: return ["--false-start"]
+			case .formEscape: return ["--form-escape"]
+			case .formString(let name, let value): return ["--form-string", "\(name)=\(value)"]
+			case .form(let name, let content): return ["--form", "\(name)=\(content)"]
+			case .ftpAccount(let data): return ["--ftp-account", data]
+			case .ftpAlternativeToUser(let command): return ["--ftp-alternative-to-user", command]
+			case .ftpCreateDirs: return ["--ftp-create-dirs"]
+			case .ftpMethod(let method): return ["--ftp-method", method]
+			case .ftpPasv: return ["--ftp-pasv"]
+			case .ftpPort(let address): return ["--ftp-port", address]
+			case .ftpPret: return ["--ftp-pret"]
+			case .ftpSkipPasvIp: return ["--ftp-skip-pasv-ip"]
+			case .ftpSSLClearCommandChannelMode(let mode): return ["--ftp-ssl-ccc-mode", mode]
 			case .ftpSSLClearCommandChannel:
 				<#code#>
 			case .ftpSSLControl:
