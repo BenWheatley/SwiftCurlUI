@@ -347,11 +347,11 @@ extension Curl {
 			if let info = connectTo {
 				result += ["--connect-to", "\(info.host1):\(info.port1):\(info.host2):\(info.port2)"]
 			}
+			mergeNotNil(value: continueAt) { result += ["--continue-at", String($0)] }
+			mergeNotNil(value: cookieJar) { result += ["--cookie-jar", $0] }
+			mergeNotNil(value: cookie) { result += ["--cookie", $0] }
 			
 			switch self {
-			case .continueAt(let offset): return ["--continue-at", String(offset)]
-			case .cookieJar(let filename): return ["--cookie-jar", filename]
-			case .cookie(let dataOrFilename): return ["--cookie", dataOrFilename]
 			case .createDirs: return ["--create-dirs"]
 			case .createFileMode(let mode): return ["--create-file-mode", mode.toString]
 			case .crlf: return ["--crlf"]
