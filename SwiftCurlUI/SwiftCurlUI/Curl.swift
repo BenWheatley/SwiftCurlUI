@@ -332,6 +332,7 @@ extension Curl {
 			mergeNotNil(value: caCert) { result += ["--cacert", $0] }
 			mergeNotNil(value: caPath) { result += ["--capath", $0] }
 			if certStatus { result += ["--cert-status"] }
+			if let certType = certType { result += ["--cert-type", certType.rawValue] }
 			
 			switch self {
 			case .certType(let type): return ["--cert-type", type.rawValue]
