@@ -484,52 +484,27 @@ extension Curl {
 			mergeNotNil(value: outputDirectory) { result += ["--output-dir", $0] }
 			mergeNotNil(value: output) { result += ["--output", $0] }
 			if parallelImmediate { result += ["--parallel-immediate"] }
-			mergeNotNil(value: parallelMax) { result += ["--parallel-max", String($0)] }
+			if let num = parallelMax { result += ["--parallel-max", String(num)] }
 			if parallel { result += ["--parallel"] }
 			mergeNotNil(value: pass) { result += ["--pass", $0] }
 			if pathAsIs { result += ["--path-as-is"] }
-			mergeNotNil(value: pinnedPubKey) { result += ["--pinnedpubkey", $0.joined(separator: ";")] }
+			mergeNotNil(value: pinnedPubKey) { result += ["--pinnedpubkey", $0] }  // would be something like `"sha256//" + ….joined(separator: ";")` if I use an array rather than a String for hashes
 			if post301 { result += ["--post301"] }
 			if post302 { result += ["--post302"] }
 			if post303 { result += ["--post303"] }
 			mergeNotNil(value: preproxy) { result += ["--preproxy", $0] }
 			if progressBar { result += ["--progress-bar"] }
 			mergeNotNil(value: protoDefault) { result += ["--proto-default", $0] }
-			mergeNotNil(value: protoRedirect) { result += ["--proto-redir", $0.joined(separator: ",")] }
-			mergeNotNil(value: proto) { result += ["--proto", $0.joined(separator: ",")] }
+			mergeNotNil(value: protoRedirect) { result += ["--proto-redir", $0] }  // would be `….joined(separator: ",")` if I was using something more complex than String
+			mergeNotNil(value: proto) { result += ["--proto", $0] } // would be `….joined(separator: ",")` if I was using something more complex than String
 			if proxyAnyAuth { result += ["--proxy-anyauth"] }
 			if proxyBasic { result += ["--proxy-basic"] }
 			if proxyCANative { result += ["--proxy-ca-native"] }
 			mergeNotNil(value: proxyCACert) { result += ["--proxy-cacert", $0] }
 			mergeNotNil(value: proxyCAPath) { result += ["--proxy-capath", $0] }
-			mergeNotNil(value: proxyCertType) { result += ["--proxy-cert-type", $0.rawValue] }
+			if let type = proxyCertType?.rawValue { result += ["--proxy-cert-type", type] }
 			
 			switch self {
-			case .ntlmWb: return ["--ntlm-wb"]
-			case .ntlm: return ["--ntlm"]
-			case .oauth2Bearer(let token): return ["--oauth2-bearer", token]
-			case .outputDirectory(let directory): return ["--output-dir", directory]
-			case .output(let file): return ["--output", file]
-			case .parallelImmediate: return ["--parallel-immediate"]
-			case .parallelMax(let num): return ["--parallel-max", String(num)]
-			case .parallel: return ["--parallel"]
-			case .pass(let phrase): return ["--pass", phrase]
-			case .pathAsIs: return ["--path-as-is"]
-			case .pinnedPubKey(let hashes): return ["--pinnedpubkey", hashes] // would be something like `"sha256//" + ….joined(separator: ";")` if I use an array rather than a String for hashes
-			case .post301: return ["--post301"]
-			case .post302: return ["--post302"]
-			case .post303: return ["--post303"]
-			case .preproxy(let protocolHostPort): return ["--preproxy", protocolHostPort]
-			case .progressBar: return ["--progress-bar"]
-			case .protoDefault(let `protocol`): return ["--proto-default", `protocol`]
-			case .protoRedirect(let protocols): return ["--proto-redir", protocols] // would be `….joined(separator: ",")` if I was using something more complex than String
-			case .proto(let protocols): return ["--proto", protocols] // would be `….joined(separator: ",")` if I was using something more complex than String
-			case .proxyAnyAuth: return ["--proxy-anyauth"]
-			case .proxyBasic: return ["--proxy-basic"]
-			case .proxyCANative: return ["--proxy-ca-native"]
-			case .proxyCACert(let file): return ["--proxy-cacert", file]
-			case .proxyCAPath(let dir): return ["--proxy-capath", dir]
-			case .proxyCertType(let type): return ["--proxy-cert-type", type.rawValue]
 			case .proxyCert(let cert, let password):
 				guard let password = password else { return ["--proxy-cert", cert] }
 				return ["--proxy-cert", "\(cert):\(password)"]
