@@ -24,12 +24,7 @@ class Curl: Codable, ObservableObject {
 		let task = Process()
 		task.executableURL = URL(fileURLWithPath: curlPath)
 		
-		// Specify the command-line arguments
-		var computedArguments: [String] = []
-		arguments.forEach {
-			computedArguments += $0.derivedArguments()
-		}
-		task.arguments = computedArguments
+		task.arguments = arguments.buildArguments()
 		
 		// Optionally, you can set the working directory if needed
 		task.currentDirectoryPath = "/path/to/your/working/directory"
