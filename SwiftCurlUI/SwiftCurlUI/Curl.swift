@@ -79,7 +79,7 @@ extension Curl {
 		var config: /*file:*/ String?
 		var connectTimeout: /*seconds:*/ TimeInterval? // when turned into a string, decimal must be a '.' regardless of locale
 		var connectTo: (host1: String, port1: String, host2: String, port2: String)? // when stringified, concatenate with ':', e.g. "example.com:443:example.net:8443"
-		var continueAt: /*offset:*/ UInt64 // offset will never be negative
+		var continueAt: /*offset:*/ UInt64? // offset will never be negative
 		var cookieJar: /*filename:*/ String? // "-" means "stdout"
 		var cookie: /*dataOrFilename:*/ String? // if there's a "=", it's data; otherswise it's a filename; if it's "-" this means "stdin"
 		var createDirs: Bool = false
@@ -347,7 +347,7 @@ extension Curl {
 			if let info = connectTo {
 				result += ["--connect-to", "\(info.host1):\(info.port1):\(info.host2):\(info.port2)"]
 			}
-			mergeNotNil(value: continueAt) { result += ["--continue-at", String($0)] }
+			if let location = continueAt { result += ["--continue-at", String(location)] }
 			mergeNotNil(value: cookieJar) { result += ["--cookie-jar", $0] }
 			mergeNotNil(value: cookie) { result += ["--cookie", $0] }
 			
