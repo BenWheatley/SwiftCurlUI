@@ -435,6 +435,36 @@ extension Curl {
 					result += ["--help", category]
 				}
 			}
+			if let md5 = hostpubmd5 { result += ["--hostpubmd5", md5] }
+			if let sha256 = hostpubsha256 { result += ["--hostpubsha256", sha256] }
+			mergeNotNil(value: hsts) { result += ["--hsts", $0] }
+			if http0_9 { result += ["--http0.9"] }
+			if http1_0 { result += ["--http1.0"] }
+			if http1_1 { result += ["--http1.1"] }
+			if http2PriorKnowledge { result += ["--http2-prior-knowledge"] }
+			if http2 { result += ["--http2"] }
+			if http3Only { result += ["--http3-only"] }
+			if http3 { result += ["--http3"] }
+			if ignoreContentLength { result += ["--ignore-content-length"] }
+			if include { result += ["--include"] }
+			if insecure { result += ["--insecure"] }
+			mergeNotNil(value: interface) { result += ["--interface", $0] }
+			mergeNotNil(value: ipfsGateway) { result += ["--ipfs-gateway", $0.absoluteString] }
+			if ipv4 { result += ["--ipv4"] }
+			if ipv6 { result += ["--ipv6"] }
+			mergeNotNil(value: json) { result += ["--json", $0] }
+			if junkSessionCookies { result += ["--junk-session-cookies"] }
+			mergeNotNil(value: keepaliveTime) { result += ["--keepalive-time", String($0)] }
+			if let type = keyType {
+				result += ["--key-type", type.rawValue]
+			}
+			mergeNotNil(value: key) { result += ["--key", $0] }
+			if let level = krb {
+				result += ["--krb", level.rawValue]
+			}
+			mergeNotNil(value: libcurl) { result += ["--libcurl", $0] }
+			mergeNotNil(value: limitRate) { result += ["--limit-rate", $0.toString] }
+			if listOnly { result += ["--list-only"] }
 			
 			switch self {
 			
