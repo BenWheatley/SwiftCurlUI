@@ -350,9 +350,9 @@ extension Curl {
 			if let location = continueAt { result += ["--continue-at", String(location)] }
 			mergeNotNil(value: cookieJar) { result += ["--cookie-jar", $0] }
 			mergeNotNil(value: cookie) { result += ["--cookie", $0] }
+			if createDirs { result += ["--create-dirs"] }
 			
 			switch self {
-			case .createDirs: return ["--create-dirs"]
 			case .createFileMode(let mode): return ["--create-file-mode", mode.toString]
 			case .crlf: return ["--crlf"]
 			case .crlFile(let file): return ["--crlfile", file]
