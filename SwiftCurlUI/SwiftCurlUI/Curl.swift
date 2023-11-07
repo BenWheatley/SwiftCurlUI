@@ -455,38 +455,12 @@ extension Curl {
 			mergeNotNil(value: libcurl) { result += ["--libcurl", $0] }
 			mergeNotNil(value: limitRate?.toString) { result += ["--limit-rate", $0] }
 			if listOnly { result += ["--list-only"] }
-			
+			if let (low, high) = localPort {
+				guard let high = high else { result += ["--local-port", "\(low)"] }
+				result += ["--local-port", "\(low)-\(high)"]
+			}
 			switch self {
 			
-			case .hostpubmd5(let md5): return ["--hostpubmd5", md5]
-			case .hostpubsha256(let sha256): return ["--hostpubsha256", sha256]
-			case .hsts(let fileName): return ["--hsts", fileName]
-			case .http0_9: return ["--http0.9"]
-			case .http1_0: return ["--http1.0"]
-			case .http1_1: return ["--http1.1"]
-			case .http2PriorKnowledge: return ["--http2-prior-knowledge"]
-			case .http2: return ["--http2"]
-			case .http3Only: return ["--http3-only"]
-			case .http3: return ["--http3"]
-			case .ignoreContentLength: return ["--ignore-content-length"]
-			case .include: return ["--include"]
-			case .insecure: return ["--insecure"]
-			case .interface(let name): return ["--interface", name]
-			case .ipfsGateway(let url): return ["--ipfs-gateway", url.absoluteString]
-			case .ipv4: return ["--ipv4"]
-			case .ipv6: return ["--ipv6"]
-			case .json(let data): return ["--json", data]
-			case .junkSessionCookies: return ["--junk-session-cookies"]
-			case .keepaliveTime(let seconds): return ["--keepalive-time", String(seconds)]
-			case .keyType(let type): return ["--key-type", type.rawValue]
-			case .key(let key): return ["--key", key]
-			case .krb(let level): return ["--krb", level.rawValue]
-			case .libcurl(let file): return ["--libcurl", file]
-			case .limitRate(let speed): return ["--limit-rate", speed.toString]
-			case .listOnly: return ["--list-only"]
-			case .localPort(let low, let high):
-				guard let high = high else { return ["--local-port", "\(low)"] }
-				return ["--local-port", "\(low)-\(high)"]
 			case .locationTrusted: return ["--location-trusted"]
 			case .location: return ["--location"]
 			case .loginOptions(let options): return ["--login-options", options]
