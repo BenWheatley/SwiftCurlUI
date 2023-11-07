@@ -341,9 +341,11 @@ extension Curl {
 			if compressedSsh { result += ["--compressed-ssh"] }
 			if compressed { result += ["--compressed"] }
 			mergeNotNil(value: config) { result += ["--config", $0] }
+			if let seconds = connectTimeout {
+				result += ["--connect-timeout", String(seconds)] // TODO: how does String(double) construct numbers in different locales? I need "12.34" everywhere, no variation.
+			}
 			
 			switch self {
-			case .connectTimeout(let seconds): return ["--connect-timeout", String(seconds)] // TODO: how does String(double) construct numbers in different locales? I need "12.34" everywhere, no variation.
 			case .connectTo(let host1, let port1, let host2, let port2):
 				return ["--connect-to", "\(host1):\(port1):\(host2):\(port2)"]
 			case .continueAt(let offset): return ["--continue-at", String(offset)]
