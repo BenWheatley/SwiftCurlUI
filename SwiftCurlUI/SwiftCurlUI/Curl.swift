@@ -317,7 +317,7 @@ extension Curl {
 		var xattr: Bool = false
 		
 		func mergeNotNil(value: String?, block: (String)->()) {
-			if let value = value { block(value) }
+			if let value = value, !value.isEmpty { block(value) }
 		}
 		
 		func buildArguments() -> [String] {
@@ -351,62 +351,93 @@ extension Curl {
 			mergeNotNil(value: cookieJar) { result += ["--cookie-jar", $0] }
 			mergeNotNil(value: cookie) { result += ["--cookie", $0] }
 			if createDirs { result += ["--create-dirs"] }
-			if let mode = createFileMode?.toString { result += ["--create-file-mode", mode.toString] }
+			if let mode = createFileMode?.toString { result += ["--create-file-mode", mode] }
+			if crlf { result += ["--crlf"] }
+			mergeNotNil(value: crlFile) { result += ["--crlfile", $0] }
+			if let algorithmList = curves?.joined(separator: ":") {
+				result += ["--curves", algorithmList]
+			}
+			if let algorithmList = curves?.joined(separator: ":") {
+				result += ["--curves", algorithmList]
+			}
+			mergeNotNil(value: dataAscii) { result += ["--data-ascii", $0] }
+			mergeNotNil(value: dataBinary) { result += ["--data-binary", $0] }
+			mergeNotNil(value: dataRaw) { result += ["--data-raw", $0] }
+			mergeNotNil(value: dataUrlEncode) { result += ["--data-urlencode", $0] }
+			if let level = delegation?.rawValue { result += ["--delegation", level] }
+			if digest { result += ["--digest"] }
+			if disableEprt { result += ["--disable-eprt"] }
+			if disableEpsv { result += ["--disable-epsv"] }
+			if disable { result += ["--disable"] }
+			if disallowUsernameInUrl { result += ["--disallow-username-in-url"] }
+			mergeNotNil(value: dnsInterface) { result += ["--dns-interface", $0] }
+			mergeNotNil(value: dnsIpv4Addr) { result += ["--dns-ipv4-addr", $0] }
+			mergeNotNil(value: dnsIpv6Addr) { result += ["--dns-ipv6-addr", $0] }
+			if let addresses = dnsServers?.joined(separator: ",") {
+				result += ["--dns-servers", addresses]
+			}
+			if dohCertStatus { result += ["--doh-cert-status"] }
+			if dohInsecure { result += ["--doh-insecure"] }
+			if let urlString = url?.absoluteString {
+				result += ["--doh-url", urlString]
+			}
+			mergeNotNil(value: dumpHeader) { result += ["--dump-header", $0] }
+			mergeNotNil(value: egdFile) { result += ["--egd-file", $0] }
+			mergeNotNil(value: engine) { result += ["--engine", $0] }
+			mergeNotNil(value: etagCompare) { result += ["--etag-compare", $0] }
+			if let seconds = expect100Timeout {
+				result += ["--expect100-timeout", String(seconds)]
+			}
+			if failEarly { result += ["--fail-early"] }
+			if failWithBody { result += ["--fail-with-body"] }
+			if fail { result += ["--fail"] }
+			if falseStart { result += ["--false-start"] }
+			if formEscape { result += ["--form-escape"] }
+			if let (name, value) = formString {
+				result += ["--form-string", "\(name)=\(value)"]
+			}
+			if let (name, content) = form {
+				result += ["--form", "\(name)=\(content)"]
+			}
+			mergeNotNil(value: ftpAccount) { result += ["--ftp-account", $0] }
+			mergeNotNil(value: ftpAlternativeToUser) { result += ["--ftp-alternative-to-user", $0] }
+			if ftpCreateDirs { result += ["--ftp-create-dirs"] }
+			if let method = ftpMethod?.rawValue { result += ["--ftp-method", method] }
+			if ftpPasv { result += ["--ftp-pasv"] }
+			mergeNotNil(value: ftpPort) { result += ["--ftp-port", $0] }
+			if ftpPret { result += ["--ftp-pret"] }
+			if ftpSkipPasvIp { result += ["--ftp-skip-pasv-ip"] }
+			if let mode = ftpSSLClearCommandChannelMode?.rawValue {
+				result += ["--ftp-ssl-ccc-mode", mode]
+			}
+			if ftpSSLClearCommandChannel { result += ["--ftp-ssl-ccc"] }
+			if ftpSSLControl { result += ["--ftp-ssl-control"] }
+			if get { result += ["--get"] }
+			if globOff { result += ["--globoff"] }
+			if let mode = ftpSSLClearCommandChannelMode?.rawValue {
+				result += ["--ftp-ssl-ccc-mode", mode]
+			}
+			if ftpSSLClearCommandChannel { result += ["--ftp-ssl-ccc"] }
+			if ftpSSLControl { result += ["--ftp-ssl-control"] }
+			if get { result += ["--get"] }
+			if globOff { result += ["--globoff"] }
+			if let milliseconds = happyEyeballsTimeoutMs {
+				result += ["--happy-eyeballs-timeout-ms", String(milliseconds)]
+			}
+			if haproxyClientIp { result += ["--haproxy-clientip"] }
+			if haproxyProtocol { result += ["--haproxy-protocol"] }
+			if head { result += ["--head"] }
+			mergeNotNil(value: header) { result += ["--header", $0] }
+			if let category = help { // TODO: Unusually, this can be independently nil or empty — consider impact on UI
+				if category.isEmpty {
+					result += ["--help"]
+				} else {
+					result += ["--help", category]
+				}
+			}
 			
 			switch self {
-			case .crlf: return ["--crlf"]
-			case .crlFile(let file): return ["--crlfile", file]
-			case .curves(let algorithmList): return ["--curves", algorithmList.joined(separator: ":")]
-			case .dataAscii(let data): return ["--data-ascii", data]
-			case .dataBinary(let data): return ["--data-binary", data]
-			case .dataRaw(let data): return ["--data-raw", data]
-			case .dataUrlEncode(let data): return ["--data-urlencode", data]
-			case .delegation(let level): return ["--delegation", level.rawValue]
-			case .digest: return ["--digest"]
-			case .disableEprt: return ["--disable-eprt"]
-			case .disableEpsv: return ["--disable-epsv"]
-			case .disable: return ["--disable"]
-			case .disallowUsernameInUrl: return ["--disallow-username-in-url"]
-			case .dnsInterface(let interface): return ["--dns-interface", interface]
-			case .dnsIpv4Addr(let address): return ["--dns-ipv4-addr", address]
-			case .dnsIpv6Addr(let address): return ["--dns-ipv6-addr", address]
-			case .dnsServers(let addresses): return ["--dns-servers", addresses.joined(separator: ",")]
-			case .dohCertStatus: return ["--doh-cert-status"]
-			case .dohInsecure: return ["--doh-insecure"]
-			case .dohUrl(let url): return ["--doh-url", url.absoluteString]
-			case .dumpHeader(let filename): return ["--dump-header", filename]
-			case .egdFile(let file): return ["--egd-file", file]
-			case .engine(let name): return ["--engine", name]
-			case .etagCompare(let filename): return ["--etag-compare", filename]
-			case .expect100Timeout(let seconds): return ["--expect100-timeout", String(seconds)]
-			case .failEarly: return ["--fail-early"]
-			case .failWithBody: return ["--fail-with-body"]
-			case .fail: return ["--fail"]
-			case .falseStart: return ["--false-start"]
-			case .formEscape: return ["--form-escape"]
-			case .formString(let name, let value): return ["--form-string", "\(name)=\(value)"]
-			case .form(let name, let content): return ["--form", "\(name)=\(content)"]
-			case .ftpAccount(let data): return ["--ftp-account", data]
-			case .ftpAlternativeToUser(let command): return ["--ftp-alternative-to-user", command]
-			case .ftpCreateDirs: return ["--ftp-create-dirs"]
-			case .ftpMethod(let method): return ["--ftp-method", method.rawValue]
-			case .ftpPasv: return ["--ftp-pasv"]
-			case .ftpPort(let address): return ["--ftp-port", address]
-			case .ftpPret: return ["--ftp-pret"]
-			case .ftpSkipPasvIp: return ["--ftp-skip-pasv-ip"]
-			case .ftpSSLClearCommandChannelMode(let mode): return ["--ftp-ssl-ccc-mode", mode.rawValue]
-			case .ftpSSLClearCommandChannel: return ["--ftp-ssl-ccc"]
-			case .ftpSSLControl: return ["--ftp-ssl-control"]
-			case .get: return ["--get"]
-			case .globOff: return ["--globoff"]
-			case .happyEyeballsTimeoutMs(let milliseconds): return ["--happy-eyeballs-timeout-ms", String(milliseconds)]
-			case .haproxyClientIp: return ["--haproxy-clientip"]
-			case .haproxyProtocol: return ["--haproxy-protocol"]
-			case .head: return ["--head"]
-			case .header(let header): return ["--header", header]
-			case .help(let category):
-				guard let category = category else { return ["--help"] }
-				return ["--help", category]
+			
 			case .hostpubmd5(let md5): return ["--hostpubmd5", md5]
 			case .hostpubsha256(let sha256): return ["--hostpubsha256", sha256]
 			case .hsts(let fileName): return ["--hsts", fileName]
