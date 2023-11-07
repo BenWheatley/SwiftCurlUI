@@ -333,15 +333,11 @@ extension Curl {
 			mergeNotNil(value: caPath) { result += ["--capath", $0] }
 			if certStatus { result += ["--cert-status"] }
 			if let certType = certType { result += ["--cert-type", certType.rawValue] }
-			
 			if let cert = cert {
-				if let password = cert.password {
-					result += ["--cert", "\(cert.certificate):\(password)"]
-				} else {
-					result += ["--cert", cert.certificate]
-				}
+				guard let password = cert.password else { result += ["--cert", cert.certificate] }
+				result += ["--cert", "\(cert.certificate):\(password)"]
 			}
-			mergeNotNil(value: ciphers) { result += ["--ciphers", $0.joined(separator: "-")] }
+			mergeNotNil(value: ciphers?.joined(separator: "-")) { result += ["--ciphers", $0] }
 			if compressedSsh { result += ["--compressed-ssh"] }
 			if compressed { result += ["--compressed"] }
 			mergeNotNil(value: config) { result += ["--config", $0] }
