@@ -459,8 +459,29 @@ extension Curl {
 				guard let high = high else { result += ["--local-port", "\(low)"] }
 				result += ["--local-port", "\(low)-\(high)"]
 			}
-			switch self {
+			if locationTrusted { result += ["--location-trusted"] }
+			if location { result += ["--location"] }
+			mergeNotNil(value: loginOptions) { result += ["--login-options", $0] }
+			mergeNotNil(value: mailAuth) { result += ["--mail-auth", $0] }
+			mergeNotNil(value: mailFrom) { result += ["--mail-from", $0] }
+			if mailRcptAllowFails { result += ["--mail-rcpt-allowfails"] }
+			mergeNotNil(value: mailRcpt) { result += ["--mail-rcpt", $0] }
+			if manual { result += ["--manual"] }
+			mergeNotNil(value: maxFilesize) { result += ["--max-filesize", $0.toString] }
+			mergeNotNil(value: maxRedirs) { result += ["--max-redirs", String($0)] }
+			mergeNotNil(value: maxTime) { result += ["--max-time", String($0)] }
+			if negotiate { result += ["--negotiate"] }
+			mergeNotNil(value: netrcFile) { result += ["--netrc-file", $0] }
+			if netrcOptional { result += ["--netrc-optional"] }
+			if netrc { result += ["--netrc"] }
+			if noAlpn { result += ["--no-alpn"] }
+			if noBuffer { result += ["--no-buffer"] }
+			if noClobber { result += ["--no-clobber"] }
+			if noKeepalive { result += ["--no-keepalive"] }
+			if noProgressMeter { result += ["--no-progress-meter"] }
+			if noSessionID { result += ["--no-sessionid"] }
 			
+			switch self {
 			case .locationTrusted: return ["--location-trusted"]
 			case .location: return ["--location"]
 			case .loginOptions(let options): return ["--login-options", options]
