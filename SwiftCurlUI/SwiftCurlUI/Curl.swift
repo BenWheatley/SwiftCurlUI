@@ -475,9 +475,11 @@ extension Curl {
 			if noKeepalive { result += ["--no-keepalive"] }
 			if noProgressMeter { result += ["--no-progress-meter"] }
 			if noSessionID { result += ["--no-sessionid"] }
+			if let noProxyList = noProxy {
+				result += ["--noproxy", noProxyList.joined(separator: ",")]
+			}
 			
 			switch self {
-			case .noProxy(let noProxyList): return ["--noproxy", noProxyList.joined(separator: ",")]
 			case .ntlmWb: return ["--ntlm-wb"]
 			case .ntlm: return ["--ntlm"]
 			case .oauth2Bearer(let token): return ["--oauth2-bearer", token]
