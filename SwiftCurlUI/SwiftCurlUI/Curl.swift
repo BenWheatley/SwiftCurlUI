@@ -478,6 +478,31 @@ extension Curl {
 			if let noProxyList = noProxy {
 				result += ["--noproxy", noProxyList.joined(separator: ",")]
 			}
+			if ntlmWb { result += ["--ntlm-wb"] }
+			if ntlm { result += ["--ntlm"] }
+			mergeNotNil(value: oauth2Bearer) { result += ["--oauth2-bearer", $0] }
+			mergeNotNil(value: outputDirectory) { result += ["--output-dir", $0] }
+			mergeNotNil(value: output) { result += ["--output", $0] }
+			if parallelImmediate { result += ["--parallel-immediate"] }
+			mergeNotNil(value: parallelMax) { result += ["--parallel-max", String($0)] }
+			if parallel { result += ["--parallel"] }
+			mergeNotNil(value: pass) { result += ["--pass", $0] }
+			if pathAsIs { result += ["--path-as-is"] }
+			mergeNotNil(value: pinnedPubKey) { result += ["--pinnedpubkey", $0.joined(separator: ";")] }
+			if post301 { result += ["--post301"] }
+			if post302 { result += ["--post302"] }
+			if post303 { result += ["--post303"] }
+			mergeNotNil(value: preproxy) { result += ["--preproxy", $0] }
+			if progressBar { result += ["--progress-bar"] }
+			mergeNotNil(value: protoDefault) { result += ["--proto-default", $0] }
+			mergeNotNil(value: protoRedirect) { result += ["--proto-redir", $0.joined(separator: ",")] }
+			mergeNotNil(value: proto) { result += ["--proto", $0.joined(separator: ",")] }
+			if proxyAnyAuth { result += ["--proxy-anyauth"] }
+			if proxyBasic { result += ["--proxy-basic"] }
+			if proxyCANative { result += ["--proxy-ca-native"] }
+			mergeNotNil(value: proxyCACert) { result += ["--proxy-cacert", $0] }
+			mergeNotNil(value: proxyCAPath) { result += ["--proxy-capath", $0] }
+			mergeNotNil(value: proxyCertType) { result += ["--proxy-cert-type", $0.rawValue] }
 			
 			switch self {
 			case .ntlmWb: return ["--ntlm-wb"]
