@@ -11,7 +11,7 @@ import SwiftUI
 struct SwiftCurlUIApp: App {
     var body: some Scene {
         WindowGroup {
-            CurlView()
+			CurlView()
         }
     }
 }

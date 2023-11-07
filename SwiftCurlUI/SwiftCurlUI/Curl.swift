@@ -7,9 +7,14 @@
 
 import Foundation
 
-struct Curl: Codable {
+class Curl: Codable, ObservableObject {
 	let curlPath: String // I could make this a URL, but then the names get all confusion — curlURL etc. don't imply the path of the executable
-	var arguments: [Curl.Argument] = []
+	
+	var arguments = Arguments()
+	
+	var stdin: String = ""
+	var stdout: String = ""
+	var stderr: String = ""
 	
 	init(curlPath: String = "/usr/bin/curl") {
 		self.curlPath = curlPath
@@ -40,9 +45,11 @@ struct Curl: Codable {
 			
 			if let output = String(data: output.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) {
 				print("Output: \(output)")
+				stdout = output
 			}
-			if let output = String(data: error.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) {
+			if let error = String(data: error.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) {
 				print("Error: \(error)")
+				stderr = error
 			}
 		} catch {
 			print("Exception: \(error.localizedDescription)")
@@ -53,263 +60,269 @@ struct Curl: Codable {
 }
 
 extension Curl {
-	enum Argument: Codable {
-		case abstractUnixSocket(path: String)
-		case altSvc(fileName: String)
-		case anyAuth
-		case append
-		case awsSigV4(providerInfo: String) // There's a more complex pattern to the provider info than I can see how to fit into this signature sensibly
-		case basic
-		case caNative
-		case caCert(file: String)
-		case caPath(directory: String)
-		case certStatus
-		case certType(type: ClientCertificateType)
-		case cert(certificate: String, password: String? = nil)
-		case ciphers(cipherList: [String]) // when turning into an argument, concatenate with hyphens e.g. "ECDHE-ECDSA-AES256-CCM8"
-		case compressedSsh
-		case compressed
-		case config(file: String)
-		case connectTimeout(seconds: TimeInterval) // when turned into a string, decimal must be a '.' regardless of locale
-		case connectTo(host1: String, port1: String, host2: String, port2: String) // when stringified, concatenate with ':', e.g. "example.com:443:example.net:8443"
-		case continueAt(offset: UInt64) // offset will never be negative
-		case cookieJar(filename: String) // "-" means "stdout"
-		case cookie(dataOrFilename: String) // if there's a "=", it's data; otherswise it's a filename; if it's "-" this means "stdin"
-		case createDirs
-		case createFileMode(mode: FileMode) // Unix file mode when stringified, so a 4-digit octal number.
-		case crlf
-		case crlFile(file: String)
-		case curves(algorithmList: [String]) // when stringified multiple algorithms can be provided by separating them with ":"
-		case dataAscii(data: String) // this is just an alias for -d, --data <data>
-		case dataBinary(data: String)
-		case dataRaw(data: String)
-		case dataUrlEncode(data: String)
-		case delegation(level: DelegationLevel) // You can use an enum for level if it has predefined values
-		case digest
-		case disableEprt
-		case disableEpsv
-		case disable
-		case disallowUsernameInUrl
-		case dnsInterface(interface: String)
-		case dnsIpv4Addr(address: String)
-		case dnsIpv6Addr(address: String)
-		case dnsServers(addresses: [String])
-		case dohCertStatus
-		case dohInsecure
-		case dohUrl(url: URL)
-		case dumpHeader(filename: String) // alias with '-D'
-		case egdFile(file: String)
-		case engine(name: String) // the UI for this could be a popup list, populated from calling the command `curl --engine list`
-		case etagCompare(filename: String)
-		case expect100Timeout(seconds: TimeInterval)
-		case failEarly
-		case failWithBody
-		case fail // alias with '-f'
-		case falseStart
-		case formEscape
-		case formString(name: String, value: String) // concatenate with =
-		case form(name: String, content: String) // concatenate with =
-		case ftpAccount(data: String)
-		case ftpAlternativeToUser(command: String)
-		case ftpCreateDirs
-		case ftpMethod(method: FTPMethod)
-		case ftpPasv
-		case ftpPort(address: String) // alias with '-P'; address is one of interface (e.g. "eth0"), IP address, host name, or "-"
-		case ftpPret
-		case ftpSkipPasvIp
-		case ftpSSLClearCommandChannelMode(mode: SSLClearCommandChannelMode)
-		case ftpSSLClearCommandChannel
-		case ftpSSLControl
-		case get
-		case globOff // alias with '-g'
-		case happyEyeballsTimeoutMs(milliseconds: UInt64)
-		case haproxyClientIp
-		case haproxyProtocol
-		case head // alias with '-I'
-		case header(header: String) // alias with '-H', filenames will only be recognised as such when preceded with '@' (e.g. `@filename.txt`), read from stdin with `@-`
-		case help(category: String?) // alias with '-h'
-		case hostpubmd5(md5: String)
-		case hostpubsha256(sha256: String)
-		case hsts(fileName: String)
-		case http0_9
-		case http1_0 // alias with '-0'
-		case http1_1
-		case http2PriorKnowledge
-		case http2
-		case http3Only // man page says: **WARNING**: this option is experimental. Do not use in production.
-		case http3 // man page says: **WARNING**: this option is experimental. Do not use in production.
-		case ignoreContentLength
-		case include // alias with '-i'
-		case insecure // alias with '-k'
-		case interface(name: String)
-		case ipfsGateway(url: URL)
-		case ipv4 // alias with '-4'
-		case ipv6 // alias with '-6'
-		case json(data: String) // is a shortcut for --data [arg] --header "Content-Type: application/json" --header "Accept: application/json"; If <data> starts with '@' it is interpreted as a filename to read the data from; if <data> is a hyphen '-' it reads the data from stdin
-		case junkSessionCookies // alias with '-j'
-		case keepaliveTime(seconds: TimeInterval)
-		case keyType(type: KeyType) // type is DER, PEM, or ENG
-		case key(key: String) // man page says private key "file name" rather than "value"
-		case krb(level: KerberosLevel) // Kerberos; values are clear, safe, confidential, or private
-		case libcurl(file: String) // creates libcurl-using C source code to perform task (instead of or as well as?) performing task
-		case limitRate(speed: HumanBytes)
-		case listOnly // alias with '-l'
-		case localPort(low: UInt16, high: UInt16?) // either "low" (for a single value) or "low-high" (for a range)
-		case locationTrusted
-		case location // alias with '-L'
-		case loginOptions(options: String)
-		case mailAuth(emailAddress: String)
-		case mailFrom(emailAddress: String)
-		case mailRcptAllowFails
-		case mailRcpt(emailAddress: String)
-		case manual // alias with '-M', the manual
-		case maxFilesize(bytes: HumanBytes)
-		case maxRedirs(num: UInt)
-		case maxTime(fractionalSeconds: TimeInterval) // alias with '-m'
+	struct Arguments: Codable {
+		var abstractUnixSocket: /*path:*/ String?
+		var altSvc: /*fileName:*/ String?
+		var anyAuth: Bool = false
+		var append: Bool = false
+		var awsSigV4: /*providerInfo:*/ String? // There's a more complex pattern to the provider info than I can see how to fit into this signature sensibly
+		var basic: Bool = false
+		var caNative: Bool = false
+		var caCert: /*file:*/ String?
+		var caPath: /*directory:*/ String?
+		var certStatus: Bool = false
+		var certType: /*type:*/ ClientCertificateType?
+		var cert: (certificate: String, password: String?)?
+		var ciphers: /*cipherList:*/ [String]? // when turning into an argument, concatenate with hyphens e.g. "ECDHE-ECDSA-AES256-CCM8"
+		var compressedSsh: Bool = false
+		var compressed: Bool = false
+		var config: /*file:*/ String?
+		var connectTimeout: /*seconds:*/ TimeInterval? // when turned into a string, decimal must be a '.' regardless of locale
+		var connectTo: (host1: String, port1: String, host2: String, port2: String)? // when stringified, concatenate with ':', e.g. "example.com:443:example.net:8443"
+		var continueAt: /*offset:*/ UInt64 // offset will never be negative
+		var cookieJar: /*filename:*/ String? // "-" means "stdout"
+		var cookie: /*dataOrFilename:*/ String? // if there's a "=", it's data; otherswise it's a filename; if it's "-" this means "stdin"
+		var createDirs: Bool = false
+		var createFileMode: /*mode:*/ FileMode? // Unix file mode when stringified, so a 4-digit octal number.
+		var crlf: Bool = false
+		var crlFile: /*file:*/ String?
+		var curves: /*algorithmList:*/ [String]? // when stringified multiple algorithms can be provided by separating them with ":"
+		var dataAscii: /*data:*/ String? // this is just an alias for -d, --data <data>
+		var dataBinary: /*data:*/ String?
+		var dataRaw: /*data:*/ String?
+		var dataUrlEncode: /*data:*/ String?
+		var delegation: /*level:*/ DelegationLevel? // You can use an enum for level if it has predefined values
+		var digest: Bool = false
+		var disableEprt: Bool = false
+		var disableEpsv: Bool = false
+		var disable: Bool = false
+		var disallowUsernameInUrl: Bool = false
+		var dnsInterface: /*interface:*/ String?
+		var dnsIpv4Addr: /*address:*/ String?
+		var dnsIpv6Addr: /*address:*/ String?
+		var dnsServers: /*addresses:*/ [String]?
+		var dohCertStatus: Bool = false
+		var dohInsecure: Bool = false
+		var dohUrl: /*url:*/ URL?
+		var dumpHeader: /*filename:*/ String? // alias with '-D'
+		var egdFile: /*file:*/ String?
+		var engine: /*name:*/ String? // the UI for this could be a popup list, populated from calling the command `curl --engine list`
+		var etagCompare: /*filename:*/ String?
+		var expect100Timeout: /*seconds:*/ TimeInterval?
+		var failEarly: Bool = false
+		var failWithBody: Bool = false
+		var fail: Bool = false // alias with '-f'
+		var falseStart: Bool = false
+		var formEscape: Bool = false
+		var formString: (name: String, value: String)? // concatenate with =
+		var form: (name: String, content: String)? // concatenate with =
+		var ftpAccount: /*data:*/ String?
+		var ftpAlternativeToUser: /*command:*/ String?
+		var ftpCreateDirs: Bool = false
+		var ftpMethod: /*method:*/ FTPMethod?
+		var ftpPasv: Bool = false
+		var ftpPort: /*address:*/ String? // alias with '-P'; address is one of interface (e.g. "eth0"), IP address, host name, or "-"
+		var ftpPret: Bool = false
+		var ftpSkipPasvIp: Bool = false
+		var ftpSSLClearCommandChannelMode: /*mode:*/ SSLClearCommandChannelMode?
+		var ftpSSLClearCommandChannel: Bool = false
+		var ftpSSLControl: Bool = false
+		var get: Bool = false
+		var globOff: Bool = false // alias with '-g'
+		var happyEyeballsTimeoutMs: /*milliseconds:*/ UInt64?
+		var haproxyClientIp: Bool = false
+		var haproxyProtocol: Bool = false
+		var head: Bool = false // alias with '-I'
+		var header: /*header:*/ String? // alias with '-H', filenames will only be recognised as such when preceded with '@' (e.g. `@filename.txt`), read from stdin with `@-`
+		var help: /*category:*/ String? // alias with '-h'
+		var hostpubmd5: /*md5:*/ String?
+		var hostpubsha256: /*sha256:*/ String?
+		var hsts: /*fileName:*/ String?
+		var http0_9: Bool = false
+		var http1_0: Bool = false // alias with '-0'
+		var http1_1: Bool = false
+		var http2PriorKnowledge: Bool = false
+		var http2: Bool = false
+		var http3Only: Bool = false // man page says: **WARNING**: this option is experimental. Do not use in production.
+		var http3: Bool = false // man page says: **WARNING**: this option is experimental. Do not use in production.
+		var ignoreContentLength: Bool = false
+		var include: Bool = false // alias with '-i'
+		var insecure: Bool = false // alias with '-k'
+		var interface: /*name:*/ String?
+		var ipfsGateway: /*url:*/ URL?
+		var ipv4: Bool = false // alias with '-4'
+		var ipv6: Bool = false // alias with '-6'
+		var json: /*data:*/ String? // is a shortcut for --data [arg] --header "Content-Type: application/json" --header "Accept: application/json"; If <data> starts with '@' it is interpreted as a filename to read the data from; if <data> is a hyphen '-' it reads the data from stdin
+		var junkSessionCookies: Bool = false // alias with '-j'
+		var keepaliveTime: /*seconds:*/ TimeInterval?
+		var keyType: /*type:*/ KeyType? // type is DER, PEM, or ENG
+		var key: /*key:*/ String? // man page says private key "file name" rather than "value"
+		var krb: /*level:*/ KerberosLevel? // Kerberos; values are clear, safe, confidential, or private
+		var libcurl: /*file:*/ String? // creates libcurl-using C source code to perform task (instead of or as well as?) performing task
+		var limitRate: /*speed:*/ HumanBytes?
+		var listOnly: Bool = false // alias with '-l'
+		var localPort: (low: UInt16, high: UInt16?)? // either "low" (for a single value) or "low-high" (for a range)
+		var locationTrusted: Bool = false
+		var location: Bool = false // alias with '-L'
+		var loginOptions: /*options:*/ String?
+		var mailAuth: /*emailAddress:*/ String?
+		var mailFrom: /*emailAddress:*/ String?
+		var mailRcptAllowFails: Bool = false
+		var mailRcpt: /*emailAddress:*/ String?
+		var manual: Bool = false // alias with '-M', the manual
+		var maxFilesize: /*bytes:*/ HumanBytes?
+		var maxRedirs: /*num:*/ UInt?
+		var maxTime: /*fractionalSeconds:*/ TimeInterval? // alias with '-m'
 		// --metalink disabled in curl for security reasons, according to man page
-		case negotiate
-		case netrcFile(filename: String)
-		case netrcOptional
-		case netrc // alias with '-n'
+		var negotiate: Bool = false
+		var netrcFile: /*filename:*/ String?
+		var netrcOptional: Bool = false
+		var netrc: Bool = false // alias with '-n'
 		// -:, --next doesn't make sense within the GUI paradigm I'm currently creating
-		case noAlpn
-		case noBuffer // alias with '-N'
-		case noClobber
-		case noKeepalive
-		case noProgressMeter
-		case noSessionID
-		case noProxy(noProxyList: [String]) // comma-separated list, or *
-		case ntlmWb
-		case ntlm
-		case oauth2Bearer(token: String) // RFC 6750
-		case outputDirectory(directory: String)
-		case output(file: String) // alias with '-o'
-		case parallelImmediate
-		case parallelMax(num: UInt)
-		case parallel // alias with '-Z'
-		case pass(phrase: String) // (SSH TLS) Passphrase for the private key.
-		case pathAsIs
-		case pinnedPubKey(hashes: String) // either (1) path to a file, or (2) "sha256//" followed by base64-encoded sha256s separated by ";"
-		case post301
-		case post302
-		case post303
-		case preproxy(protocolHostPort: String) // [protocol://]host[:port]
-		case progressBar // alias with '-#'
-		case protoDefault(protocol: String)
-		case protoRedirect(protocols: String)
-		case proto(protocols: String) // see man page for details on the structure, too much for a mere comment
-		case proxyAnyAuth
-		case proxyBasic
-		case proxyCANative
-		case proxyCACert(file: String)
-		case proxyCAPath(dir: String)
-		case proxyCertType(type: ClientCertificateType)
-		case proxyCert(cert: String, password: String?) // if it has a password, concatenate with ':'
-		case proxyCiphers(list: [String])
-		case proxyCRLFile(file: String)
-		case proxyDigest
-		case proxyHeader(header: String) // same rules as --header but not an alias
-		case proxyHttp2
-		case proxyInsecure
-		case proxyKeyType(type: String)
-		case proxyKey(key: String)
-		case proxyNegotiate
-		case proxyNTLM
-		case proxyPass(phrase: String)
-		case proxyPinnedPubKey(hashes: String)
-		case proxyServiceName(name: String)
-		case proxySSLAllowBeast
-		case proxySSLAutoClientCert
-		case proxyTLS13Ciphers(ciphersuiteList: [String])
-		case proxyTLSAuthType(type: TLSAuthenticationType)
-		case proxyTLSPassword(string: String)
-		case proxyTLSUser(name: String)
-		case proxyTLSv1
-		case proxyUser(user: String, password: String) // alias with '-U', concatenate with ':'
-		case proxy(protocolHostPort: String) // alias with '-x', [protocol://]host[:port]
-		case proxy1_0(hostPort: String) // host[:port]
-		case proxytunnel // alias with '-p'
-		case pubKey(key: String)
-		case quote(command: String) // alias with '-Q'
-		case range(range: String) // alias with '-r', see man page for parsing rules
-		case rate(maxRequestRate: RequestRate) // number of transfer starts per time unit, the user can specify s, m, h, d for obvious meanings, e.g., "5/s," more than 1000/s is counted as unrestricted
-		case raw
-		case referer(url: URL) // alias with '-e'
-		case remoteHeaderName // alias with '-J'
-		case remoteNameAll
-		case remoteName // alias with '-O'
-		case remoteTime // alias with '-R'
-		case removeOnError
-		case requestTarget(path: String)
-		case request(method: String) // alias with '-X', which ones you're allowed depend on your protocol, so this is best left as a String at least for the first version
-		case resolve(hostPortAddr: String) // <[+]host:port:addr[,addr]...>
-		case retryAllErrors
-		case retryConnRefused
-		case retryDelay(seconds: TimeInterval)
-		case retryMaxTime(seconds: TimeInterval)
-		case retry(number: UInt)
-		case saslAuthorizationIdentity(identity: String)
-		case saslInitialResponse
-		case serviceName(name: String)
-		case showError // alias with '-S'
-		case silent // alias with '-s'
-		case socks4(hostPort: String) // <host[:port]>
-		case socks4a(hostPort: String) // <host[:port]>
-		case socks5Basic
-		case socks5_GSS_API_NEC
-		case socks5_GSS_API_Service(name: String)
-		case socks5_GSS_API
-		case socks5Hostname(hostPort: String)
-		case socks5(hostPort: String)
-		case speedLimit(speed: UInt64) // alias with '-Y'; lower limit, bytes/second, over time window in speedTime
-		case speedTime(seconds: TimeInterval) // alias with '-y', time window used by speedLimit
-		case sslAllowBeast // From the man page: WARNING: this option loosens the SSL security, and by using this flag you ask for exactly that.
-		case sslAutoClientCert
-		case sslNoRevoke
-		case sslRequired
-		case sslRevokeBestEffort
-		case ssl
-		case sslv2 // alias with '-2'
-		case sslv3 // alias with '-3'
-		case stderr(file: String)
-		case styledOutput
-		case suppressConnectHeaders
-		case tcpFastOpen
-		case tcpNoDelay
-		case telnetOption(option: String) // alias with '-t'; Supported options: TTYPE=<term>, XDISPLOC=<X display>, NEW_ENV=<var,val>; e.g. `curl -t TTYPE=vt100 …`
-		case tftpBlockSize(value: UInt64) // block size on a TFTP server
-		case tftpNoOptions
-		case timeCond(date: Date, olderThan: Bool) // alias '-z'; this is a string representing a date, which can be "all sorts of date" formats
-		case tlsMax(version: TLSVersion) // valid values: [default, 1.0, 1.1, 1.2, 1.3]
-		case tls13Ciphers(ciphersuiteList: [String])
-		case tlsAuthType(type: TLSAuthenticationType) // only supported value: SRP
-		case tlspassword(string: String)
-		case tlsuser(name: String)
-		case tlsv1_0
-		case tlsv1_1
-		case tlsv1_2
-		case tlsv1_3
-		case tlsv1 // alias with '-1'
-		case trEncoding // request compressed Transfer-Encoding response
-		case traceAscii(file: String)
-		case traceConfig(string: String)
-		case traceIDs
-		case traceTime
-		case trace(file: String)
-		case unixSocket(path: String)
-		case uploadFile(file: String) // alias with '-T'
-		case urlQuery(data: String)
-		case url(url: URL) // to fetch
-		case useAscii // alias with '-B'
-		case userAgent(name: String) // alias with '-A'
-		case user(user: String, password: String) // alias with '-u'
-		case variable(nameText: String) // <[%]name=text/@file>
-		case verbose // alias with '-v'
-		case version // alias with '-V'
-		case writeOut(format: String) // alias with '-w', format string is a decent-sized part of the man page all by itself
-		case xattr
+		var noAlpn: Bool = false
+		var noBuffer: Bool = false // alias with '-N'
+		var noClobber: Bool = false
+		var noKeepalive: Bool = false
+		var noProgressMeter: Bool = false
+		var noSessionID: Bool = false
+		var noProxy: /*noProxyList:*/ [String]? // comma-separated list, or *
+		var ntlmWb: Bool = false
+		var ntlm: Bool = false
+		var oauth2Bearer: /*token:*/ String? // RFC 6750
+		var outputDirectory: /*directory:*/ String?
+		var output: /*file:*/ String? // alias with '-o'
+		var parallelImmediate: Bool = false
+		var parallelMax: /*num:*/ UInt?
+		var parallel: Bool = false // alias with '-Z'
+		var pass: /*phrase:*/ String? // (SSH TLS) Passphrase for the private key.
+		var pathAsIs: Bool = false
+		var pinnedPubKey: /*hashes:*/ String? // either (1) path to a file, or (2) "sha256//" followed by base64-encoded sha256s separated by ";"
+		var post301: Bool = false
+		var post302: Bool = false
+		var post303: Bool = false
+		var preproxy: /*protocolHostPort:*/ String? // [protocol://]host[:port]
+		var progressBar: Bool = false // alias with '-#'
+		var protoDefault: /*protocol:*/ String?
+		var protoRedirect: /*protocols:*/ String?
+		var proto: /*protocols:*/ String? // see man page for details on the structure, too much for a mere comment
+		var proxyAnyAuth: Bool = false
+		var proxyBasic: Bool = false
+		var proxyCANative: Bool = false
+		var proxyCACert: /*file:*/ String?
+		var proxyCAPath: /*dir:*/ String?
+		var proxyCertType: /*type:*/ ClientCertificateType?
+		var proxyCert: (cert: String, password: String?)? // if it has a password, concatenate with ':'
+		var proxyCiphers: /*list:*/ [String]?
+		var proxyCRLFile: /*file:*/ String?
+		var proxyDigest: Bool = false
+		var proxyHeader: /*header:*/ String? // same rules as --header but not an alias
+		var proxyHttp2: Bool = false
+		var proxyInsecure: Bool = false
+		var proxyKeyType: /*type:*/ String?
+		var proxyKey: /*key:*/ String?
+		var proxyNegotiate: Bool = false
+		var proxyNTLM: Bool = false
+		var proxyPass: /*phrase:*/ String?
+		var proxyPinnedPubKey: /*hashes:*/ String?
+		var proxyServiceName: /*name:*/ String?
+		var proxySSLAllowBeast: Bool = false
+		var proxySSLAutoClientCert: Bool = false
+		var proxyTLS13Ciphers: /*ciphersuiteList:*/ [String]?
+		var proxyTLSAuthType: /*type:*/ TLSAuthenticationType?
+		var proxyTLSPassword: /*string:*/ String?
+		var proxyTLSUser: /*name:*/ String?
+		var proxyTLSv1: Bool = false
+		var proxyUser: (user: String, password: String)? // alias with '-U', concatenate with ':'
+		var proxy: /*protocolHostPort:*/ String? // alias with '-x', [protocol://]host[:port]
+		var proxy1_0: /*hostPort:*/ String? // host[:port]
+		var proxytunnel: Bool = false // alias with '-p'
+		var pubKey: /*key:*/ String?
+		var quote: /*command:*/ String? // alias with '-Q'
+		var range: /*range:*/ String? // alias with '-r', see man page for parsing rules
+		var rate: /*maxRequestRate:*/ RequestRate? // number of transfer starts per time unit, the user can specify s, m, h, d for obvious meanings, e.g., "5/s," more than 1000/s is counted as unrestricted
+		var raw: Bool = false
+		var referer: /*url:*/ URL? // alias with '-e'
+		var remoteHeaderName: Bool = false // alias with '-J'
+		var remoteNameAll: Bool = false
+		var remoteName: Bool = false // alias with '-O'
+		var remoteTime: Bool = false // alias with '-R'
+		var removeOnError: Bool = false
+		var requestTarget: /*path:*/ String?
+		var request: /*method:*/ String? // alias with '-X', which ones you're allowed depend on your protocol, so this is best left as a String at least for the first version
+		var resolve: /*hostPortAddr:*/ String? // <[+]host:port:addr[,addr]...>
+		var retryAllErrors: Bool = false
+		var retryConnRefused: Bool = false
+		var retryDelay: /*seconds:*/ TimeInterval?
+		var retryMaxTime: /*seconds:*/ TimeInterval?
+		var retry: /*number:*/ UInt?
+		var saslAuthorizationIdentity: /*identity:*/ String?
+		var saslInitialResponse: Bool = false
+		var serviceName: /*name:*/ String?
+		var showError: Bool = false // alias with '-S'
+		var silent: Bool = false // alias with '-s'
+		var socks4: /*hostPort:*/ String? // <host[:port]>
+		var socks4a: /*hostPort:*/ String? // <host[:port]>
+		var socks5Basic: Bool = false
+		var socks5_GSS_API_NEC: Bool = false
+		var socks5_GSS_API_Service: /*name:*/ String?
+		var socks5_GSS_API: Bool = false
+		var socks5Hostname: /*hostPort:*/ String?
+		var socks5: /*hostPort:*/ String?
+		var speedLimit: /*speed:*/ UInt64? // alias with '-Y'; lower limit, bytes/second, over time window in speedTime
+		var speedTime: /*seconds:*/ TimeInterval? // alias with '-y', time window used by speedLimit
+		var sslAllowBeast: Bool = false // From the man page: WARNING: this option loosens the SSL security, and by using this flag you ask for exactly that.
+		var sslAutoClientCert: Bool = false
+		var sslNoRevoke: Bool = false
+		var sslRequired: Bool = false
+		var sslRevokeBestEffort: Bool = false
+		var ssl: Bool = false
+		var sslv2: Bool = false // alias with '-2'
+		var sslv3: Bool = false // alias with '-3'
+		var stderr: /*file:*/ String?
+		var styledOutput: Bool = false
+		var suppressConnectHeaders: Bool = false
+		var tcpFastOpen: Bool = false
+		var tcpNoDelay: Bool = false
+		var telnetOption: /*option:*/ String? // alias with '-t'; Supported options: TTYPE=<term>, XDISPLOC=<X display>, NEW_ENV=<var,val>; e.g. `curl -t TTYPE=vt100 …`
+		var tftpBlockSize: /*value:*/ UInt64? // block size on a TFTP server
+		var tftpNoOptions: Bool = false
+		var timeCond: (date: Date, olderThan: Bool)? // alias '-z'; this is a string representing a date, which can be "all sorts of date" formats
+		var tlsMax: /*version:*/ TLSVersion? // valid values: [default, 1.0, 1.1, 1.2, 1.3]
+		var tls13Ciphers: /*ciphersuiteList:*/ [String]?
+		var tlsAuthType: /*type:*/ TLSAuthenticationType? // only supported value: SRP
+		var tlspassword: /*string:*/ String?
+		var tlsuser: /*name:*/ String?
+		var tlsv1_0: Bool = false
+		var tlsv1_1: Bool = false
+		var tlsv1_2: Bool = false
+		var tlsv1_3: Bool = false
+		var tlsv1: Bool = false // alias with '-1'
+		var trEncoding: Bool = false // request compressed Transfer-Encoding response
+		var traceAscii: /*file:*/ String?
+		var traceConfig: /*string:*/ String?
+		var traceIDs: Bool = false
+		var traceTime: Bool = false
+		var trace: /*file:*/ String?
+		var unixSocket: /*path:*/ String?
+		var uploadFile: /*file:*/ String? // alias with '-T'
+		var urlQuery: /*data:*/ String?
+		var url: /*url:*/ URL? // to fetch
+		var useAscii: Bool = false // alias with '-B'
+		var userAgent: /*name:*/ String? // alias with '-A'
+		var user: (user: String, password: String)? // alias with '-u'
+		var variable: /*nameText:*/ String? // <[%]name=text/@file>
+		var verbose: Bool = false // alias with '-v'
+		var version: Bool = false // alias with '-V'
+		var writeOut: /*format:*/ String? // alias with '-w', format string is a decent-sized part of the man page all by itself
+		var xattr: Bool = false
 		
-		func derivedArguments() -> [String] {
+		func mergeNotNil(value: String?, block: (String)->()) {
+			if let value = value { block(value) }
+		}
+		
+		func buildArguments() -> [String] {
+			var result: [String] = []
+			mergeNotNil(value: abstractUnixSocket) { result += ["--abstract-unix-socket", $0] }
 			switch self {
 			case .abstractUnixSocket(let path): return ["--abstract-unix-socket", path]
 			case .altSvc(let fileName): return ["--alt-svc", fileName]
