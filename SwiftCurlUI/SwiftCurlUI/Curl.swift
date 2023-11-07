@@ -334,15 +334,19 @@ extension Curl {
 			if certStatus { result += ["--cert-status"] }
 			if let certType = certType { result += ["--cert-type", certType.rawValue] }
 			
+			if let cert = cert {
+				if let password = cert.password {
+					result += ["--cert", "\(cert.certificate):\(password)"]
+				} else {
+					result += ["--cert", cert.certificate]
+				}
+			}
+			mergeNotNil(value: ciphers) { result += ["--ciphers", $0.joined(separator: "-")] }
+			if compressedSsh { result += ["--compressed-ssh"] }
+			if compressed { result += ["--compressed"] }
+			mergeNotNil(value: config) { result += ["--config", $0] }
+			
 			switch self {
-			case .certType(let type): return ["--cert-type", type.rawValue]
-			case .cert(let certificate, let password):
-				guard let password = password else { return ["--cert", certificate] }
-				return ["--cert", "\(certificate):\(password)"]
-			case .ciphers(let cipherList): return ["--ciphers", cipherList.joined(separator: "-")]
-			case .compressedSsh: return ["--compressed-ssh"]
-			case .compressed: return ["--compressed"]
-			case .config(let file): return ["--config", file]
 			case .connectTimeout(let seconds): return ["--connect-timeout", String(seconds)] // TODO: how does String(double) construct numbers in different locales? I need "12.34" everywhere, no variation.
 			case .connectTo(let host1, let port1, let host2, let port2):
 				return ["--connect-to", "\(host1):\(port1):\(host2):\(port2)"]
