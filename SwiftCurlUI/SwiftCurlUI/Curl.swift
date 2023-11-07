@@ -323,17 +323,17 @@ extension Curl {
 		func buildArguments() -> [String] {
 			var result: [String] = []
 			mergeNotNil(value: abstractUnixSocket) { result += ["--abstract-unix-socket", $0] }
+			mergeNotNil(value: altSvc) { result += ["--alt-svc", $0] }
+			if anyAuth { result += ["--anyauth"] }
+			if append { result += ["--append"] }
+			mergeNotNil(value: awsSigV4) { result += ["--aws-sigv4", $0] }
+			if basic { result += ["--basic"] }
+			if caNative { result += ["--ca-native"] }
+			mergeNotNil(value: caCert) { result += ["--cacert", $0] }
+			mergeNotNil(value: caPath) { result += ["--capath", $0] }
+			if certStatus { result += ["--cert-status"] }
+			
 			switch self {
-			case .abstractUnixSocket(let path): return ["--abstract-unix-socket", path]
-			case .altSvc(let fileName): return ["--alt-svc", fileName]
-			case .anyAuth: return ["--anyauth"]
-			case .append: return ["--append"]
-			case .awsSigV4(providerInfo: let providerInfo): return ["--aws-sigv4", providerInfo]
-			case .basic: return ["--basic"]
-			case .caNative: return ["--ca-native"]
-			case .caCert(let file): return ["--cacert", file]
-			case .caPath(let directory): return ["--capath", directory]
-			case .certStatus: return ["--cert-status"]
 			case .certType(let type): return ["--cert-type", type.rawValue]
 			case .cert(let certificate, let password):
 				guard let password = password else { return ["--cert", certificate] }
