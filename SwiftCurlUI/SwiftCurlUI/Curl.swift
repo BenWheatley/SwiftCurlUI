@@ -332,7 +332,7 @@ extension Curl {
 			mergeNotNil(value: caCert) { result += ["--cacert", $0] }
 			mergeNotNil(value: caPath) { result += ["--capath", $0] }
 			if certStatus { result += ["--cert-status"] }
-			if let certType = certType { result += ["--cert-type", certType.rawValue] }
+			mergeNotNil(value: certType?.rawValue) { result += ["--cert-type", $0] }
 			if let cert = cert {
 				guard let password = cert.password else { result += ["--cert", cert.certificate] }
 				result += ["--cert", "\(cert.certificate):\(password)"]
@@ -351,7 +351,7 @@ extension Curl {
 			mergeNotNil(value: cookieJar) { result += ["--cookie-jar", $0] }
 			mergeNotNil(value: cookie) { result += ["--cookie", $0] }
 			if createDirs { result += ["--create-dirs"] }
-			if let mode = createFileMode?.toString { result += ["--create-file-mode", mode] }
+			mergeNotNil(value: createFileMode?.toString) { result += ["--create-file-mode", $0] }
 			if crlf { result += ["--crlf"] }
 			mergeNotNil(value: crlFile) { result += ["--crlfile", $0] }
 			if let algorithmList = curves?.joined(separator: ":") {
@@ -364,7 +364,7 @@ extension Curl {
 			mergeNotNil(value: dataBinary) { result += ["--data-binary", $0] }
 			mergeNotNil(value: dataRaw) { result += ["--data-raw", $0] }
 			mergeNotNil(value: dataUrlEncode) { result += ["--data-urlencode", $0] }
-			if let level = delegation?.rawValue { result += ["--delegation", level] }
+			mergeNotNil(value: delegation?.rawValue) { result += ["--delegation", $0] }
 			if digest { result += ["--digest"] }
 			if disableEprt { result += ["--disable-eprt"] }
 			if disableEpsv { result += ["--disable-epsv"] }
@@ -378,9 +378,7 @@ extension Curl {
 			}
 			if dohCertStatus { result += ["--doh-cert-status"] }
 			if dohInsecure { result += ["--doh-insecure"] }
-			if let urlString = url?.absoluteString {
-				result += ["--doh-url", urlString]
-			}
+			mergeNotNil(value: url?.absoluteString) { result += ["--doh-url", $0] }
 			mergeNotNil(value: dumpHeader) { result += ["--dump-header", $0] }
 			mergeNotNil(value: egdFile) { result += ["--egd-file", $0] }
 			mergeNotNil(value: engine) { result += ["--engine", $0] }
@@ -402,21 +400,17 @@ extension Curl {
 			mergeNotNil(value: ftpAccount) { result += ["--ftp-account", $0] }
 			mergeNotNil(value: ftpAlternativeToUser) { result += ["--ftp-alternative-to-user", $0] }
 			if ftpCreateDirs { result += ["--ftp-create-dirs"] }
-			if let method = ftpMethod?.rawValue { result += ["--ftp-method", method] }
+			mergeNotNil(value: ftpMethod?.rawValue) { result += ["--ftp-method", $0] }
 			if ftpPasv { result += ["--ftp-pasv"] }
 			mergeNotNil(value: ftpPort) { result += ["--ftp-port", $0] }
 			if ftpPret { result += ["--ftp-pret"] }
 			if ftpSkipPasvIp { result += ["--ftp-skip-pasv-ip"] }
-			if let mode = ftpSSLClearCommandChannelMode?.rawValue {
-				result += ["--ftp-ssl-ccc-mode", mode]
-			}
+			mergeNotNil(value: ftpSSLClearCommandChannelMode?.rawValue) { result += ["--ftp-ssl-ccc-mode", $0] }
 			if ftpSSLClearCommandChannel { result += ["--ftp-ssl-ccc"] }
 			if ftpSSLControl { result += ["--ftp-ssl-control"] }
 			if get { result += ["--get"] }
 			if globOff { result += ["--globoff"] }
-			if let mode = ftpSSLClearCommandChannelMode?.rawValue {
-				result += ["--ftp-ssl-ccc-mode", mode]
-			}
+			mergeNotNil(value: ftpSSLClearCommandChannelMode?.rawValue) { result += ["--ftp-ssl-ccc-mode", $0] }
 			if ftpSSLClearCommandChannel { result += ["--ftp-ssl-ccc"] }
 			if ftpSSLControl { result += ["--ftp-ssl-control"] }
 			if get { result += ["--get"] }
@@ -435,8 +429,8 @@ extension Curl {
 					result += ["--help", category]
 				}
 			}
-			if let md5 = hostpubmd5 { result += ["--hostpubmd5", md5] }
-			if let sha256 = hostpubsha256 { result += ["--hostpubsha256", sha256] }
+			mergeNotNil(value: hostpubmd5) { result += ["--hostpubmd5", $0] }
+			mergeNotNil(value: hostpubsha256) { result += ["--hostpubsha256", $0] }
 			mergeNotNil(value: hsts) { result += ["--hsts", $0] }
 			if http0_9 { result += ["--http0.9"] }
 			if http1_0 { result += ["--http1.0"] }
@@ -449,21 +443,17 @@ extension Curl {
 			if include { result += ["--include"] }
 			if insecure { result += ["--insecure"] }
 			mergeNotNil(value: interface) { result += ["--interface", $0] }
-			mergeNotNil(value: ipfsGateway) { result += ["--ipfs-gateway", $0.absoluteString] }
+			mergeNotNil(value: ipfsGateway?.absoluteString) { result += ["--ipfs-gateway", $0] }
 			if ipv4 { result += ["--ipv4"] }
 			if ipv6 { result += ["--ipv6"] }
 			mergeNotNil(value: json) { result += ["--json", $0] }
 			if junkSessionCookies { result += ["--junk-session-cookies"] }
-			mergeNotNil(value: keepaliveTime) { result += ["--keepalive-time", String($0)] }
-			if let type = keyType {
-				result += ["--key-type", type.rawValue]
-			}
+			if let seconds = keepaliveTime { result += ["--keepalive-time", String(seconds)] }
+			mergeNotNil(value: keyType?.rawValue) { result += ["--key-type", $0] }
 			mergeNotNil(value: key) { result += ["--key", $0] }
-			if let level = krb {
-				result += ["--krb", level.rawValue]
-			}
+			mergeNotNil(value: krb?.rawValue) { result += ["--krb", $0] }
 			mergeNotNil(value: libcurl) { result += ["--libcurl", $0] }
-			mergeNotNil(value: limitRate) { result += ["--limit-rate", $0.toString] }
+			mergeNotNil(value: limitRate?.toString) { result += ["--limit-rate", $0] }
 			if listOnly { result += ["--list-only"] }
 			
 			switch self {
