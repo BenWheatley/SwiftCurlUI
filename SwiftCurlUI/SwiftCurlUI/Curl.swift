@@ -467,9 +467,9 @@ extension Curl {
 			if mailRcptAllowFails { result += ["--mail-rcpt-allowfails"] }
 			mergeNotNil(value: mailRcpt) { result += ["--mail-rcpt", $0] }
 			if manual { result += ["--manual"] }
-			mergeNotNil(value: maxFilesize) { result += ["--max-filesize", $0.toString] }
-			mergeNotNil(value: maxRedirs) { result += ["--max-redirs", String($0)] }
-			mergeNotNil(value: maxTime) { result += ["--max-time", String($0)] }
+			mergeNotNil(value: maxFilesize?.toString) { result += ["--max-filesize", $0] }
+			if let num = maxRedirs { result += ["--max-redirs", String(num)] }
+			if let fractionalSeconds = maxTime { result += ["--max-time", String(fractionalSeconds)] }
 			if negotiate { result += ["--negotiate"] }
 			mergeNotNil(value: netrcFile) { result += ["--netrc-file", $0] }
 			if netrcOptional { result += ["--netrc-optional"] }
@@ -482,27 +482,6 @@ extension Curl {
 			if noSessionID { result += ["--no-sessionid"] }
 			
 			switch self {
-			case .locationTrusted: return ["--location-trusted"]
-			case .location: return ["--location"]
-			case .loginOptions(let options): return ["--login-options", options]
-			case .mailAuth(let emailAddress): return ["--mail-auth", emailAddress]
-			case .mailFrom(let emailAddress): return ["--mail-from", emailAddress]
-			case .mailRcptAllowFails: return ["--mail-rcpt-allowfails"]
-			case .mailRcpt(let emailAddress): return ["--mail-rcpt", emailAddress]
-			case .manual: return ["--manual"]
-			case .maxFilesize(let bytes): return ["--max-filesize", bytes.toString]
-			case .maxRedirs(let num): return ["--max-redirs", String(num)]
-			case .maxTime(let fractionalSeconds): return ["--max-time", String(fractionalSeconds)]
-			case .negotiate: return ["--negotiate"]
-			case .netrcFile(let filename): return ["--netrc-file", filename]
-			case .netrcOptional: return ["--netrc-optional"]
-			case .netrc: return ["--netrc"]
-			case .noAlpn: return ["--no-alpn"]
-			case .noBuffer: return ["--no-buffer"]
-			case .noClobber: return ["--no-clobber"]
-			case .noKeepalive: return ["--no-keepalive"]
-			case .noProgressMeter: return ["--no-progress-meter"]
-			case .noSessionID: return ["--no-sessionid"]
 			case .noProxy(let noProxyList): return ["--noproxy", noProxyList.joined(separator: ",")]
 			case .ntlmWb: return ["--ntlm-wb"]
 			case .ntlm: return ["--ntlm"]
