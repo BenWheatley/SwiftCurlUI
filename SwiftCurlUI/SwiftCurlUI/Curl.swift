@@ -10,6 +10,7 @@ import Foundation
 class Curl: Codable, ObservableObject {
 	let curlPath: String // I could make this a URL, but then the names get all confusion — curlURL etc. don't imply the path of the executable
 	
+	var url: [String]
 	var arguments = Arguments()
 	
 	var stdin: String = ""

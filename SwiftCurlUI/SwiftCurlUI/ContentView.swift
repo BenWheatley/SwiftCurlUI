@@ -15,7 +15,13 @@ struct CurlView: View {
 		VStack {
 			HStack {
 				Text("URL")
-				TextField("Enter URL", text: $curl.url)
+				TokenField()
+				
+				/*TextField("Enter URL", text: $curl.url)
+					.keyboardType(.URL)
+					.textContentType(.URL)
+					.disableAutocorrection(true)
+					.autocapitalization(.none)*/
 			}
 			
 			Picker("Console", selection: $selectedOutput) {
@@ -34,4 +40,17 @@ struct CurlView: View {
 #Preview {
 	CurlView()
 		.previewDevice(PreviewDevice(rawValue: "Mac"))
+}
+
+// MARK: -
+
+struct TokenField: NSViewRepresentable {
+	public func makeNSView(context: Context) -> some NSTokenField {
+		let tokenField = NSTokenField()
+		return tokenField
+	}
+	
+	func updateNSView(_ nsView: NSViewType, context: Context) {
+		// Nothing yet
+	}
 }
