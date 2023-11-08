@@ -604,6 +604,8 @@ extension Curl {
 			if version { result += ["--version"] }
 			mergeNotNil(value: writeOut) { result += ["--write-out", $0] }
 			if xattr { result += ["--xattr"] }
+			
+			return result
 		}
 	}
 }
