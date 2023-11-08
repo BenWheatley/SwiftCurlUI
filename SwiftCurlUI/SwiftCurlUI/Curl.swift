@@ -510,6 +510,14 @@ extension Curl {
 			if proxyNTLM { result += ["--proxy-ntlm"] }
 			mergeNotNil(value: proxyPass) { result += ["--proxy-pass", $0] }
 			mergeNotNil(value: proxyPinnedPubKey) { result += ["--proxy-pinnedpubkey", $0] } // would be something like `"sha256//" + ….joined(separator: ";")` if I use an array rather than a String for hashes
+			mergeNotNil(value: proxyServiceName) { result += ["--proxy-service-name", $0] }
+			if proxySSLAllowBeast { result += ["--proxy-ssl-allow-beast"] }
+			if proxySSLAutoClientCert { result += ["--proxy-ssl-auto-client-cert"] }
+			mergeNotNil(value: proxyTLS13Ciphers) { result += ["--proxy-tls13-ciphers", $0.joined(separator: "_")] }
+			mergeNotNil(value: proxyTLSAuthType) { result += ["--proxy-tlsauthtype", $0.rawValue] }
+			mergeNotNil(value: proxyTLSPassword) { result += ["--proxy-tlspassword", $0] }
+			mergeNotNil(value: proxyTLSUser) { result += ["--proxy-tlsuser", $0] }
+			if proxyTLSv1 { result += ["--proxy-tlsv1"] }
 			
 			
 			
