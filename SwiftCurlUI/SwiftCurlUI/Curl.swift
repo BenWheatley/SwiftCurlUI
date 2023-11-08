@@ -513,24 +513,15 @@ extension Curl {
 			mergeNotNil(value: proxyServiceName) { result += ["--proxy-service-name", $0] }
 			if proxySSLAllowBeast { result += ["--proxy-ssl-allow-beast"] }
 			if proxySSLAutoClientCert { result += ["--proxy-ssl-auto-client-cert"] }
-			mergeNotNil(value: proxyTLS13Ciphers) { result += ["--proxy-tls13-ciphers", $0.joined(separator: "_")] }
-			mergeNotNil(value: proxyTLSAuthType) { result += ["--proxy-tlsauthtype", $0.rawValue] }
+			mergeNotNil(value: proxyTLS13Ciphers?.joined(separator: "_")) { result += ["--proxy-tls13-ciphers", $0] }
+			mergeNotNil(value: proxyTLSAuthType?.rawValue) { result += ["--proxy-tlsauthtype", $0] }
 			mergeNotNil(value: proxyTLSPassword) { result += ["--proxy-tlspassword", $0] }
 			mergeNotNil(value: proxyTLSUser) { result += ["--proxy-tlsuser", $0] }
 			if proxyTLSv1 { result += ["--proxy-tlsv1"] }
-			
+			if let (user, password) = proxyUser { result += ["--proxy-user", "\(user):\(password)"] }
 			
 			
 			switch self {
-			case .proxyServiceName(let name): return ["--proxy-service-name", name]
-			case .proxySSLAllowBeast: return ["--proxy-ssl-allow-beast"]
-			case .proxySSLAutoClientCert: return ["--proxy-ssl-auto-client-cert"]
-			case .proxyTLS13Ciphers(let ciphersuiteList): return ["--proxy-tls13-ciphers", ciphersuiteList.joined(separator: "_")]
-			case .proxyTLSAuthType(let type): return ["--proxy-tlsauthtype", type.rawValue]
-			case .proxyTLSPassword(let string): return ["--proxy-tlspassword", string]
-			case .proxyTLSUser(let name): return ["--proxy-tlsuser", name]
-			case .proxyTLSv1: return ["--proxy-tlsv1"]
-			case .proxyUser(let user, let password): return ["--proxy-user", "\(user):\(password)"]
 			case .proxy(let protocolHostPort): return ["--proxy", protocolHostPort]
 			case .proxy1_0(let hostPort): return ["--proxy1.0", hostPort]
 			case .proxytunnel: return ["--proxytunnel"]
