@@ -33,6 +33,13 @@ struct CurlView: View {
 			.pickerStyle(SegmentedPickerStyle())
 			
 			TextEditor(text: selectedOutput == 0 ? $curl.stdin : selectedOutput == 1 ? $curl.stdout : $curl.stderr)
+			
+			Button {
+				curl.invoke()
+			} label: {
+				Text("Invoke")
+			}
+
 		}
 		.padding()
 	}

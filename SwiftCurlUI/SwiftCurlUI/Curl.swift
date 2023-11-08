@@ -21,7 +21,7 @@ class Curl: Codable, ObservableObject {
 		self.curlPath = curlPath
 	}
 	
-	func invoke() -> String {
+	func invoke() {
 		let task = Process()
 		task.executableURL = URL(fileURLWithPath: curlPath)
 		
@@ -50,8 +50,6 @@ class Curl: Codable, ObservableObject {
 		} catch {
 			print("Exception: \(error.localizedDescription)")
 		}
-		
-		return ""
 	}
 }
 
