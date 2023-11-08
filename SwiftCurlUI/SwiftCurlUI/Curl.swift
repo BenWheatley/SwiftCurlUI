@@ -286,8 +286,8 @@ extension Curl {
 		var tlsMax: /*version:*/ TLSVersion? // valid values: [default, 1.0, 1.1, 1.2, 1.3]
 		var tls13Ciphers: /*ciphersuiteList:*/ [String]?
 		var tlsAuthType: /*type:*/ TLSAuthenticationType? // only supported value: SRP
-		var tlspassword: /*string:*/ String?
-		var tlsuser: /*name:*/ String?
+		var tlsPassword: /*string:*/ String?
+		var tlsUser: /*name:*/ String?
 		var tlsv1_0: Bool = false
 		var tlsv1_1: Bool = false
 		var tlsv1_2: Bool = false
@@ -318,6 +318,7 @@ extension Curl {
 		
 		func buildArguments() -> [String] {
 			var result: [String] = []
+			
 			mergeNotNil(value: abstractUnixSocket) { result += ["--abstract-unix-socket", $0] }
 			mergeNotNil(value: altSvc) { result += ["--alt-svc", $0] }
 			if anyAuth { result += ["--anyauth"] }
@@ -579,8 +580,8 @@ extension Curl {
 			mergeNotNil(value: tlsMax?.rawValue) { result += ["--tls-max", $0] }
 			mergeNotNil(value: tls13Ciphers?.joined(separator: "_")) { result += ["--tls13-ciphers", $0] }
 			mergeNotNil(value: tlsAuthType?.rawValue) { result += ["--tlsauthtype", $0] }
-			mergeNotNil(value: tlspassword) { result += ["--tlspassword", $0] }
-			mergeNotNil(value: tlsuser) { result += ["--tlsuser", $0] }
+			mergeNotNil(value: tlsPassword) { result += ["--tlspassword", $0] }
+			mergeNotNil(value: tlsUser) { result += ["--tlsuser", $0] }
 			if tlsv1_0 { result += ["--tlsv1.0"] }
 			if tlsv1_1 { result += ["--tlsv1.1"] }
 			if tlsv1_2 { result += ["--tlsv1.2"] }
