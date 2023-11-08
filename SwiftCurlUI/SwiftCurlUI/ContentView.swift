@@ -10,12 +10,13 @@ import SwiftUI
 struct CurlView: View {
 	@ObservedObject var curl: Curl = Curl()
 	@State private var selectedOutput = 0
+	@State private var tokenFieldUrls: [String] = []  // A separate state property for TokenField
 	
 	var body: some View {
 		VStack {
 			HStack {
 				Text("URLs:")
-				TokenField()
+				TokenField(urls: $tokenFieldUrls)
 				
 				/*TextField("Enter URL", text: $curl.url)
 					.keyboardType(.URL)
@@ -45,6 +46,12 @@ struct CurlView: View {
 // MARK: -
 
 struct TokenField: NSViewRepresentable {
+	@Binding var urls: [String]
+
+	init(urls: Binding<[String]>) {
+		_urls = urls
+	}
+	
 	public func makeNSView(context: Context) -> some NSTokenField {
 		let tokenField = NSTokenField()
 		return tokenField
