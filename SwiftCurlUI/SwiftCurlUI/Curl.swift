@@ -576,19 +576,11 @@ extension Curl {
 			if let (date, olderThan) = timeCond {
 				result += ["--time-cond", (olderThan ? "-" : "") + ISO8601DateFormatter.string(from: date, timeZone: TimeZone.current)]
 			}
-			if let tlsMax = tlsMax {
-				result += ["--tls-max", tlsMax.rawValue]
-			}
-			mergeNotNil(value: tls13Ciphers) { result += ["--tls13-ciphers", $0.joined(separator: "_")] }
-			if let tlsAuthType = tlsAuthType {
-				result += ["--tlsauthtype", tlsAuthType.rawValue]
-			}
-			if let tlspassword = tlspassword {
-				result += ["--tlspassword", tlspassword]
-			}
-			if let tlsuser = tlsuser {
-				result += ["--tlsuser", tlsuser]
-			}
+			mergeNotNil(value: tlsMax?.rawValue) { result += ["--tls-max", $0] }
+			mergeNotNil(value: tls13Ciphers?.joined(separator: "_")) { result += ["--tls13-ciphers", $0] }
+			mergeNotNil(value: tlsAuthType?.rawValue) { result += ["--tlsauthtype", $0] }
+			mergeNotNil(value: tlspassword) { result += ["--tlspassword", $0] }
+			mergeNotNil(value: tlsuser) { result += ["--tlsuser", $0] }
 			if tlsv1_0 { result += ["--tlsv1.0"] }
 			if tlsv1_1 { result += ["--tlsv1.1"] }
 			if tlsv1_2 { result += ["--tlsv1.2"] }
@@ -603,48 +595,15 @@ extension Curl {
 			mergeNotNil(value: unixSocket) { result += ["--unix-socket", $0] }
 			mergeNotNil(value: uploadFile) { result += ["--upload-file", $0] }
 			mergeNotNil(value: urlQuery) { result += ["--url-query", $0] }
-			mergeNotNil(value: url) { result += ["--url", $0.absoluteString] }
+			mergeNotNil(value: url?.absoluteString) { result += ["--url", $0] }
 			if useAscii { result += ["--use-ascii"] }
 			mergeNotNil(value: userAgent) { result += ["--user-agent", $0] }
-			if let user = user, let password = password {
-				result += ["--user", "\(user):\(password)"]
-			}
+			if let (user, password) = user { result += ["--user", "\(user):\(password)"] }
 			mergeNotNil(value: variable) { result += ["--variable", $0] }
 			if verbose { result += ["--verbose"] }
 			if version { result += ["--version"] }
 			mergeNotNil(value: writeOut) { result += ["--write-out", $0] }
 			if xattr { result += ["--xattr"] }
-			
-			switch self {
-			case .tlsMax(let version): return ["--tls-max", version.rawValue]
-			case .tls13Ciphers(let ciphersuiteList): return ["--tls13-ciphers", ciphersuiteList.joined(separator: "_")]
-			case .tlsAuthType(let type): return ["--tlsauthtype", type.rawValue]
-			case .tlspassword(let string): return ["--tlspassword", string]
-			case .tlsuser(let name): return ["--tlsuser", name]
-			case .tlsv1_0: return ["--tlsv1.0"]
-			case .tlsv1_1: return ["--tlsv1.1"]
-			case .tlsv1_2: return ["--tlsv1.2"]
-			case .tlsv1_3: return ["--tlsv1.3"]
-			case .tlsv1: return ["--tlsv1"]
-			case .trEncoding: return ["--tr-encoding"]
-			case .traceAscii(let file): return ["--trace-ascii", file]
-			case .traceConfig(let string): return ["--trace-config", string]
-			case .traceIDs: return ["--trace-ids"]
-			case .traceTime: return ["--trace-time"]
-			case .trace(let file): return ["--trace", file]
-			case .unixSocket(let path): return ["--unix-socket", path]
-			case .uploadFile(let file): return ["--upload-file", file]
-			case .urlQuery(let data): return ["--url-query", data]
-			case .url(let url): return ["--url", url.absoluteString]
-			case .useAscii: return ["--use-ascii"]
-			case .userAgent(let name): return ["--user-agent", name]
-			case .user(let user, let password): return ["--user", "\(user):\(password)"]
-			case .variable(let nameText): return ["--variable", nameText]
-			case .verbose: return ["--verbose"]
-			case .version: return ["--version"]
-			case .writeOut(let format): return ["--write-out", format]
-			case .xattr: return ["--xattr"]
-			}
 		}
 	}
 }
