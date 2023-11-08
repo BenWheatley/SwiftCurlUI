@@ -576,6 +576,44 @@ extension Curl {
 			if let (date, olderThan) = timeCond {
 				result += ["--time-cond", (olderThan ? "-" : "") + ISO8601DateFormatter.string(from: date, timeZone: TimeZone.current)]
 			}
+			if let tlsMax = tlsMax {
+				result += ["--tls-max", tlsMax.rawValue]
+			}
+			mergeNotNil(value: tls13Ciphers) { result += ["--tls13-ciphers", $0.joined(separator: "_")] }
+			if let tlsAuthType = tlsAuthType {
+				result += ["--tlsauthtype", tlsAuthType.rawValue]
+			}
+			if let tlspassword = tlspassword {
+				result += ["--tlspassword", tlspassword]
+			}
+			if let tlsuser = tlsuser {
+				result += ["--tlsuser", tlsuser]
+			}
+			if tlsv1_0 { result += ["--tlsv1.0"] }
+			if tlsv1_1 { result += ["--tlsv1.1"] }
+			if tlsv1_2 { result += ["--tlsv1.2"] }
+			if tlsv1_3 { result += ["--tlsv1.3"] }
+			if tlsv1 { result += ["--tlsv1"] }
+			if trEncoding { result += ["--tr-encoding"] }
+			mergeNotNil(value: traceAscii) { result += ["--trace-ascii", $0] }
+			mergeNotNil(value: traceConfig) { result += ["--trace-config", $0] }
+			if traceIDs { result += ["--trace-ids"] }
+			if traceTime { result += ["--trace-time"] }
+			mergeNotNil(value: trace) { result += ["--trace", $0] }
+			mergeNotNil(value: unixSocket) { result += ["--unix-socket", $0] }
+			mergeNotNil(value: uploadFile) { result += ["--upload-file", $0] }
+			mergeNotNil(value: urlQuery) { result += ["--url-query", $0] }
+			mergeNotNil(value: url) { result += ["--url", $0.absoluteString] }
+			if useAscii { result += ["--use-ascii"] }
+			mergeNotNil(value: userAgent) { result += ["--user-agent", $0] }
+			if let user = user, let password = password {
+				result += ["--user", "\(user):\(password)"]
+			}
+			mergeNotNil(value: variable) { result += ["--variable", $0] }
+			if verbose { result += ["--verbose"] }
+			if version { result += ["--version"] }
+			mergeNotNil(value: writeOut) { result += ["--write-out", $0] }
+			if xattr { result += ["--xattr"] }
 			
 			switch self {
 			case .tlsMax(let version): return ["--tls-max", version.rawValue]
