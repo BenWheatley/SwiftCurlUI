@@ -28,7 +28,7 @@ class Curl: Codable, ObservableObject {
 		task.arguments = arguments.buildArguments() + urls
 		
 		// Optionally, you can set the working directory if needed
-		task.currentDirectoryPath = "/path/to/your/working/directory"
+		task.currentDirectoryURL = nil
 		
 		let output = Pipe()
 		let error = Pipe()
@@ -45,10 +45,12 @@ class Curl: Codable, ObservableObject {
 			}
 			if let error = String(data: error.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) {
 				print("Error: \(error)")
+				print("Arguments: \(task.arguments)")
 				stderr = error
 			}
 		} catch {
 			print("Exception: \(error.localizedDescription)")
+			print("Arguments: \(task.arguments)")
 		}
 	}
 }
