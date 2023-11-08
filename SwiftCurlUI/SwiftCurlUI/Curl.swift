@@ -509,21 +509,11 @@ extension Curl {
 			if proxyNegotiate { result += ["--proxy-negotiate"] }
 			if proxyNTLM { result += ["--proxy-ntlm"] }
 			mergeNotNil(value: proxyPass) { result += ["--proxy-pass", $0] }
+			mergeNotNil(value: proxyPinnedPubKey) { result += ["--proxy-pinnedpubkey", $0] } // would be something like `"sha256//" + ….joined(separator: ";")` if I use an array rather than a String for hashes
 			
 			
 			
 			switch self {
-			case .proxyCiphers(let list): return ["--proxy-ciphers", list.joined(separator: "-")]
-			case .proxyCRLFile(let file): return ["--proxy-crlfile", file]
-			case .proxyDigest: return ["--proxy-digest"]
-			case .proxyHeader(let header): return ["--proxy-header", header]
-			case .proxyHttp2: return ["--proxy-http2"]
-			case .proxyInsecure: return ["--proxy-insecure"]
-			case .proxyKeyType(let type): return ["--proxy-key-type", type]
-			case .proxyKey(let key): return ["--proxy-key", key]
-			case .proxyNegotiate: return ["--proxy-negotiate"]
-			case .proxyNTLM: return ["--proxy-ntlm"]
-			case .proxyPass(let phrase): return ["--proxy-pass", phrase]
 			case .proxyPinnedPubKey(let hashes): return ["--proxy-pinnedpubkey", hashes] // would be something like `"sha256//" + ….joined(separator: ";")` if I use an array rather than a String for hashes
 			case .proxyServiceName(let name): return ["--proxy-service-name", name]
 			case .proxySSLAllowBeast: return ["--proxy-ssl-allow-beast"]
