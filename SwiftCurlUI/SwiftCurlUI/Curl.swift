@@ -349,12 +349,7 @@ extension Curl {
 			mergeNotNil(value: createFileMode?.toString) { result += ["--create-file-mode", $0] }
 			if crlf { result += ["--crlf"] }
 			mergeNotNil(value: crlFile) { result += ["--crlfile", $0] }
-			if let algorithmList = curves?.joined(separator: ":") {
-				result += ["--curves", algorithmList]
-			}
-			if let algorithmList = curves?.joined(separator: ":") {
-				result += ["--curves", algorithmList]
-			}
+			mergeNotNil(value: curves?.joined(separator: ":")) { result += ["--curves", $0] }
 			mergeNotNil(value: dataAscii) { result += ["--data-ascii", $0] }
 			mergeNotNil(value: dataBinary) { result += ["--data-binary", $0] }
 			mergeNotNil(value: dataRaw) { result += ["--data-raw", $0] }
@@ -368,9 +363,7 @@ extension Curl {
 			mergeNotNil(value: dnsInterface) { result += ["--dns-interface", $0] }
 			mergeNotNil(value: dnsIpv4Addr) { result += ["--dns-ipv4-addr", $0] }
 			mergeNotNil(value: dnsIpv6Addr) { result += ["--dns-ipv6-addr", $0] }
-			if let addresses = dnsServers?.joined(separator: ",") {
-				result += ["--dns-servers", addresses]
-			}
+			mergeNotNil(value: dnsServers?.joined(separator: ",")) { result += ["--dns-servers", $0] }
 			if dohCertStatus { result += ["--doh-cert-status"] }
 			if dohInsecure { result += ["--doh-insecure"] }
 			mergeNotNil(value: url?.absoluteString) { result += ["--doh-url", $0] }
@@ -475,9 +468,7 @@ extension Curl {
 			if noKeepalive { result += ["--no-keepalive"] }
 			if noProgressMeter { result += ["--no-progress-meter"] }
 			if noSessionID { result += ["--no-sessionid"] }
-			if let noProxyList = noProxy {
-				result += ["--noproxy", noProxyList.joined(separator: ",")]
-			}
+			mergeNotNil(value: noProxy?.joined(separator: ",")) { result += ["--noproxy", $0] }
 			if ntlmWb { result += ["--ntlm-wb"] }
 			if ntlm { result += ["--ntlm"] }
 			mergeNotNil(value: oauth2Bearer) { result += ["--oauth2-bearer", $0] }
@@ -507,7 +498,7 @@ extension Curl {
 				guard let password = password else { result += ["--proxy-cert", cert] }
 				result += ["--proxy-cert", "\(cert):\(password)"]
 			}
-			mergeNotNil(value: proxyCiphers) { result += ["--proxy-ciphers", $0.joined(separator: "-")] }
+			mergeNotNil(value: proxyCiphers?.joined(separator: "-")) { result += ["--proxy-ciphers", $0] }
 			mergeNotNil(value: proxyCRLFile) { result += ["--proxy-crlfile", $0] }
 			if proxyDigest { result += ["--proxy-digest"] }
 			mergeNotNil(value: proxyHeader) { result += ["--proxy-header", $0] }
