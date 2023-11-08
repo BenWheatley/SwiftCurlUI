@@ -48,15 +48,17 @@ struct CurlView: View {
 struct TokenField: NSViewRepresentable {
 	@Binding var urls: [String]
 
-	init(urls: Binding<[String]>) {
+	init(urls: Binding<[String]) {
 		_urls = urls
 	}
-	
+
 	public func makeNSView(context: Context) -> some NSTokenField {
 		let tokenField = NSTokenField()
+		// Bind the NSTokenField's value to the 'urls' property
+		tokenField.bind(NSBindingName("value"), to: $urls)
 		return tokenField
 	}
-	
+
 	func updateNSView(_ nsView: NSViewType, context: Context) {
 		// Nothing yet
 	}
