@@ -507,7 +507,17 @@ extension Curl {
 				guard let password = password else { result += ["--proxy-cert", cert] }
 				result += ["--proxy-cert", "\(cert):\(password)"]
 			}
-			
+			mergeNotNil(value: proxyCiphers) { result += ["--proxy-ciphers", $0.joined(separator: "-")] }
+			mergeNotNil(value: proxyCRLFile) { result += ["--proxy-crlfile", $0] }
+			if proxyDigest { result += ["--proxy-digest"] }
+			mergeNotNil(value: proxyHeader) { result += ["--proxy-header", $0] }
+			if proxyHttp2 { result += ["--proxy-http2"] }
+			if proxyInsecure { result += ["--proxy-insecure"] }
+			mergeNotNil(value: proxyKeyType) { result += ["--proxy-key-type", $0] }
+			mergeNotNil(value: proxyKey) { result += ["--proxy-key", $0] }
+			if proxyNegotiate { result += ["--proxy-negotiate"] }
+			if proxyNTLM { result += ["--proxy-ntlm"] }
+			mergeNotNil(value: proxyPass) { result += ["--proxy-pass", $0] }
 			
 			
 			
