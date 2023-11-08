@@ -14,7 +14,7 @@ struct CurlView: View {
 	var body: some View {
 		VStack {
 			HStack {
-				Text("URL")
+				Text("URLs:")
 				TokenField()
 				
 				/*TextField("Enter URL", text: $curl.url)
@@ -24,16 +24,16 @@ struct CurlView: View {
 					.autocapitalization(.none)*/
 			}
 			
-			Picker("Console", selection: $selectedOutput) {
+			Picker("Console:", selection: $selectedOutput) {
 				Text("stdin").tag(0)
 				Text("stdout").tag(1)
 				Text("stderr").tag(2)
 			}
 			.pickerStyle(SegmentedPickerStyle())
-			.padding()
 			
 			TextEditor(text: selectedOutput == 0 ? $curl.stdin : selectedOutput == 1 ? $curl.stdout : $curl.stderr)
 		}
+		.padding()
 	}
 }
 
