@@ -10,7 +10,7 @@ import Foundation
 class Curl: Codable, ObservableObject {
 	let curlPath: String // I could make this a URL, but then the names get all confusion — curlURL etc. don't imply the path of the executable
 	
-	var url: [String]
+	var urls: [String] = []
 	var arguments = Arguments()
 	
 	var stdin: String = ""
@@ -25,7 +25,7 @@ class Curl: Codable, ObservableObject {
 		let task = Process()
 		task.executableURL = URL(fileURLWithPath: curlPath)
 		
-		task.arguments = arguments.buildArguments()
+		task.arguments = arguments.buildArguments() + urls
 		
 		// Optionally, you can set the working directory if needed
 		task.currentDirectoryPath = "/path/to/your/working/directory"
@@ -56,6 +56,16 @@ class Curl: Codable, ObservableObject {
 }
 
 extension Curl {
+	struct CertificateDetails: Codable { var certificate: String, password: String? }
+	struct ConnectionDetails: Codable { var host1: String, port1: String, host2: String, port2: String }
+	struct FormStringDetails: Codable { var name: String, value: String }
+	struct FormDetails: Codable { var name: String, content: String }
+	struct LocalPortDetails: Codable { var low: UInt16, high: UInt16? }
+	struct ProxyCertDetails: Codable { var cert: String, password: String? }
+	struct ProxyUserDetails: Codable { var user: String, password: String }
+	struct TimeCondDetails: Codable { var date: Date, olderThan: Bool }
+	struct UserDetails: Codable { var user: String, password: String }
+	
 	struct Arguments: Codable {
 		var abstractUnixSocket: /*path:*/ String?
 		var altSvc: /*fileName:*/ String?
@@ -68,13 +78,13 @@ extension Curl {
 		var caPath: /*directory:*/ String?
 		var certStatus: Bool = false
 		var certType: /*type:*/ ClientCertificateType?
-		var cert: (certificate: String, password: String?)?
+		var cert: CertificateDetails?
 		var ciphers: /*cipherList:*/ [String]? // when turning into an argument, concatenate with hyphens e.g. "ECDHE-ECDSA-AES256-CCM8"
 		var compressedSsh: Bool = false
 		var compressed: Bool = false
 		var config: /*file:*/ String?
 		var connectTimeout: /*seconds:*/ TimeInterval? // when turned into a string, decimal must be a '.' regardless of locale
-		var connectTo: (host1: String, port1: String, host2: String, port2: String)? // when stringified, concatenate with ':', e.g. "example.com:443:example.net:8443"
+		var connectTo: ConnectionDetails? // when stringified, concatenate with ':', e.g. "example.com:443:example.net:8443"
 		var continueAt: /*offset:*/ UInt64? // offset will never be negative
 		var cookieJar: /*filename:*/ String? // "-" means "stdout"
 		var cookie: /*dataOrFilename:*/ String? // if there's a "=", it's data; otherswise it's a filename; if it's "-" this means "stdin"
@@ -110,8 +120,8 @@ extension Curl {
 		var fail: Bool = false // alias with '-f'
 		var falseStart: Bool = false
 		var formEscape: Bool = false
-		var formString: (name: String, value: String)? // concatenate with =
-		var form: (name: String, content: String)? // concatenate with =
+		var formString: FormStringDetails? // concatenate with =
+		var form: FormDetails? // concatenate with =
 		var ftpAccount: /*data:*/ String?
 		var ftpAlternativeToUser: /*command:*/ String?
 		var ftpCreateDirs: Bool = false
@@ -157,7 +167,7 @@ extension Curl {
 		var libcurl: /*file:*/ String? // creates libcurl-using C source code to perform task (instead of or as well as?) performing task
 		var limitRate: /*speed:*/ HumanBytes?
 		var listOnly: Bool = false // alias with '-l'
-		var localPort: (low: UInt16, high: UInt16?)? // either "low" (for a single value) or "low-high" (for a range)
+		var localPort: LocalPortDetails? // either "low" (for a single value) or "low-high" (for a range)
 		var locationTrusted: Bool = false
 		var location: Bool = false // alias with '-L'
 		var loginOptions: /*options:*/ String?
@@ -207,7 +217,7 @@ extension Curl {
 		var proxyCACert: /*file:*/ String?
 		var proxyCAPath: /*dir:*/ String?
 		var proxyCertType: /*type:*/ ClientCertificateType?
-		var proxyCert: (cert: String, password: String?)? // if it has a password, concatenate with ':'
+		var proxyCert: ProxyCertDetails? // if it has a password, concatenate with ':'
 		var proxyCiphers: /*list:*/ [String]?
 		var proxyCRLFile: /*file:*/ String?
 		var proxyDigest: Bool = false
@@ -228,7 +238,7 @@ extension Curl {
 		var proxyTLSPassword: /*string:*/ String?
 		var proxyTLSUser: /*name:*/ String?
 		var proxyTLSv1: Bool = false
-		var proxyUser: (user: String, password: String)? // alias with '-U', concatenate with ':'
+		var proxyUser: ProxyUserDetails? // alias with '-U', concatenate with ':'
 		var proxy: /*protocolHostPort:*/ String? // alias with '-x', [protocol://]host[:port]
 		var proxy1_0: /*hostPort:*/ String? // host[:port]
 		var proxytunnel: Bool = false // alias with '-p'
@@ -282,7 +292,7 @@ extension Curl {
 		var telnetOption: /*option:*/ String? // alias with '-t'; Supported options: TTYPE=<term>, XDISPLOC=<X display>, NEW_ENV=<var,val>; e.g. `curl -t TTYPE=vt100 …`
 		var tftpBlockSize: /*value:*/ UInt64? // block size on a TFTP server
 		var tftpNoOptions: Bool = false
-		var timeCond: (date: Date, olderThan: Bool)? // alias '-z'; this is a string representing a date, which can be "all sorts of date" formats
+		var timeCond: TimeCondDetails? // alias '-z'; this is a string representing a date, which can be "all sorts of date" formats
 		var tlsMax: /*version:*/ TLSVersion? // valid values: [default, 1.0, 1.1, 1.2, 1.3]
 		var tls13Ciphers: /*ciphersuiteList:*/ [String]?
 		var tlsAuthType: /*type:*/ TLSAuthenticationType? // only supported value: SRP
@@ -305,7 +315,7 @@ extension Curl {
 		var url: /*url:*/ URL? // to fetch
 		var useAscii: Bool = false // alias with '-B'
 		var userAgent: /*name:*/ String? // alias with '-A'
-		var user: (user: String, password: String)? // alias with '-u'
+		var user: UserDetails? // alias with '-u'
 		var variable: /*nameText:*/ String? // <[%]name=text/@file>
 		var verbose: Bool = false // alias with '-v'
 		var version: Bool = false // alias with '-V'
@@ -331,8 +341,8 @@ extension Curl {
 			if certStatus { result += ["--cert-status"] }
 			mergeNotNil(value: certType?.rawValue) { result += ["--cert-type", $0] }
 			if let cert = cert {
-				guard let password = cert.password else { result += ["--cert", cert.certificate] }
-				result += ["--cert", "\(cert.certificate):\(password)"]
+				if let password = cert.password { result += ["--cert", "\(cert.certificate):\(password)"] }
+				else { result += ["--cert", cert.certificate] }
 			}
 			mergeNotNil(value: ciphers?.joined(separator: "-")) { result += ["--ciphers", $0] }
 			if compressedSsh { result += ["--compressed-ssh"] }
@@ -381,11 +391,11 @@ extension Curl {
 			if fail { result += ["--fail"] }
 			if falseStart { result += ["--false-start"] }
 			if formEscape { result += ["--form-escape"] }
-			if let (name, value) = formString {
-				result += ["--form-string", "\(name)=\(value)"]
+			if let formString = formString {
+				result += ["--form-string", "\(formString.name)=\(formString.value)"]
 			}
-			if let (name, content) = form {
-				result += ["--form", "\(name)=\(content)"]
+			if let form = form {
+				result += ["--form", "\(form.name)=\(form.content)"]
 			}
 			mergeNotNil(value: ftpAccount) { result += ["--ftp-account", $0] }
 			mergeNotNil(value: ftpAlternativeToUser) { result += ["--ftp-alternative-to-user", $0] }
@@ -445,9 +455,9 @@ extension Curl {
 			mergeNotNil(value: libcurl) { result += ["--libcurl", $0] }
 			mergeNotNil(value: limitRate?.toString) { result += ["--limit-rate", $0] }
 			if listOnly { result += ["--list-only"] }
-			if let (low, high) = localPort {
-				guard let high = high else { result += ["--local-port", "\(low)"] }
-				result += ["--local-port", "\(low)-\(high)"]
+			if let localPort = localPort {
+				if let high = localPort.high { result += ["--local-port", "\(localPort.low)-\(high)"] }
+				else { result += ["--local-port", "\(localPort.low)"] }
 			}
 			if locationTrusted { result += ["--location-trusted"] }
 			if location { result += ["--location"] }
@@ -496,9 +506,9 @@ extension Curl {
 			mergeNotNil(value: proxyCACert) { result += ["--proxy-cacert", $0] }
 			mergeNotNil(value: proxyCAPath) { result += ["--proxy-capath", $0] }
 			if let type = proxyCertType?.rawValue { result += ["--proxy-cert-type", type] }
-			if let (cert, password) = proxyCert {
-				guard let password = password else { result += ["--proxy-cert", cert] }
-				result += ["--proxy-cert", "\(cert):\(password)"]
+			if let proxyCert = proxyCert {
+				if let password = proxyCert.password { result += ["--proxy-cert", "\(proxyCert.cert):\(password)"] }
+				else { result += ["--proxy-cert", proxyCert.cert] }
 			}
 			mergeNotNil(value: proxyCiphers?.joined(separator: "-")) { result += ["--proxy-ciphers", $0] }
 			mergeNotNil(value: proxyCRLFile) { result += ["--proxy-crlfile", $0] }
@@ -520,7 +530,7 @@ extension Curl {
 			mergeNotNil(value: proxyTLSPassword) { result += ["--proxy-tlspassword", $0] }
 			mergeNotNil(value: proxyTLSUser) { result += ["--proxy-tlsuser", $0] }
 			if proxyTLSv1 { result += ["--proxy-tlsv1"] }
-			if let (user, password) = proxyUser { result += ["--proxy-user", "\(user):\(password)"] }
+			if let proxyUser = proxyUser { result += ["--proxy-user", "\(proxyUser.user):\(proxyUser.password)"] }
 			mergeNotNil(value: proxy) { result += ["--proxy", $0] }
 			mergeNotNil(value: proxy1_0) { result += ["--proxy1.0", $0] }
 			if proxytunnel { result += ["--proxytunnel"] }
@@ -574,8 +584,8 @@ extension Curl {
 			mergeNotNil(value: telnetOption) { result += ["--telnet-option", $0] }
 			if let tftpBlockSize = tftpBlockSize { result += ["--tftp-blksize", String(tftpBlockSize)] }
 			if tftpNoOptions { result += ["--tftp-no-options"] }
-			if let (date, olderThan) = timeCond {
-				result += ["--time-cond", (olderThan ? "-" : "") + ISO8601DateFormatter.string(from: date, timeZone: TimeZone.current)]
+			if let timeCond = timeCond {
+				result += ["--time-cond", (timeCond.olderThan ? "-" : "") + ISO8601DateFormatter.string(from: timeCond.date, timeZone: TimeZone.current)]
 			}
 			mergeNotNil(value: tlsMax?.rawValue) { result += ["--tls-max", $0] }
 			mergeNotNil(value: tls13Ciphers?.joined(separator: "_")) { result += ["--tls13-ciphers", $0] }
@@ -599,7 +609,7 @@ extension Curl {
 			mergeNotNil(value: url?.absoluteString) { result += ["--url", $0] }
 			if useAscii { result += ["--use-ascii"] }
 			mergeNotNil(value: userAgent) { result += ["--user-agent", $0] }
-			if let (user, password) = user { result += ["--user", "\(user):\(password)"] }
+			if let user = user { result += ["--user", "\(user.user):\(user.password)"] }
 			mergeNotNil(value: variable) { result += ["--variable", $0] }
 			if verbose { result += ["--verbose"] }
 			if version { result += ["--version"] }
