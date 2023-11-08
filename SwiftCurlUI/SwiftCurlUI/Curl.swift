@@ -503,11 +503,15 @@ extension Curl {
 			mergeNotNil(value: proxyCACert) { result += ["--proxy-cacert", $0] }
 			mergeNotNil(value: proxyCAPath) { result += ["--proxy-capath", $0] }
 			if let type = proxyCertType?.rawValue { result += ["--proxy-cert-type", type] }
+			if let (cert, password) = proxyCert {
+				guard let password = password else { result += ["--proxy-cert", cert] }
+				result += ["--proxy-cert", "\(cert):\(password)"]
+			}
+			
+			
+			
 			
 			switch self {
-			case .proxyCert(let cert, let password):
-				guard let password = password else { return ["--proxy-cert", cert] }
-				return ["--proxy-cert", "\(cert):\(password)"]
 			case .proxyCiphers(let list): return ["--proxy-ciphers", list.joined(separator: "-")]
 			case .proxyCRLFile(let file): return ["--proxy-crlfile", file]
 			case .proxyDigest: return ["--proxy-digest"]
