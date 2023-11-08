@@ -514,7 +514,6 @@ extension Curl {
 			
 			
 			switch self {
-			case .proxyPinnedPubKey(let hashes): return ["--proxy-pinnedpubkey", hashes] // would be something like `"sha256//" + ….joined(separator: ";")` if I use an array rather than a String for hashes
 			case .proxyServiceName(let name): return ["--proxy-service-name", name]
 			case .proxySSLAllowBeast: return ["--proxy-ssl-allow-beast"]
 			case .proxySSLAutoClientCert: return ["--proxy-ssl-auto-client-cert"]
