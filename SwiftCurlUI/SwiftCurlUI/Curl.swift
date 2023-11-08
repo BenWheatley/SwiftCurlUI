@@ -572,10 +572,11 @@ extension Curl {
 			mergeNotNil(value: telnetOption) { result += ["--telnet-option", $0] }
 			if let tftpBlockSize = tftpBlockSize { result += ["--tftp-blksize", String(tftpBlockSize)] }
 			if tftpNoOptions { result += ["--tftp-no-options"] }
-			
+			if let (date, olderThan) = timeCond {
+				result += ["--time-cond", (olderThan ? "-" : "") + ISO8601DateFormatter.string(from: date, timeZone: TimeZone.current)]
+			}
 			
 			switch self {
-			case .timeCond(let date, let olderThan): return ["--time-cond", (olderThan ? "-" : "") + ISO8601DateFormatter.string(from: date, timeZone: TimeZone.current)]
 			case .tlsMax(let version): return ["--tls-max", version.rawValue]
 			case .tls13Ciphers(let ciphersuiteList): return ["--tls13-ciphers", ciphersuiteList.joined(separator: "_")]
 			case .tlsAuthType(let type): return ["--tlsauthtype", type.rawValue]
