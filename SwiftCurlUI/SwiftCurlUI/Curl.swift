@@ -525,9 +525,9 @@ extension Curl {
 			mergeNotNil(value: pubKey) { result += ["--pubkey", $0] }
 			mergeNotNil(value: quote) { result += ["--quote", $0] }
 			mergeNotNil(value: range) { result += ["--range", $0] }
-			mergeNotNil(value: rate) { result += ["--rate", $0.toString] }
+			mergeNotNil(value: rate?.toString) { result += ["--rate", $0] }
 			if raw { result += ["--raw"] }
-			mergeNotNil(value: referer) { result += ["--referer", $0.absoluteString] }
+			mergeNotNil(value: referer?.absoluteString) { result += ["--referer", $0] }
 			if remoteHeaderName { result += ["--remote-header-name"] }
 			if remoteNameAll { result += ["--remote-name-all"] }
 			if remoteName { result += ["--remote-name"] }
@@ -538,9 +538,9 @@ extension Curl {
 			mergeNotNil(value: resolve) { result += ["--resolve", $0] }
 			if retryAllErrors { result += ["--retry-all-errors"] }
 			if retryConnRefused { result += ["--retry-connrefused"] }
-			mergeNotNil(value: retryDelay) { result += ["--retry-delay", $0.toString] }
-			mergeNotNil(value: retryMaxTime) { result += ["--retry-max-time", $0.toString] }
-			mergeNotNil(value: retry) { result += ["--retry", $0.toString] }
+			if let retryDelay = retryDelay { result += ["--retry-delay", String(retryDelay)] }
+			if let retryMaxTime = retryMaxTime { result += ["--retry-max-time", String(retryMaxTime)] }
+			if let retry = retry { result += ["--retry", String(retry)] }
 			mergeNotNil(value: saslAuthorizationIdentity) { result += ["--sasl-authzid", $0] }
 			if saslInitialResponse { result += ["--sasl-ir"] }
 			mergeNotNil(value: serviceName) { result += ["--service-name", $0] }
@@ -554,8 +554,8 @@ extension Curl {
 			if socks5_GSS_API { result += ["--socks5-gssapi"] }
 			mergeNotNil(value: socks5Hostname) { result += ["--socks5-hostname", $0] }
 			mergeNotNil(value: socks5) { result += ["--socks5", $0] }
-			mergeNotNil(value: speedLimit) { result += ["--speed-limit", $0.toString] }
-			mergeNotNil(value: speedTime) { result += ["--speed-time", $0.toString] }
+			if let speedLimit = speedLimit { result += ["--speed-limit", String(speedLimit)] }
+			if let speedTime = speedTime { result += ["--speed-time", String(speedTime)] }
 			if sslAllowBeast { result += ["--ssl-allow-beast"] }
 			if sslAutoClientCert { result += ["--ssl-auto-client-cert"] }
 			if sslNoRevoke { result += ["--ssl-no-revoke"] }
@@ -570,64 +570,11 @@ extension Curl {
 			if tcpFastOpen { result += ["--tcp-fastopen"] }
 			if tcpNoDelay { result += ["--tcp-nodelay"] }
 			mergeNotNil(value: telnetOption) { result += ["--telnet-option", $0] }
-			mergeNotNil(value: tftpBlockSize) { result += ["--tftp-blksize", $0.toString] }
+			if let tftpBlockSize = tftpBlockSize { result += ["--tftp-blksize", String(tftpBlockSize)] }
 			if tftpNoOptions { result += ["--tftp-no-options"] }
 			
 			
 			switch self {
-			case .proxy(let protocolHostPort): return ["--proxy", protocolHostPort]
-			case .proxy1_0(let hostPort): return ["--proxy1.0", hostPort]
-			case .proxytunnel: return ["--proxytunnel"]
-			case .pubKey(let key): return ["--pubkey", key]
-			case .quote(let command): return ["--quote", command]
-			case .range(let range): return ["--range", range]
-			case .rate(let maxRequestRate): return ["--rate", maxRequestRate.toString]
-			case .raw: return ["--raw"]
-			case .referer(let url): return ["--referer", url.absoluteString]
-			case .remoteHeaderName: return ["--remote-header-name"]
-			case .remoteNameAll: return ["--remote-name-all"]
-			case .remoteName: return ["--remote-name"]
-			case .remoteTime: return ["--remote-time"]
-			case .removeOnError: return ["--remove-on-error"]
-			case .requestTarget(let path): return ["--request-target", path]
-			case .request(let method): return ["--request", method]
-			case .resolve(let hostPortAddr): return ["--resolve", hostPortAddr]
-			case .retryAllErrors: return ["--retry-all-errors"]
-			case .retryConnRefused: return ["--retry-connrefused"]
-			case .retryDelay(let seconds): return ["--retry-delay", String(seconds)]
-			case .retryMaxTime(let seconds): return ["--retry-max-time", String(seconds)]
-			case .retry(let number): return ["--retry", String(number)]
-			case .saslAuthorizationIdentity(let identity): return ["--sasl-authzid", identity]
-			case .saslInitialResponse: return ["--sasl-ir"]
-			case .serviceName(let name): return ["--service-name", name]
-			case .showError: return ["--show-error"]
-			case .silent: return ["--silent"]
-			case .socks4(let hostPort): return ["--socks4", hostPort]
-			case .socks4a(let hostPort): return ["--socks4a", hostPort]
-			case .socks5Basic: return ["--socks5-basic"]
-			case .socks5_GSS_API_NEC: return ["--socks5-gssapi-nec"]
-			case .socks5_GSS_API_Service(let name): return ["--socks5-gssapi-service", name]
-			case .socks5_GSS_API: return ["--socks5-gssapi"]
-			case .socks5Hostname(let hostPort): return ["--socks5-hostname", hostPort]
-			case .socks5(let hostPort): return ["--socks5", hostPort]
-			case .speedLimit(let speed): return ["--speed-limit", String(speed)]
-			case .speedTime(let seconds): return ["--speed-time", String(seconds)]
-			case .sslAllowBeast: return ["--ssl-allow-beast"]
-			case .sslAutoClientCert: return ["--ssl-auto-client-cert"]
-			case .sslNoRevoke: return ["--ssl-no-revoke"]
-			case .sslRequired: return ["--ssl-reqd"]
-			case .sslRevokeBestEffort: return ["--ssl-revoke-best-effort"]
-			case .ssl: return ["--ssl"]
-			case .sslv2: return ["--sslv2"]
-			case .sslv3: return ["--sslv3"]
-			case .stderr(let file): return ["--stderr", file]
-			case .styledOutput: return ["--styled-output"]
-			case .suppressConnectHeaders: return ["--suppress-connect-headers"]
-			case .tcpFastOpen: return ["--tcp-fastopen"]
-			case .tcpNoDelay: return ["--tcp-nodelay"]
-			case .telnetOption(let option): return ["--telnet-option", option]
-			case .tftpBlockSize(let value): return ["--tftp-blksize", String(value)]
-			case .tftpNoOptions: return ["--tftp-no-options"]
 			case .timeCond(let date, let olderThan): return ["--time-cond", (olderThan ? "-" : "") + ISO8601DateFormatter.string(from: date, timeZone: TimeZone.current)]
 			case .tlsMax(let version): return ["--tls-max", version.rawValue]
 			case .tls13Ciphers(let ciphersuiteList): return ["--tls13-ciphers", ciphersuiteList.joined(separator: "_")]
