@@ -66,29 +66,10 @@ struct TokenField: NSViewRepresentable {
 		init(parent: TokenField) {
 			self.parent = parent
 		}
-
-		func tokenFieldDidChange(_ obj: Notification) {
-			print("tokenFieldDidChange")
-			// this isn't ever invoked
-			if let tokenField = obj.object as? NSTokenField {
-				parent.urls = tokenField.objectValue as? [String] ?? []
-			}
-		}
 		
-		func tokenField(_ tokenField: NSTokenField, shouldAdd tokens: [Any], at index: Int) -> [Any] {
-			print("shouldAdd")
-			// this isn't ever invoked
-			if let newTokens = tokens as? [String] {
-				parent.urls = newTokens
-			}
-			return tokens
-		}
-		
-		func tokenField(_ tokenField: NSTokenField, didChangeTokens tokens: [Any]) {
-			print("didChangeTokens")
-			// this isn't ever invoked
-			if let newTokens = tokens as? [String] {
-				parent.urls = newTokens
+		@objc func tokenFieldDidEndEditing(sender: NSTokenField) {
+			if let tokens = sender.objectValue as? [String] {
+				parent.urls = tokens
 			}
 		}
 		
@@ -101,9 +82,11 @@ struct TokenField: NSViewRepresentable {
 		return Coordinator(parent: self)
 	}
 
-	public func makeNSView(context: Context) -> some NSTokenField {
+	public func makeNSView(context: Context) -> NSTokenField {
 		let tokenField = NSTokenField()
 		tokenField.delegate = context.coordinator
+		tokenField.target = context.coordinator
+		tokenField.action = #selector(Coordinator.tokenFieldDidEndEditing(sender:))
 		return tokenField
 	}
 
