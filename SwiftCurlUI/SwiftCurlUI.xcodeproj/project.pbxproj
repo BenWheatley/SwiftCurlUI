@@ -18,6 +18,7 @@
 		B55897482AF3C4CC00946FFD /* Curl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55897462AF3C4CC00946FFD /* Curl.swift */; };
 		B558974A2AF3EA2400946FFD /* FileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55897492AF3EA2400946FFD /* FileMode.swift */; };
 		B558974B2AF3EA2400946FFD /* FileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55897492AF3EA2400946FFD /* FileMode.swift */; };
+		B5E7A09D2B08D915000AAC1B /* TokenField in Frameworks */ = {isa = PBXBuildFile; productRef = B5E7A09C2B08D915000AAC1B /* TokenField */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5E7A09D2B08D915000AAC1B /* TokenField in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +155,9 @@
 			dependencies = (
 			);
 			name = SwiftCurlUI;
+			packageProductDependencies = (
+				B5E7A09C2B08D915000AAC1B /* TokenField */,
+			);
 			productName = SwiftCurlUI;
 			productReference = B55897182AF3BCCB00946FFD /* SwiftCurlUI.app */;
 			productType = "com.apple.product-type.application";
@@ -225,6 +230,9 @@
 				Base,
 			);
 			mainGroup = B558970F2AF3BCCB00946FFD;
+			packageReferences = (
+				B5E7A09B2B08D915000AAC1B /* XCRemoteSwiftPackageReference "TokenField" */,
+			);
 			productRefGroup = B55897192AF3BCCB00946FFD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -593,6 +601,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B5E7A09B2B08D915000AAC1B /* XCRemoteSwiftPackageReference "TokenField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fcanas/TokenField.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B5E7A09C2B08D915000AAC1B /* TokenField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5E7A09B2B08D915000AAC1B /* XCRemoteSwiftPackageReference "TokenField" */;
+			productName = TokenField;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B55897102AF3BCCB00946FFD /* Project object */;
 }

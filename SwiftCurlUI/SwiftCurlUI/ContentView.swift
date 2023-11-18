@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TokenField
 
 struct CurlView: View {
 	@ObservedObject var curl: Curl = Curl()
@@ -17,11 +18,7 @@ struct CurlView: View {
 			HStack {
 				Text("URLs:")
 				
-				TokenField(urls: $tokenFieldUrls)
-					.onChange { newUrls in
-		 // Handle changes to the urls property
-		 print(newUrls)
-	 }
+				TokenField($tokenFieldUrls)
 				
 				Button {
 					curl.urls = tokenFieldUrls
@@ -49,64 +46,4 @@ struct CurlView: View {
 #Preview {
 	CurlView()
 		.previewDevice(PreviewDevice(rawValue: "Mac"))
-}
-
-// MARK: -
-
-struct TokenField: NSViewRepresentable {
-	@Binding var urls: [String] {
-		didSet {
-			print(urls) // this isn't ever invoked
-		}
-	}
-
-	class Coordinator: NSObject, NSTokenFieldDelegate {
-		var parent: TokenField
-
-		init(parent: TokenField) {
-			self.parent = parent
-		}
-		
-		@objc func tokenFieldDidEndEditing(sender: NSTokenField) {
-			if let tokens = sender.objectValue as? [String] {
-				parent.urls = tokens
-			}
-		}
-		
-		func tokenField(_ tokenField: NSTokenField, hasMenuForRepresentedObject representedObject: Any) -> Bool {
-			false
-		}
-	}
-
-	func makeCoordinator() -> Coordinator {
-		return Coordinator(parent: self)
-	}
-
-	public func makeNSView(context: Context) -> NSTokenField {
-		let tokenField = NSTokenField()
-		tokenField.delegate = context.coordinator
-		tokenField.target = context.coordinator
-		tokenField.action = #selector(Coordinator.tokenFieldDidEndEditing(sender:))
-		return tokenField
-	}
-
-	// Update inner NSTokenField's value when the SwiftUI binding changes
-	func updateNSView(_ nsView: NSViewType, context: Context) {
-		nsView.objectValue = urls
-	}
-	
-	func onChange(_ action: @escaping ([String]) -> Void) -> Self {
-		var view = self
-		view.onChangeAction = action
-		return view
-	}
-	
-	private var onChangeAction: (([String]) -> Void)? {
-		get { nil }
-		set {
-			if let newValue = newValue {
-				newValue(urls)
-			}
-		}
-	}
 }

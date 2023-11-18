@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "tokenfield",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fcanas/TokenField.git",
+      "state" : {
+        "revision" : "f86f3eea3b9a2d9fe54219c9a41d9838e1d833f1",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}
