@@ -22,7 +22,6 @@ struct CurlView: View {
 				
 				Button {
 					curl.urls = tokenFieldUrls
-					tokenFieldUrls = ["1"]
 					curl.invoke()
 				} label: {
 					Text("Invoke")
