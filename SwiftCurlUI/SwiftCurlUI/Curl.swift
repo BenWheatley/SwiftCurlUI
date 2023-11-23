@@ -21,7 +21,7 @@ class Curl: Codable, ObservableObject {
 		self.curlPath = curlPath
 	}
 	
-	func invoke() {
+	func invoke() async {
 		let task = Process()
 		task.executableURL = URL(fileURLWithPath: curlPath)
 		

@@ -10,7 +10,6 @@ import TokenField
 
 struct CurlView: View {
 	@ObservedObject var curl: Curl = Curl()
-	@State private var selectedOutput = 0
 	@State private var tokenFieldUrls: [String] = []  // A separate state property for TokenField
 	
 	var body: some View {
@@ -19,24 +18,29 @@ struct CurlView: View {
 				Text("URLs:")
 				
 				TokenField($tokenFieldUrls)
+					.frame(maxHeight: 45)
 				
+				// Example content for token field: https://www.kitsunesoftware.com/images/KitsuneSoftwareLogo2022.png,https://www.kitsunesoftware.com/images/KitsuneSoftwareLogo[1999-2023].png
 				Button {
 					curl.urls = tokenFieldUrls
-					curl.invoke()
+					Task.detached {
+						await curl.invoke()
+					}
+					print(curl.stderr)
+					print()
 				} label: {
 					Text("Invoke")
 				}
 			}
 			
-			Picker("Console:", selection: $selectedOutput) {
-				Text("stdin").tag(0)
-				Text("stdout").tag(1)
-				Text("stderr").tag(2)
-			}
-			.pickerStyle(SegmentedPickerStyle())
+			Text("stdin")
+			TextEditor(text: $curl.stdin)
 			
-			TextEditor(text: selectedOutput == 0 ? $curl.stdin : selectedOutput == 1 ? $curl.stdout : $curl.stderr)
-
+			Text("stdout")
+			TextEditor(text: $curl.stdout)
+			
+			Text("stderr")
+			TextEditor(text: $curl.stderr) // Weird bug: the contents only updates when app loses focus
 		}
 		.padding()
 	}
